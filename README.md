@@ -32,7 +32,8 @@ which report `10 passed, 0 failed`.
 |---|---|---|---|
 | `00-agent-bee` | demo | yes | A LangChain agent solving NYT Spelling Bee with a local tool. |
 | `01-mcp-bee` | demo | yes | The same solver behind a FastMCP server, alongside the local-tool agent. |
-| `02-mcp-puzzlemaster` | demo | yes | Three agents sharing one server, one dictionary and one audit log. Usage graphs and CSV export. |
+| `02-mcp-puzzlemaster` | demo | yes | Three agents sharing one server, one dictionary and one audit log. Usage graphs and CSV export. Plus a fourth agent holding all three tools, routing between them itself. |
+| `02b-mcp-puzzlemaster-solo` | demo | yes | The same solvers behind one tool that takes plain English — the *server* calls Claude to work out which game it is. Client-side vs server-side routing, both halves timed. |
 | `03-mcp-bookstore` | **activity** | yes | Refactor a LangChain agent onto MCP in four checkpoints, then add authenticated writes. |
 | `04-mcp-deployment` | demo | no | Deploying a local MCP server to a hosted one. An HTML page. |
 | `05-mcps-for-all` | demo | no | Reaching an MCP server from Claude Desktop without writing Python. An HTML page. |
