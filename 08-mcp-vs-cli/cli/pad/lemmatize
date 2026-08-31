@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""Reduce a word to its dictionary headword."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="lemmatize", description="Reduce a word to its dictionary headword.")
+p.add_argument("--word", type=str, required=True, help="word")
+p.add_argument("--part-of-speech", type=str, default="noun", help="part_of_speech")
+a = p.parse_args()
+print("lemmatize: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

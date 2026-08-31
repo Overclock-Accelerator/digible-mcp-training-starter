@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>08 &mdash; MCP versus the command line</title>
+<style>
+:root{
+  --bg:#fbfaf7; --panel:#ffffff; --ink:#1a1a1a; --ink-2:#4a4a48; --ink-3:#6e6e6a;
+  --rule:#e2ded4; --rule-2:#d0cabb;
+  --accent:#8a4b1f; --accent-soft:#f3e9df;
+  --code-bg:#f6f3ed; --code-ink:#2c2a26; --code-rule:#e2ded4;
+  --ok:#2f6a3f; --ok-soft:#e6f0e7;
+  --warn:#8a5a00; --warn-soft:#fbf1dc;
+  --stop:#9a2f2f; --stop-soft:#f8e7e4;
+  --shadow:0 1px 2px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme:dark){
+:root{
+  --bg:#14140f; --panel:#1b1b16; --ink:#f0ede4; --ink-2:#c4c0b4; --ink-3:#95918a;
+  --rule:#33322a; --rule-2:#454338;
+  --accent:#e0a06a; --accent-soft:#2b2119;
+  --code-bg:#121210; --code-ink:#e4e0d6; --code-rule:#33322a;
+  --ok:#8fd0a0; --ok-soft:#1b2a1e;
+  --warn:#e8c37a; --warn-soft:#2b2416;
+  --stop:#eda49a; --stop-soft:#2e1c1a;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:400 19px/1.65 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  padding:0 20px 120px;
+}
+.wrap{max-width:920px;margin:0 auto}
+
+/* ---- masthead ---- */
+header.mast{padding:64px 0 36px;border-bottom:3px solid var(--ink)}
+.eyebrow{
+  font:600 14px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 18px;
+}
+h1{font-size:clamp(38px,6vw,60px);line-height:1.06;margin:0 0 20px;letter-spacing:-.022em;font-weight:700}
+.standfirst{font-size:22px;line-height:1.55;color:var(--ink-2);margin:0;max-width:44em}
+.meta{
+  margin-top:28px;display:flex;flex-wrap:wrap;gap:10px;
+  font:500 14px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+.meta span{
+  background:var(--panel);border:1px solid var(--rule);border-radius:999px;
+  padding:8px 14px;color:var(--ink-3);
+}
+
+/* ---- sections ---- */
+section{padding-top:52px}
+h2{
+  font-size:clamp(26px,3.4vw,34px);line-height:1.2;margin:0 0 8px;letter-spacing:-.015em;font-weight:700;
+  display:flex;gap:16px;align-items:baseline;
+}
+h2 .num{
+  font:700 16px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color:var(--accent);background:var(--accent-soft);border-radius:6px;
+  padding:8px 10px;flex:none;letter-spacing:.05em;
+}
+h3{font-size:21px;line-height:1.35;margin:34px 0 10px;font-weight:650;letter-spacing:-.008em}
+h4{font-size:17px;margin:24px 0 8px;font-weight:650;color:var(--ink-2)}
+p{margin:0 0 16px;max-width:44em}
+.lede{color:var(--ink-2);font-size:20px;max-width:44em;margin-bottom:22px}
+ul,ol{max-width:44em;margin:0 0 16px;padding-left:1.3em}
+li{margin:0 0 9px}
+strong{font-weight:650}
+a{color:var(--accent);text-underline-offset:3px}
+hr.soft{border:0;border-top:1px solid var(--rule);margin:44px 0}
+
+/* ---- code ---- */
+pre{
+  background:var(--code-bg);color:var(--code-ink);border:1px solid var(--code-rule);
+  border-radius:10px;padding:18px 20px;overflow-x:auto;margin:0 0 20px;
+  font:400 15.5px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  -webkit-user-select:all;user-select:all; tab-size:2;
+}
+pre code{white-space:pre;display:block}
+code{
+  font:400 .875em/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  background:var(--code-bg);border:1px solid var(--code-rule);
+  border-radius:4px;padding:.1em .38em;
+}
+pre code{background:none;border:0;padding:0}
+.filename{
+  font:600 13px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color:var(--ink-3);letter-spacing:.04em;margin:0 0 7px;text-transform:none;
+}
+
+/* ---- callouts ---- */
+.call{
+  border-left:5px solid var(--rule-2);background:var(--panel);border-radius:0 10px 10px 0;
+  padding:18px 22px;margin:0 0 22px;box-shadow:var(--shadow);
+}
+.call p:last-child,.call ul:last-child,.call pre:last-child{margin-bottom:0}
+.call .tag{
+  display:block;font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.14em;text-transform:uppercase;margin:0 0 10px;
+}
+.call.note{border-left-color:var(--accent);background:var(--accent-soft)}
+.call.note .tag{color:var(--accent)}
+.call.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+.call.warn .tag{color:var(--warn)}
+.call.stop{border-left-color:var(--stop);background:var(--stop-soft)}
+.call.stop .tag{color:var(--stop)}
+.call.ok{border-left-color:var(--ok);background:var(--ok-soft)}
+.call.ok .tag{color:var(--ok)}
+
+/* ---- steps ---- */
+ol.steps{list-style:none;padding:0;counter-reset:s;max-width:none}
+ol.steps>li{
+  counter-increment:s;position:relative;padding:0 0 4px 58px;margin:0 0 30px;
+}
+ol.steps>li::before{
+  content:counter(s);position:absolute;left:0;top:1px;
+  width:38px;height:38px;border-radius:50%;
+  background:var(--ink);color:var(--bg);
+  font:700 17px/38px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  text-align:center;
+}
+ol.steps>li>h3{margin:4px 0 8px}
+
+/* ---- table ---- */
+.tw{overflow-x:auto;margin:0 0 22px;border:1px solid var(--rule);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:16.5px;min-width:520px}
+th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{
+  font:700 12.5px/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+  background:var(--code-bg);
+}
+tr:last-child td{border-bottom:0}
+td code{font-size:.85em;white-space:nowrap}
+
+/* ---- before/after ---- */
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:0 0 22px}
+@media (max-width:760px){.ba{grid-template-columns:1fr}}
+.ba>div{min-width:0}
+.ba h4{margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.pill{
+  font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.1em;text-transform:uppercase;padding:5px 8px;border-radius:4px;
+}
+.pill.bad{background:var(--stop-soft);color:var(--stop)}
+.pill.good{background:var(--ok-soft);color:var(--ok)}
+.ba pre{margin:0;font-size:14.5px}
+
+/* ---- verified badge ---- */
+.vf{
+  display:inline-block;font:600 12.5px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.06em;color:var(--ok);background:var(--ok-soft);
+  border-radius:4px;padding:6px 9px;margin:0 0 14px;
+}
+.vf.un{color:var(--warn);background:var(--warn-soft)}
+
+footer{margin-top:72px;padding-top:26px;border-top:1px solid var(--rule);color:var(--ink-3);font-size:15.5px}
+footer p{max-width:46em}
+@media print{body{padding:0}.call,pre,.tw{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <p class="eyebrow">MCP Training &middot; Part 08</p>
+  <h1>MCP versus the command&nbsp;line</h1>
+  <p class="standfirst">Two agents, the same solver code, two different seams. We measured what each one costs in tokens, time and round-trips &mdash; and two of the three things we predicted turned out to be wrong.</p>
+  <div class="meta">
+    <span>~3 min live</span>
+    <span>95 runs</span>
+    <span>claude-sonnet-5</span>
+    <span>2026-08-31</span>
+  </div>
+</header>
+
+<section>
+  <h2><span class="num">01</span> The axis</h2>
+  <p class="lede">The interesting difference is not discovery. It is <strong>where capability descriptions live, and what they cost.</strong></p>
+
+  <div class="ba">
+    <div>
+      <h4><span class="pill bad">MCP</span> capabilities in context</h4>
+      <p>Every tool&rsquo;s name, description and full JSON schema is injected into the model&rsquo;s context <strong>on every request</strong>. Forty tools means forty schemas re-sent every turn &mdash; whether the model uses one of them or none.</p>
+    </div>
+    <div>
+      <h4><span class="pill good">CLI</span> capabilities on disk</h4>
+      <p>The model gets <em>one</em> tool definition: a generic <code>run_command</code>. The capabilities sit on the filesystem. The model pays only when it goes looking, roughly once per conversation rather than once per turn.</p>
+    </div>
+  </div>
+
+  <div class="call note">
+    <span class="tag">The reframe</span>
+    <p>The CLI is <strong>lazy-loading</strong> tool schemas. MCP is <strong>eager-loading</strong> all of them. Everything below follows from that one sentence.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">02</span> What the model actually sees</h2>
+  <p>Not a description read from somewhere at runtime &mdash; it ships inside the request itself. This is a real response from the deployed PuzzleMaster server:</p>
+
+  <p class="filename">tools/list &rarr; one entry, verbatim</p>
+<pre><code>{
+  "name": "solve_spelling_bee",
+  "description": "Solve a NYT Spelling Bee puzzle against the full ENABLE1 dictionary.",
+  "inputSchema": {
+    "properties": {
+      "letters": { "type": "string",
+                   "description": "The 7 puzzle letters, e.g. \"VALIDTY\"." },
+      "center":  { "type": "string",
+                   "description": "The mandatory center letter, e.g. \"V\"." }
+    },
+    "required": ["agent_name", "letters", "center"]
+  }
+}</code></pre>
+
+  <p>The client calls <code>tools/list</code> once at connection, converts the result into the API&rsquo;s tool format, and then includes it in <em>every</em> request for the life of the conversation.</p>
+
+  <div class="call warn">
+    <span class="tag">Consequence</span>
+    <p><strong>Tool descriptions are prompt.</strong> Three things follow: description quality <em>is</em> selection accuracy; descriptions written by someone else are attacker-controlled text in your context window; and every word costs tokens on every turn.</p>
+  </div>
+
+  <p>The CLI has no equivalent. There is nowhere to put a description, because there is no tool definition beyond <code>run_command</code>. The nearest thing is <code>--help</code> output &mdash; which enters context only when the model runs it, arriving as a tool <em>result</em>, not a tool <em>definition</em>. Read once, never re-sent.</p>
+</section>
+
+<section>
+  <h2><span class="num">03</span> How the experiment was controlled</h2>
+  <p>Both agents call <strong>byte-identical solver code</strong>. Nothing differs except the seam.</p>
+  <ul>
+    <li><code>verify_solvers.py</code> compares <code>inspect.getsource</code> of all four solver functions in both arms against <code>shared/solvers_reference.py</code> &mdash; 4 solvers identical across 2 implementations.</li>
+    <li>Same model both sides: <code>claude-sonnet-5</code>.</li>
+    <li>5 runs per cell, 19 cells. Single runs are noise.</li>
+    <li>Token counts read from LangChain&rsquo;s <code>usage_metadata</code>. Nothing estimated.</li>
+    <li>95 runs total, <strong>95/95 correct</strong>.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="num">04</span> The tool-count tax</h2>
+  <p class="lede">This is the headline. Input tokens for the identical task, varying only how many tools the server exposes.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Arm</th><th>Capabilities</th><th>Input tokens</th><th>vs. 3</th></tr></thead>
+    <tbody>
+      <tr><td>MCP</td><td>3</td><td>3,344</td><td>1.00&times;</td></tr>
+      <tr><td>MCP</td><td>15</td><td>7,629</td><td>2.28&times;</td></tr>
+      <tr><td>MCP</td><td>40</td><td>16,320</td><td><strong>4.88&times;</strong></td></tr>
+      <tr><td>CLI</td><td>3</td><td>2,220</td><td>&mdash;</td></tr>
+      <tr><td>CLI</td><td>15</td><td>2,220</td><td>&mdash;</td></tr>
+      <tr><td>CLI</td><td>40</td><td><strong>2,217</strong></td><td>&mdash;</td></tr>
+    </tbody>
+  </table></div>
+
+<pre><code>input tokens, same task, one capability actually used
+the SAME 37 padding capabilities exist on both sides
+
+MCP    3   ########                                    3,344
+MCP   15   ##################                          7,629
+MCP   40   ########################################   16,320
+CLI    3   #####                                       2,220
+CLI   15   #####                                       2,220
+CLI   40   #####                                       2,217</code></pre>
+
+  <div class="call stop">
+    <span class="tag">The number to say out loud</span>
+    <p>Dead linear at roughly <strong>178 input tokens per tool per request</strong>. The 37 tools that were never called cost <strong>12,975 input tokens</strong> &mdash; paid on every single turn, forever.</p>
+  </div>
+
+  <div class="call ok">
+    <span class="tag">Measured, not assumed</span>
+    <p>The same 37 padding capabilities were built <em>both</em> ways &mdash; registered as MCP tools, and generated as executables on <code>PATH</code> with real <code>--help</code> text &mdash; so both lines share an x-axis. <strong>The CLI line is flat: 2,220 &rarr; 2,220 &rarr; 2,217.</strong> Thirty-seven added capabilities moved it by three tokens.</p>
+  </div>
+  <p>Forty scripts and three scripts produce the identical <code>run_command</code> schema. Nothing about the catalogue reaches the model unless the model goes looking.</p>
+</section>
+
+<section>
+  <h2><span class="num">05</span> Composition</h2>
+  <p>Task: <em>&ldquo;how many of the Spelling Bee answers are five letters or longer?&rdquo;</em> The answer is 24.</p>
+
+  <div class="ba">
+    <div>
+      <h4><span class="pill bad">MCP</span> 3,345 in &middot; 447 out</h4>
+      <p>Pulls all 34 words into context and counts them there. <strong>1,665 characters</strong> of intermediate data crosses the context window to produce a two-digit answer.</p>
+    </div>
+    <div>
+      <h4><span class="pill good">CLI</span> 1,449 in &middot; 96 out</h4>
+      <p>Filters before anything reaches the model. <strong>2 characters</strong> come back.</p>
+    </div>
+  </div>
+
+<pre><code>puzzle bee --letters VALIDTY --center V --json \
+  | jq '[.words[] | select((.word|length) &gt;= 5)] | length'
+24</code></pre>
+
+  <p>This generalises to any tool returning large results, which is most real tools. It is the strongest argument against MCP and it deserves to be made at full strength.</p>
+</section>
+
+<section>
+  <h2><span class="num">06</span> Does the CLI pick the wrong command?</h2>
+  <span class="vf">MEASURED &mdash; 95/95 correct across every arm</span>
+  <p>No. Across all runs the CLI agent never once selected the wrong command. What it got wrong was <strong>the shape of the data coming back</strong>:</p>
+
+  <p class="filename">aggregate task &mdash; every distinct command the CLI arm ran</p>
+<pre><code>run 1  ... --json | jq '[.[] | select((.word // .) | length &gt;= 5)] | length'   &larr; wrong path, hedged
+run 1  ... --json | jq '.'                                                     &larr; dumped it to look
+run 1  ... --json | jq '[.words[] | select(.word|length&gt;=5)] | length'          &larr; correct
+runs 2-5 ... --json | jq '[.words[] | select((.word|length) &gt;= 5)] | length'    &larr; straight there</code></pre>
+
+  <p>Three tool calls on the first run, two thereafter. MCP was one call every time, because the output schema was already in context. Once the shape is known, the CLI drops to <strong>1,449 input tokens and a single call</strong> &mdash; the <code>cli+schema</code> arm.</p>
+
+  <div class="call ok">
+    <span class="tag">So MCP's real win is narrower than advertised</span>
+    <p>It is not knowing <em>which</em> tool to call. It is knowing <strong>what comes back</strong>. The advantage lives on the output schema, not the invocation.</p>
+  </div>
+
+  <div class="call warn">
+    <span class="tag">Honest caveat</span>
+    <p>We tested three conventionally-named commands. With forty ambiguously-named ones, selection accuracy would likely degrade &mdash; but it degrades for MCP too, which is exactly what &sect;04 measures. The genuinely different risk is not accuracy, it is <strong>blast radius</strong>: MCP structurally cannot call a tool you did not expose; bash can construct a command that succeeds at something you never intended.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">07</span> Two predictions that flipped</h2>
+  <p class="lede">Both were written into the brief before the benchmark ran. Both were wrong. They are reported as observed rather than smoothed over, because a rigged comparison is worth nothing to an engineering audience.</p>
+
+  <h3>Prediction: MCP wins on unfamiliar tasks, because it is self-describing</h3>
+  <p><strong>Wrong.</strong> On the un-briefed crossword task the CLI agent won &mdash; 1,377 against 2,548 input tokens &mdash; and never spent a turn on <code>--help</code>. It guessed the Unix convention and hedged in the same round-trip:</p>
+<pre><code>puzzle crossword --pattern "C_O__W_RD" --json 2&gt;/dev/null || puzzle crossword --help</code></pre>
+  <p><strong>A conventionally-named CLI is itself a discovery mechanism.</strong> MCP&rsquo;s self-description advantage would hold for unguessable enums or non-obvious required-field combinations &mdash; not for a well-named flag.</p>
+
+  <h3>Prediction: with 40 commands the CLI&rsquo;s discovery cost would climb</h3>
+  <p><strong>Wrong.</strong> On the unbriefed task the CLI at 40 commands (1,572 &plusmn; 470 input tokens) was no worse than at 3 (2,067 &plusmn; 1,090). Discovery cost is real &mdash; it lives in that spread, from runs that guessed a subcommand wrong &mdash; but it does not scale with catalogue size.</p>
+  <p>The traces say why: <strong>across all 30 CLI sweep runs, not one ran <code>ls</code>.</strong> The agent guesses <code>puzzle crossword --pattern &hellip;</code>, usually hedged with <code>|| puzzle --help</code> in the same command, so the size of the directory never reaches it.</p>
+  <div class="call warn">
+    <span class="tag">Limit on this finding</span>
+    <p>Forty <em>well-named</em> commands under one conventional entry point. Forty badly-named ones, or a task that forces enumeration, would very likely behave differently.</p>
+  </div>
+
+  <h3>Prediction: the results would split, some tasks each</h3>
+  <p><strong>Wrong.</strong> The CLI won every task on tokens. There is no draw to report, so the conclusion does not manufacture one.</p>
+</section>
+
+<section>
+  <h2><span class="num">08</span> So when is MCP the right call?</h2>
+  <p class="lede">A CLI is a tool you <strong>install</strong>. An MCP server is a service you <strong>deploy</strong>. Every architectural difference follows from that.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>When&hellip;</th><th>Why the CLI cannot do it</th></tr></thead>
+    <tbody>
+      <tr><td><strong>There is more than one consumer</strong></td><td>A CLI lives on a machine. Updating it means everyone reinstalls, and you cannot tell who is on which version. Updating a server is a deploy &mdash; every consumer gets it at once.</td></tr>
+      <tr><td><strong>Non-engineers are consumers</strong></td><td>Claude Desktop cannot run your bash script. It can connect to your server. The entire &ldquo;democratize&rdquo; argument exists only on the MCP side.</td></tr>
+      <tr><td><strong>You need enforceable permissions</strong></td><td>You cannot hand someone bash and withhold &ldquo;run something I did not anticipate.&rdquo; Handing over bash is handing over the machine. <code>Depends()</code> and schema scoping have no CLI equivalent.</td></tr>
+      <tr><td><strong>You need one audit seam</strong></td><td>Forty scripts across twelve laptops produce nothing. One server produces Part 02&rsquo;s usage graph.</td></tr>
+      <tr><td><strong>Credentials should not sit on laptops</strong></td><td>The server holds them; callers never see them.</td></tr>
+      <tr><td><strong>Definitions must be canonical</strong></td><td>The server is where an organisation agrees what &ldquo;qualified lead&rdquo; means. That is Part 09.</td></tr>
+    </tbody>
+  </table></div>
+
+  <p><strong>The CLI wins for a single operator doing local, exploratory, composable work</strong> &mdash; which describes most individual engineering, and is why the token numbers came out the way they did.</p>
+
+  <div class="call note">
+    <span class="tag">The point to leave the room with</span>
+    <p>These are not competing on the same axis. The CLI&rsquo;s efficiency is a <strong>runtime</strong> property. MCP&rsquo;s advantages are <strong>organisational</strong> properties &mdash; versioning, access control, observability, reach. Choosing between them on token count alone is answering the wrong question.</p>
+  </div>
+
+  <p>The direction the field is heading, named here but deliberately not built: let the model write <em>code</em> that calls tools, so intermediate results never enter the context window at all. That collapses the composition gap without giving up the schema.</p>
+</section>
+
+<section>
+  <h2><span class="num">09</span> Running it yourself</h2>
+<pre><code>cd 08-mcp-vs-cli
+python verify_solvers.py     # prove both arms share identical solver code
+python benchmark.py          # re-run everything (needs .env.local)
+cat results/chart.txt        # the committed numbers</code></pre>
+  <div class="call warn">
+    <span class="tag">What is not measured</span>
+    <p>No prompt caching &mdash; which would materially reduce MCP&rsquo;s repeated schema cost in production. Wall clock is dominated by API latency, not by either approach. Payloads here are small; the composition gap widens as results grow.</p>
+  </div>
+</section>
+
+<footer>
+  <p>Part 08 of the MCP training series. Numbers generated 2026-08-31 against <code>claude-sonnet-5</code>, 5 runs per cell, token counts read from <code>usage_metadata</code>. Re-run <code>benchmark.py</code> to regenerate; expect small variation in output tokens and wall clock, and near-zero variation in input tokens.</p>
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+# Verified compatible set — resolved with `uv pip compile` on 2026-08-31.
+# Change nothing here without re-running the resolution.
+
+fastmcp==3.4.7
+langchain==1.3.18
+langchain-core==1.6.1
+langchain-anthropic==1.7.0
+langchain-mcp-adapters==0.3.2
+langgraph==1.2.11
+
+# PINNED DELIBERATELY. PyPI's latest `mcp` is 2.1.1, but
+# langchain-mcp-adapters requires mcp<2.0.0. An unpinned
+# `pip install mcp` upgrades past this and breaks every agent
+# in the repo with a resolution error. Leave it alone.
+mcp==1.29.1

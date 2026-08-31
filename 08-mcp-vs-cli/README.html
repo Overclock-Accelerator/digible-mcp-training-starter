@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MCP vs. CLI: the same solvers, measured</title>
+<style>
+:root{
+  --bg:#fbfaf7; --panel:#ffffff; --ink:#1a1a1a; --ink-2:#4a4a48; --ink-3:#6e6e6a;
+  --rule:#e2ded4; --rule-2:#d0cabb;
+  --accent:#8a4b1f; --accent-soft:#f3e9df;
+  --code-bg:#f6f3ed; --code-ink:#2c2a26; --code-rule:#e2ded4;
+  --ok:#2f6a3f; --ok-soft:#e6f0e7;
+  --warn:#8a5a00; --warn-soft:#fbf1dc;
+  --stop:#9a2f2f; --stop-soft:#f8e7e4;
+  --shadow:0 1px 2px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme:dark){
+:root{
+  --bg:#14140f; --panel:#1b1b16; --ink:#f0ede4; --ink-2:#c4c0b4; --ink-3:#95918a;
+  --rule:#33322a; --rule-2:#454338;
+  --accent:#e0a06a; --accent-soft:#2b2119;
+  --code-bg:#121210; --code-ink:#e4e0d6; --code-rule:#33322a;
+  --ok:#8fd0a0; --ok-soft:#1b2a1e;
+  --warn:#e8c37a; --warn-soft:#2b2416;
+  --stop:#eda49a; --stop-soft:#2e1c1a;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:400 19px/1.65 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  padding:0 20px 120px;
+}
+.wrap{max-width:920px;margin:0 auto}
+
+/* ---- masthead ---- */
+header.mast{padding:64px 0 36px;border-bottom:3px solid var(--ink)}
+.eyebrow{
+  font:600 14px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 18px;
+}
+h1{font-size:clamp(38px,6vw,60px);line-height:1.06;margin:0 0 20px;letter-spacing:-.022em;font-weight:700}
+.standfirst{font-size:22px;line-height:1.55;color:var(--ink-2);margin:0;max-width:44em}
+.meta{
+  margin-top:28px;display:flex;flex-wrap:wrap;gap:10px;
+  font:500 14px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+.meta span{
+  background:var(--panel);border:1px solid var(--rule);border-radius:999px;
+  padding:8px 14px;color:var(--ink-3);
+}
+
+/* ---- sections ---- */
+section{padding-top:52px}
+h2{
+  font-size:clamp(26px,3.4vw,34px);line-height:1.2;margin:0 0 8px;letter-spacing:-.015em;font-weight:700;
+  display:flex;gap:16px;align-items:baseline;
+}
+h2 .num{
+  font:700 16px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color:var(--accent);background:var(--accent-soft);border-radius:6px;
+  padding:8px 10px;flex:none;letter-spacing:.05em;
+}
+h3{font-size:21px;line-height:1.35;margin:34px 0 10px;font-weight:650;letter-spacing:-.008em}
+h4{font-size:17px;margin:24px 0 8px;font-weight:650;color:var(--ink-2)}
+p{margin:0 0 16px;max-width:44em}
+.lede{color:var(--ink-2);font-size:20px;max-width:44em;margin-bottom:22px}
+ul,ol{max-width:44em;margin:0 0 16px;padding-left:1.3em}
+li{margin:0 0 9px}
+li>p:last-child,li>ul:last-child,li>ol:last-child,li>pre:last-child{margin-bottom:0}
+li>ul,li>ol{margin-top:9px}
+strong{font-weight:650}
+a{color:var(--accent);text-underline-offset:3px}
+hr.soft{border:0;border-top:1px solid var(--rule);margin:44px 0}
+
+/* ---- code ---- */
+pre{
+  background:var(--code-bg);color:var(--code-ink);border:1px solid var(--code-rule);
+  border-radius:10px;padding:18px 20px;overflow-x:auto;margin:0 0 20px;
+  font:400 15.5px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  -webkit-user-select:all;user-select:all; tab-size:2;
+}
+pre code{white-space:pre;display:block}
+code{
+  font:400 .875em/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  background:var(--code-bg);border:1px solid var(--code-rule);
+  border-radius:4px;padding:.1em .38em;
+}
+pre code{background:none;border:0;padding:0}
+.filename{
+  font:600 13px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color:var(--ink-3);letter-spacing:.04em;margin:0 0 7px;text-transform:none;
+}
+
+/* ---- callouts ---- */
+.call{
+  border-left:5px solid var(--rule-2);background:var(--panel);border-radius:0 10px 10px 0;
+  padding:18px 22px;margin:0 0 22px;box-shadow:var(--shadow);
+}
+.call p:last-child,.call ul:last-child,.call pre:last-child{margin-bottom:0}
+.call .tag{
+  display:block;font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.14em;text-transform:uppercase;margin:0 0 10px;
+}
+.call.note{border-left-color:var(--accent);background:var(--accent-soft)}
+.call.note .tag{color:var(--accent)}
+.call.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+.call.warn .tag{color:var(--warn)}
+.call.stop{border-left-color:var(--stop);background:var(--stop-soft)}
+.call.stop .tag{color:var(--stop)}
+.call.ok{border-left-color:var(--ok);background:var(--ok-soft)}
+.call.ok .tag{color:var(--ok)}
+
+/* ---- steps ---- */
+ol.steps{list-style:none;padding:0;counter-reset:s;max-width:none}
+ol.steps>li{
+  counter-increment:s;position:relative;padding:0 0 4px 58px;margin:0 0 30px;
+}
+ol.steps>li::before{
+  content:counter(s);position:absolute;left:0;top:1px;
+  width:38px;height:38px;border-radius:50%;
+  background:var(--ink);color:var(--bg);
+  font:700 17px/38px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  text-align:center;
+}
+ol.steps>li>h3{margin:4px 0 8px}
+
+/* ---- table ---- */
+.tw{overflow-x:auto;margin:0 0 22px;border:1px solid var(--rule);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:16.5px;min-width:520px}
+th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{
+  font:700 12.5px/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+  background:var(--code-bg);
+}
+tr:last-child td{border-bottom:0}
+td code{font-size:.85em;white-space:nowrap}
+
+/* ---- before/after ---- */
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:0 0 22px}
+@media (max-width:760px){.ba{grid-template-columns:1fr}}
+.ba>div{min-width:0}
+.ba h4{margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.pill{
+  font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.1em;text-transform:uppercase;padding:5px 8px;border-radius:4px;
+}
+.pill.bad{background:var(--stop-soft);color:var(--stop)}
+.pill.good{background:var(--ok-soft);color:var(--ok)}
+.ba pre{margin:0;font-size:14.5px}
+
+/* ---- verified badge ---- */
+.vf{
+  display:inline-block;font:600 12.5px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.06em;color:var(--ok);background:var(--ok-soft);
+  border-radius:4px;padding:6px 9px;margin:0 0 14px;
+}
+.vf.un{color:var(--warn);background:var(--warn-soft)}
+
+footer{margin-top:72px;padding-top:26px;border-top:1px solid var(--rule);color:var(--ink-3);font-size:15.5px}
+footer p{max-width:46em}
+@media print{body{padding:0}.call,pre,.tw{break-inside:avoid}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <p class="eyebrow">MCP Training · Part 08</p>
+  <h1>MCP vs. CLI: the same solvers, measured</h1>
+  <p class="standfirst"><strong>The one idea:</strong> MCP and a CLI are two seams over the same capability, and the seam you choose is a <em>per-request bill</em> — tool schemas are re-sent on every turn and scale with tool count, while a shell agent pays for one tool definition forever and can pipe intermediate results away before they ever enter the context window.</p>
+  <div class="meta">
+    <span>08-mcp-vs-cli/README.md</span>
+  </div>
+</header>
+
+<section>
+<p>This folder is a benchmark, not an argument. Every number below was measured, not estimated: LangChain surfaces the Anthropic API&#x27;s own <code>usage_metadata</code> on each AI message, and <code>metrics.py</code> sums it across the whole trajectory.</p>
+<p><strong>Results generated 2026-08-31 (UTC) with <code>anthropic:claude-sonnet-5</code>, 5 runs per cell, 95 runs total, 95/95 correct.</strong> Re-running will move the numbers a little; the shape holds.</p>
+<p>Every run&#x27;s tool calls are on screen and in <a href="results/traces.txt"><code>results/traces.txt</code></a> — a table of token counts is an assertion, a trace beside it is an argument.</p>
+<h2>The experiment</h2>
+<p>The controlled experiment already existed in this repo. <code>shared/solvers_reference.py</code> holds three solver bodies. <code>02-mcp-puzzlemaster</code> wraps them in MCP tools. Here, <code>cli/puzzle</code> wraps the <em>same bodies</em> in argparse — so two interfaces sit over byte-identical logic and nothing differs except the seam.</p>
+<p>That claim is checked, not asserted:</p>
+<pre><code>python verify_solvers.py
+# cli/puzzle.py    solve_spelling_bee       identical  (1307 bytes)
+# mcp_server.py    solve_spelling_bee       identical  (1307 bytes)
+# ...
+# OK — 4 solvers byte-identical across 2 implementations.</code></pre>
+<p>Both agents use the same model, the same task prompts, the same async entrypoint and the same metric collection. The MCP agent gets typed tools; the CLI agent gets one <code>bash</code> tool and a <code>puzzle</code> command on its PATH.</p>
+<h2>Run it</h2>
+<p>Put your key in <code>.env.local</code> at the repo root — no shell export, and nothing to remember per terminal:</p>
+<pre><code>cp .env.local.example .env.local
+$EDITOR .env.local          # ANTHROPIC_API_KEY=sk-ant-...</code></pre>
+<p>Both agents call <code>load_env()</code> from <code>shared/envloader.py</code>, which walks up to find <code>.env.local</code> and never overwrites an already-set variable, so an <code>export</code> still wins if you want one. Then, with the shared virtualenv active:</p>
+<pre><code>cd 08-mcp-vs-cli
+python cli/make_pad.py                    # generate the 37 pad commands (no key needed)
+python verify_solvers.py                  # no key needed
+python benchmark.py --runs 5              # ~12 minutes, ~95 API calls
+python benchmark.py --render-only         # re-render every artifact, free</code></pre>
+<p>Single runs, for poking at one cell. Each prints its tool calls before its answer:</p>
+<pre><code>python agent_mcp.py --task aggregate --tools 40
+python agent_cli.py --task aggregate --capabilities 40 --brief</code></pre>
+<p>The CLI works on its own, with no model in the loop at all:</p>
+<pre><code>cli/puzzle bee --letters VALIDTY --center V --json | jq &#x27;.count, .total_points&#x27;</code></pre>
+<h2>Results</h2>
+<p>Full chart in <a href="results/chart.txt"><code>results/chart.txt</code></a>; raw per-run records, including every command each agent issued, in <a href="results/results.json"><code>results/results.json</code></a>.</p>
+<h3>1. Capabilities in context vs. capabilities on disk</h3>
+<p>The single most valuable chart in this folder, and the axis worth naming out loud. <strong>MCP puts capabilities in the context window; a CLI puts them on disk.</strong> MCP re-sends every tool&#x27;s name, description and full JSON schema on <em>every request</em> — a fixed recurring tax on the whole catalogue, paid whether the model touches one tool or none. The CLI sends one <code>bash</code> definition regardless, and pays only when the model goes looking.</p>
+<p>Both arms are padded from the <strong>same 37-entry catalogue</strong> (<code>pad_catalog.py</code>), registered as MCP tools by <code>mcp_server.py</code> and generated as executable scripts by <code>cli/make_pad.py</code>. So &quot;40 tools&quot; and &quot;40 commands&quot; are the same 40 capabilities, and the two lines genuinely share an x-axis. The pad entries are plausible word utilities (<code>find_anagrams</code>, <code>count_syllables</code>, <code>scrabble_score</code>, …) with real parameters, real docstrings and real <code>--help</code> text. <strong>None of them are ever called by either arm.</strong></p>
+<p>Task <code>solve</code>, both sides briefed:</p>
+<div class="tw"><table><thead><tr><th>interface</th><th>capabilities</th><th>input tok (mean ± sd)</th><th>vs. 3</th><th>tok per extra capability</th><th>output tok</th><th>round-trips</th></tr></thead><tbody><tr><td>MCP</td><td>3</td><td>3344 ± 12</td><td>1.00x</td><td>—</td><td>167 ± 7</td><td>2.0</td></tr><tr><td>MCP</td><td>15</td><td>7629 ± 0</td><td>2.28x</td><td><strong>+357</strong></td><td>168 ± 1</td><td>2.0</td></tr><tr><td>MCP</td><td>40</td><td>16320 ± 16</td><td><strong>4.88x</strong></td><td><strong>+351</strong></td><td>180 ± 16</td><td>2.0</td></tr><tr><td>CLI + bash</td><td>3</td><td>2220 ± 6</td><td>1.00x</td><td>—</td><td>118 ± 14</td><td>2.0</td></tr><tr><td>CLI + bash</td><td>15</td><td>2220 ± 6</td><td><strong>1.00x</strong></td><td><strong>0</strong></td><td>111 ± 12</td><td>2.0</td></tr><tr><td>CLI + bash</td><td>40</td><td>2217 ± 0</td><td><strong>1.00x</strong></td><td><strong>0</strong></td><td>114 ± 13</td><td>2.0</td></tr></tbody></table></div>
+<p><strong>The MCP line is dead linear at ~355 input tokens per additional capability per run</strong> — two round-trips, so ~178 tokens per tool per request. <strong>The CLI line is flat to within measurement noise: 2220, 2220, 2217.</strong> Adding 37 capabilities changed the CLI&#x27;s input cost by 3 tokens, and one of those is rounding.</p>
+<p>Thirty-seven tools nobody touched cost the MCP arm 12,976 input tokens. A 40-tool server is not 40 conveniences; it is a fixed ~6,500-token toll on every single turn. Attach three such servers and the model starts the conversation 20,000 tokens in the red.</p>
+<p>The flat line is what <code>results/cli_catalog.txt</code> shows concretely — 38 commands sitting on the PATH:</p>
+<pre><code>$ ls $PATH_DIR   # 40 capabilities (38 commands: puzzle + 37 pad)
+
+  acrostic-build  antonym-lookup  boggle-solve  caesar-shift
+  check-spelling  clue-difficulty  contains-search  count-syllables
+  ...</code></pre>
+<p>The model never sees that listing unless it goes looking. The MCP arm sends the equivalent catalogue on every request.</p>
+<h3>1b. The honest counter-cost, which did not appear</h3>
+<p>The expected trade is that a big CLI catalogue raises <em>discovery</em> cost: <code>ls</code>, then <code>--help</code>, then a retry after guessing a flag wrong — extra round-trips and extra output tokens on any task the agent was not briefed for. So the sweep was also run on <code>undocumented</code>, which neither system prompt mentions:</p>
+<div class="tw"><table><thead><tr><th>interface</th><th>capabilities</th><th>input tok</th><th>output tok</th><th>round-trips</th></tr></thead><tbody><tr><td>MCP</td><td>3</td><td>2548 ± 0</td><td>112 ± 7</td><td>2.0</td></tr><tr><td>MCP</td><td>15</td><td>6844 ± 13</td><td>123 ± 18</td><td>2.0</td></tr><tr><td>MCP</td><td>40</td><td>15518 ± 0</td><td>121 ± 7</td><td>2.0</td></tr><tr><td>CLI + bash</td><td>3</td><td>2067 ± 1090</td><td>165 ± 122</td><td>2.6</td></tr><tr><td>CLI + bash</td><td>15</td><td>1392 ± 56</td><td>130 ± 56</td><td>2.0</td></tr><tr><td>CLI + bash</td><td>40</td><td>1572 ± 470</td><td>110 ± 23</td><td>2.2</td></tr></tbody></table></div>
+<p><strong>The predicted rise did not happen, and we are not going to pretend it did.</strong> The CLI&#x27;s discovery cost is real — look at the spread, ±1090 at three commands, driven by single runs that guessed a subcommand wrong and had to recover — but it does <strong>not scale with catalogue size</strong>. At 40 commands it is no worse than at 3.</p>
+<p>The traces say why. Across all 30 CLI runs in the sweep, <strong>not one ran <code>ls</code>.</strong> The agent goes straight to <code>puzzle crossword --pattern ...</code>, usually hedged with <code>|| puzzle --help</code> in the same command. It never enumerates the directory, so the size of the directory never reaches it. Discovery cost here is a function of <em>how guessable the interface is</em>, not of how much is installed.</p>
+<p>That is a real limit on the finding: a catalogue of 40 badly-named commands, or one where the agent had to enumerate before choosing, would likely behave differently. What is measured is that catalogue size alone does not move the CLI arm, while it moves the MCP arm 4.9x.</p>
+<h3>2. CLI composes; MCP returns whatever it returns</h3>
+<p>Task: <em>how many of the Spelling Bee answers are 5 or more letters long?</em> The answer is the integer 24.</p>
+<div class="tw"><table><thead><tr><th>arm</th><th>input tok</th><th>output tok</th><th>round-trips</th><th>tool output into context</th></tr></thead><tbody><tr><td>MCP</td><td>3345 ± 0</td><td>428 ± 20</td><td>2.0</td><td><strong>1,665 chars</strong></td></tr><tr><td>CLI (unbriefed)</td><td>3926 ± 63</td><td>196 ± 49</td><td>3.2</td><td>1,609 chars</td></tr><tr><td>CLI (schema known)</td><td><strong>1449 ± 1</strong></td><td><strong>96 ± 1</strong></td><td>2.0</td><td><strong>2 chars</strong></td></tr></tbody></table></div>
+<p>The two traces, side by side, are the whole argument — this is what <code>results/traces.txt</code> puts on screen:</p>
+<pre><code>──── mcp · aggregate · 3 tools in context ────────────────────────
+  1. solve_spelling_bee(agent_name=&quot;agent-mcp&quot;, letters=&quot;VALIDTY&quot;, center=&quot;V&quot;)
+     → [{&#x27;type&#x27;: &#x27;text&#x27;, &#x27;text&#x27;: &#x27;{&quot;words&quot;:[{&quot;word&quot;:&quot;VALIDITY&quot;,&quot;points&quot;:15,...
+
+──── cli+schema · aggregate · 3 commands on disk ─────────────────
+  1. bash(command=&quot;puzzle bee --letters VALIDTY --cente...&quot;)
+     → 24
+  [1] puzzle bee --letters VALIDTY --center V --json | jq &#x27;[.words[] | select((.word|length) &gt;= 5)] | length&#x27;</code></pre>
+<p>The MCP agent has one move: call the tool, receive all 34 words with their scores, and count them in-context. That is 1,665 characters of intermediate result dragged through the context window, and the counting shows up as 428 output tokens because the model reasons over the list.</p>
+<p>The briefed CLI agent pipes to <code>jq</code> and <strong>two bytes</strong> come back. <code>24\n</code>. The 34 words existed, were filtered, and were discarded inside the shell — they never touched the context window. 2.3x fewer input tokens and 4.5x fewer output tokens than MCP, for identical work.</p>
+<p><strong>This is the strongest argument against MCP</strong>, and it generalizes far past word puzzles: any time the useful answer is an aggregate, a filter, or a join over a large intermediate, MCP makes you pay for the intermediate and a shell does not.</p>
+<h3>3. The counterweight did not survive contact with the data</h3>
+<p>The predicted third asymmetry was: MCP is self-describing, so on a task nobody briefed, the MCP agent already knows the schema while the CLI agent burns turns on <code>--help</code>.</p>
+<p>Neither system prompt mentions crossword patterns. The task: <em>find every dictionary word matching <code>C_O__W_RD</code></em>.</p>
+<div class="tw"><table><thead><tr><th>arm</th><th>input tok</th><th>output tok</th><th>round-trips</th><th>correct</th></tr></thead><tbody><tr><td>MCP</td><td>2548 ± 0</td><td>110 ± 1</td><td>2.0</td><td>5/5</td></tr><tr><td>CLI</td><td><strong>1637 ± 593</strong></td><td>124 ± 33</td><td><strong>2.2</strong></td><td>5/5</td></tr></tbody></table></div>
+<p>The CLI agent won this one too, and mostly never spent a turn on <code>--help</code>. What it typically wrote:</p>
+<pre><code>puzzle crossword --pattern &quot;C_O__W_RD&quot; --json 2&gt;/dev/null || puzzle crossword --help</code></pre>
+<p>It guessed the subcommand and flag from ordinary Unix convention, and hedged the guess with a fallback in the <em>same</em> round-trip. The discovery cost the theory predicted was real but it was usually paid in about twenty output tokens of shell, not in an extra turn. The large spread (±593) is one run in five that guessed <code>puzzle pattern</code> instead of <code>puzzle crossword</code> and needed a recovery turn — so the cost exists, it is just intermittent and small.</p>
+<p><strong>Report this honestly in the room.</strong> The self-description advantage is real in principle and it did not show up here, because a conventionally-named CLI with a <code>--help</code> is itself a discovery mechanism, and the model is fluent in that convention. Where MCP&#x27;s schema genuinely wins is where convention gives no help: unguessable enums, non-obvious required-field combinations, tools whose names do not telegraph their arguments. <code>puzzle crossword --pattern</code> was too guessable to be a fair test of it, and pretending otherwise would be rigging the demo.</p>
+<p>The place discovery <em>did</em> cost real tokens was task 2: the unbriefed CLI agent guessed <code>.[] | select(...)</code> for the JSON shape, got an error, ran <code>jq &#x27;.&#x27;</code> to dump the whole payload into context, and only then wrote the right filter — 4240 input tokens against 1449 once it knew the shape. <strong>Discovery cost is real; it just lands on the output schema, not the invocation.</strong> MCP&#x27;s structured output schema hands the model that for free.</p>
+<h3>4. The baseline</h3>
+<div class="tw"><table><thead><tr><th>arm</th><th>input tok</th><th>output tok</th><th>wall</th><th>correct</th></tr></thead><tbody><tr><td>MCP</td><td>3339 ± 0</td><td>165 ± 9</td><td>7.5s</td><td>5/5</td></tr><tr><td>CLI</td><td>2217 ± 0</td><td>124 ± 1</td><td>4.9s</td><td>5/5</td></tr></tbody></table></div>
+<p>Identical work, both sides briefed: CLI uses <strong>34% fewer input tokens</strong> with only 3 capabilities a side. Treat the wall-clock numbers with suspicion — they are dominated by API latency, and individual MCP runs varied from 3.7s to 14.5s across the session. Tokens are the reliable measurement here; time is not.</p>
+<h2>The honest conclusion</h2>
+<p><strong>On tokens, the CLI wins, and it wins on every task measured.</strong> With 3 capabilities it is 34% cheaper on input; with 40 it is 86% cheaper; on a composable aggregate it is 2.3x cheaper on input and 4.5x cheaper on output. We went in expecting to split the result, and expecting a rising CLI discovery cost at 40 commands to be the counterweight. Neither happened.</p>
+<p>That does not make MCP a mistake. It makes the trade explicit:</p>
+<p><strong>MCP buys you:</strong></p>
+<ul><li><strong>Discovery of output shape.</strong> The model knows what comes back before it calls. Task 2 shows exactly what not knowing costs.</li><li><strong>Type safety at the boundary.</strong> Arguments are validated against a schema before any code runs; <code>ToolError</code> is a defined failure channel. A shell agent&#x27;s failure mode is an arbitrary string and exit status 2.</li><li><strong>Enforceable permissions.</strong> This is the one with no CLI equivalent at all. FastMCP&#x27;s <code>Depends()</code> injects a parameter that is <strong>excluded from the schema entirely</strong> — the model cannot see it, set it, or spoof it (see <code>02</code>&#x27;s README). There is no way to hand an agent <code>bash</code> and withhold &quot;the ability to run something you did not anticipate&quot;. Every capability on the PATH, and every capability the model can install, is in scope. If that matters — regulated data, production credentials, multi-tenant isolation — the token savings are not the deciding variable.</li><li><strong>A single audit seam.</strong> <code>02</code>&#x27;s logging middleware sees every call because every call crosses one place. <code>bash</code> gives you a command string.</li></ul>
+<p><strong>A CLI buys you:</strong></p>
+<ul><li><strong>Composition.</strong> Pipes, <code>jq</code>, <code>head</code>, <code>wc</code>. Intermediate results never enter the context window.</li><li><strong>A flat tool budget, measured.</strong> 2220 → 2220 → 2217 input tokens across 3, 15 and 40 capabilities. Capabilities live on disk, not in context.</li><li><strong>Ubiquity.</strong> No server, no adapter, no version pin. <code>puzzle</code> runs in CI, in a Makefile, and in your own hands with no model in the loop.</li></ul>
+<p>The shape the numbers actually support: <strong>MCP pays fixed input tokens per turn and buys certainty; the CLI pays variable, occasional discovery tokens and buys a flat baseline.</strong> The variable cost showed up as spread (±1090 in one cell) rather than as a trend, and it never scaled with catalogue size, because the agent guessed rather than enumerated.</p>
+<p>The practical reading: <strong>use MCP where the boundary needs to be enforced or the output schema needs to be discovered; use a CLI where the work needs to compose or the catalogue is large.</strong> And keep the tool count small either way — 40 tools is not a richer server, it is a ~6,500-token entry fee on every turn.</p>
+<h3>The synthesis worth naming</h3>
+<p>Both columns above are converging on the same answer, and it is neither of these designs: <strong>let the model write code that calls the tools, and run that code somewhere else.</strong></p>
+<p>Instead of the model invoking <code>solve_spelling_bee</code> and receiving 34 words, it writes a small program that calls the tool, filters, aggregates, and returns <code>24</code>. The tool definitions are loaded on demand — read from the filesystem as importable modules rather than injected into every request — so the schema tax scales with what you actually use instead of what you have installed. And the intermediate results live in the execution environment, not the context window. That is MCP&#x27;s typed, permissioned boundary with the shell&#x27;s composition, which is exactly the pair of properties the table above says you currently have to choose between. Anthropic has published this pattern as &quot;code execution with MCP&quot;; MCP&#x27;s own Apps/<code>mcp-run-python</code> work points the same direction.</p>
+<p><strong>We did not build it here</strong> — this folder is a measurement, and adding a third arm would have made it an advocacy piece. But when someone in the room says &quot;so which one do I pick&quot;, that is the direction the answer is moving.</p>
+<h2>Caveats, stated plainly</h2>
+<ul><li><strong>One model, one task family, small payloads.</strong> Word puzzles produce kilobyte-scale results. The composition advantage grows with payload size; a tool returning 200KB of JSON would widen the gap enormously. Nothing here says how it behaves at that scale.</li><li><strong>Wall clock is API latency.</strong> Reported for completeness, not for conclusions.</li><li><strong>Input-token counts include the system prompt and conversation history</strong>, summed across all round-trips. That is the real bill, but it means a run with more turns pays for its history twice.</li><li><strong>No prompt caching.</strong> Anthropic&#x27;s prompt caching can amortize a large static tool block across turns within a session, which would soften — not eliminate — the tool-count tax. Measuring that is a good follow-up and is not measured here.</li><li><strong>The pad capabilities are never called by either arm.</strong> That is the point: MCP pays their full schema anyway, and the CLI does not.</li><li><strong>The CLI agent never ran <code>ls</code>.</strong> So this measures a <em>guessable</em> catalogue. Badly-named commands, or a task forcing enumeration, would likely put a real discovery cost on the CLI arm that 40 plausible names did not.</li><li><strong>Round-trips and tool calls are counted separately.</strong> <code>show_tools</code> gives the tool-call count; <code>usage_metadata</code> gives the round-trip count. A turn that calls no tool is still a request you pay input tokens for, so they are not interchangeable.</li></ul>
+<h2>Files</h2>
+<div class="tw"><table><thead><tr><th>File</th><th>What it is</th></tr></thead><tbody><tr><td><code>cli/puzzle</code></td><td>The CLI — three solvers, <code>--json</code> output that composes with <code>jq</code>, no model required</td></tr><tr><td><code>cli/pad/</code></td><td>37 generated pad commands with real <code>--help</code>, the CLI mirror of the MCP pad tools</td></tr><tr><td><code>cli/make_pad.py</code></td><td>Generates <code>cli/pad/</code> from <code>pad_catalog.py</code></td></tr><tr><td><code>pad_catalog.py</code></td><td>The 37 pad capabilities, shared by both arms so they pad identically</td></tr><tr><td><code>mcp_server.py</code></td><td>The MCP arm — same solvers, plus a <code>--tools N</code> knob that pads to 40</td></tr><tr><td><code>agent_mcp.py</code></td><td>Agent with MCP tools</td></tr><tr><td><code>agent_cli.py</code></td><td>Agent with one <code>bash</code> tool; <code>--capabilities N</code> sets the PATH size, <code>--brief</code> adds the output schema MCP gives away free</td></tr><tr><td><code>tasks.py</code></td><td>The three task prompts, byte-identical across both arms</td></tr><tr><td><code>metrics.py</code></td><td>Token/round-trip accounting from <code>usage_metadata</code> — measured, never estimated</td></tr><tr><td><code>benchmark.py</code></td><td>The harness: runs the matrix N times, writes <code>results/</code></td></tr><tr><td><code>verify_solvers.py</code></td><td>Proves the solver bodies are byte-identical to <code>shared/solvers_reference.py</code></td></tr><tr><td><code>results/results.json</code></td><td>Every run, every metric, every command the agents issued</td></tr><tr><td><code>results/chart.txt</code></td><td>Rendered ASCII chart</td></tr><tr><td><code>results/tool_scaling.md</code></td><td>The capabilities-in-context vs. capabilities-on-disk tables</td></tr><tr><td><code>results/traces.txt</code></td><td>A full tool-call trace per cell, with verbatim commands</td></tr><tr><td><code>results/cli_catalog.txt</code></td><td><code>ls</code> of the CLI agent&#x27;s PATH at 3, 15 and 40 capabilities</td></tr></tbody></table></div>
+</section>
+
+<footer><p>Generated from <code>08-mcp-vs-cli/README.md</code>, which is the editable source.
+Regenerate every page with <code>python shared/render_report.py --all</code>.</p></footer>
+</div>
+</body>
+</html>

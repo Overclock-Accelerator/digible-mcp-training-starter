@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""Score a word under standard Scrabble letter values."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="scrabble-score", description="Score a word under standard Scrabble letter values.")
+p.add_argument("--word", type=str, required=True, help="word")
+p.add_argument("--multiplier", type=int, default=1, help="multiplier")
+a = p.parse_args()
+print("scrabble-score: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

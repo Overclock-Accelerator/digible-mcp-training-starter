@@ -1,0 +1,2394 @@
+{
+  "generated_at": "2026-08-31T12:41:03+00:00",
+  "model": "anthropic:claude-sonnet-5",
+  "runs_per_cell": 5,
+  "scaling_tasks": [
+    "solve",
+    "undocumented"
+  ],
+  "tasks": {
+    "solve": {
+      "prompt": "Solve the Spelling Bee with letters VALIDTY and center letter V. Report the word count, the total points, and the pangrams.",
+      "measures": "baseline: identical work, both sides briefed"
+    },
+    "aggregate": {
+      "prompt": "For the Spelling Bee with letters VALIDTY and center letter V, how many of the answers are 5 or more letters long? Report just the number.",
+      "measures": "composition: intermediate results in context vs. piped away"
+    },
+    "undocumented": {
+      "prompt": "Find every dictionary word matching the crossword pattern C_O__W_RD.",
+      "measures": "discovery: self-describing schema vs. --help spelunking"
+    }
+  },
+  "matrix": [
+    {
+      "arm": "mcp",
+      "task": "solve",
+      "capabilities": 3,
+      "runs": [
+        {
+          "input_tokens": 3339,
+          "output_tokens": 167,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 4597,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 3506
+        },
+        {
+          "input_tokens": 3339,
+          "output_tokens": 178,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 5341,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Spelling Bee results (letters: VALIDTY, center: V)**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram(s):** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 3517
+        },
+        {
+          "input_tokens": 3339,
+          "output_tokens": 167,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 4311,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 3506
+        },
+        {
+          "input_tokens": 3339,
+          "output_tokens": 158,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 3704,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Results:**\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram(s):** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 3497
+        },
+        {
+          "input_tokens": 3339,
+          "output_tokens": 156,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 19583,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Results:**\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 3495
+        }
+      ],
+      "trace": "\n\u2500\u2500\u2500\u2500 mcp \u00b7 solve \u00b7 3 tools in context \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  1. solve_spelling_bee(agent_name=\"agent-mcp\", letters=\"VALIDTY\", center=\"V\")\n     \u2192 [{'type': 'text', 'text': '{\"words\":[{\"word\":\"VALIDITY\",\"points\":15,\"pangram\":true},{\"word\":\"ADDITIVITY\",\"points\":10,\"pangram\":false},{\"word\":\"AVADAVAT\",\"point\u2026\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+      "stats": {
+        "input_tokens": {
+          "mean": 3339,
+          "stdev": 0.0,
+          "min": 3339,
+          "max": 3339
+        },
+        "output_tokens": {
+          "mean": 165.2,
+          "stdev": 8.8,
+          "min": 156,
+          "max": 178
+        },
+        "total_tokens": {
+          "mean": 3504.2,
+          "stdev": 8.8,
+          "min": 3495,
+          "max": 3517
+        },
+        "llm_calls": {
+          "mean": 2,
+          "stdev": 0.0,
+          "min": 2,
+          "max": 2
+        },
+        "tool_calls": {
+          "mean": 1,
+          "stdev": 0.0,
+          "min": 1,
+          "max": 1
+        },
+        "tool_result_chars": {
+          "mean": 1665,
+          "stdev": 0.0,
+          "min": 1665,
+          "max": 1665
+        },
+        "wall_ms": {
+          "mean": 7507.2,
+          "stdev": 6776.2,
+          "min": 3704,
+          "max": 19583
+        },
+        "correct_runs": 5,
+        "total_runs": 5
+      }
+    },
+    {
+      "arm": "cli",
+      "task": "solve",
+      "capabilities": 3,
+      "runs": [
+        {
+          "input_tokens": 2217,
+          "output_tokens": 125,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 4962,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram(s):** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 2342
+        },
+        {
+          "input_tokens": 2217,
+          "output_tokens": 126,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 4972,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram(s):** VALIDITY (15 pts)",
+          "correct": true,
+          "total_tokens": 2343
+        },
+        {
+          "input_tokens": 2217,
+          "output_tokens": 123,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 4584,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 2340
+        },
+        {
+          "input_tokens": 2217,
+          "output_tokens": 123,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 5128,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 2340
+        },
+        {
+          "input_tokens": 2217,
+          "output_tokens": 123,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 4798,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 2340
+        }
+      ],
+      "trace": "\n\u2500\u2500\u2500\u2500 cli \u00b7 solve \u00b7 3 commands on disk \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  1. bash(command=\"puzzle bee --letters VALIDTY --cente...\")\n     \u2192 {\"words\": [{\"word\": \"VALIDITY\", \"points\": 15, \"pangram\": true}, {\"word\": \"ADDITIVITY\", \"points\": 10, \"pangram\": false}, {\"word\": \"AVADAVAT\", \"points\": 8, \"pang\u2026\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+      "stats": {
+        "input_tokens": {
+          "mean": 2217,
+          "stdev": 0.0,
+          "min": 2217,
+          "max": 2217
+        },
+        "output_tokens": {
+          "mean": 124,
+          "stdev": 1.4,
+          "min": 123,
+          "max": 126
+        },
+        "total_tokens": {
+          "mean": 2341,
+          "stdev": 1.4,
+          "min": 2340,
+          "max": 2343
+        },
+        "llm_calls": {
+          "mean": 2,
+          "stdev": 0.0,
+          "min": 2,
+          "max": 2
+        },
+        "tool_calls": {
+          "mean": 1,
+          "stdev": 0.0,
+          "min": 1,
+          "max": 1
+        },
+        "tool_result_chars": {
+          "mean": 1796,
+          "stdev": 0.0,
+          "min": 1796,
+          "max": 1796
+        },
+        "wall_ms": {
+          "mean": 4888.8,
+          "stdev": 206.5,
+          "min": 4584,
+          "max": 5128
+        },
+        "correct_runs": 5,
+        "total_runs": 5
+      }
+    },
+    {
+      "arm": "mcp",
+      "task": "aggregate",
+      "capabilities": 3,
+      "runs": [
+        {
+          "input_tokens": 3345,
+          "output_tokens": 428,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 8034,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**24**",
+          "correct": true,
+          "total_tokens": 3773
+        },
+        {
+          "input_tokens": 3345,
+          "output_tokens": 416,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 7595,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**24**",
+          "correct": true,
+          "total_tokens": 3761
+        },
+        {
+          "input_tokens": 3345,
+          "output_tokens": 416,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 7575,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**24**",
+          "correct": true,
+          "total_tokens": 3761
+        },
+        {
+          "input_tokens": 3345,
+          "output_tokens": 416,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 7597,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**24**",
+          "correct": true,
+          "total_tokens": 3761
+        },
+        {
+          "input_tokens": 3345,
+          "output_tokens": 463,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 7823,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**24**",
+          "correct": true,
+          "total_tokens": 3808
+        }
+      ],
+      "trace": "\n\u2500\u2500\u2500\u2500 mcp \u00b7 aggregate \u00b7 3 tools in context \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  1. solve_spelling_bee(agent_name=\"agent-mcp\", letters=\"VALIDTY\", center=\"V\")\n     \u2192 [{'type': 'text', 'text': '{\"words\":[{\"word\":\"VALIDITY\",\"points\":15,\"pangram\":true},{\"word\":\"ADDITIVITY\",\"points\":10,\"pangram\":false},{\"word\":\"AVADAVAT\",\"point\u2026\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+      "stats": {
+        "input_tokens": {
+          "mean": 3345,
+          "stdev": 0.0,
+          "min": 3345,
+          "max": 3345
+        },
+        "output_tokens": {
+          "mean": 427.8,
+          "stdev": 20.4,
+          "min": 416,
+          "max": 463
+        },
+        "total_tokens": {
+          "mean": 3772.8,
+          "stdev": 20.4,
+          "min": 3761,
+          "max": 3808
+        },
+        "llm_calls": {
+          "mean": 2,
+          "stdev": 0.0,
+          "min": 2,
+          "max": 2
+        },
+        "tool_calls": {
+          "mean": 1,
+          "stdev": 0.0,
+          "min": 1,
+          "max": 1
+        },
+        "tool_result_chars": {
+          "mean": 1665,
+          "stdev": 0.0,
+          "min": 1665,
+          "max": 1665
+        },
+        "wall_ms": {
+          "mean": 7724.8,
+          "stdev": 200.5,
+          "min": 7575,
+          "max": 8034
+        },
+        "correct_runs": 5,
+        "total_runs": 5
+      }
+    },
+    {
+      "arm": "cli",
+      "task": "aggregate",
+      "capabilities": 3,
+      "runs": [
+        {
+          "input_tokens": 4035,
+          "output_tokens": 230,
+          "llm_calls": 3,
+          "tool_calls": 2,
+          "tool_result_chars": 1798,
+          "wall_ms": 7862,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json | jq '[.[] | select(.length>=5 or (.|length)>=5)]' 2>/dev/null || puzzle bee --letters VALIDTY --center V --json",
+            "puzzle bee --letters VALIDTY --center V --json | jq '[.words[] | select((.word|length)>=5)] | length'"
+          ],
+          "final_text": "**24**",
+          "correct": true,
+          "total_tokens": 4265
+        },
+        {
+          "input_tokens": 3869,
+          "output_tokens": 266,
+          "llm_calls": 4,
+          "tool_calls": 3,
+          "tool_result_chars": 852,
+          "wall_ms": 9635,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json | jq '[.answers[] | select(length>=5)] | length'",
+            "puzzle bee --letters VALIDTY --center V --json | jq '.' | head -50",
+            "puzzle bee --letters VALIDTY --center V --json | jq '[.words[] | select(.word|length>=5)] | length'"
+          ],
+          "final_text": "**24**",
+          "correct": true,
+          "total_tokens": 4135
+        },
+        {
+          "input_tokens": 3908,
+          "output_tokens": 161,
+          "llm_calls": 3,
+          "tool_calls": 2,
+          "tool_result_chars": 1798,
+          "wall_ms": 6851,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json",
+            "puzzle bee --letters VALIDTY --center V --json | jq '[.words[] | select((.word|length) >= 5)] | length'"
+          ],
+          "final_text": "**24**",
+          "correct": true,
+          "total_tokens": 4069
+        },
+        {
+          "input_tokens": 3908,
+          "output_tokens": 161,
+          "llm_calls": 3,
+          "tool_calls": 2,
+          "tool_result_chars": 1798,
+          "wall_ms": 8526,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json",
+            "puzzle bee --letters VALIDTY --center V --json | jq '[.words[] | select((.word|length) >= 5)] | length'"
+          ],
+          "final_text": "**24**",
+          "correct": true,
+          "total_tokens": 4069
+        },
+        {
+          "input_tokens": 3908,
+          "output_tokens": 161,
+          "llm_calls": 3,
+          "tool_calls": 2,
+          "tool_result_chars": 1798,
+          "wall_ms": 7535,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json",
+            "puzzle bee --letters VALIDTY --center V --json | jq '[.words[] | select((.word|length) >= 5)] | length'"
+          ],
+          "final_text": "**24**",
+          "correct": true,
+          "total_tokens": 4069
+        }
+      ],
+      "trace": "\n\u2500\u2500\u2500\u2500 cli \u00b7 aggregate \u00b7 3 commands on disk \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  1. bash(command=\"puzzle bee --letters VALIDTY --cente...\")\n     \u2192 {\"words\": [{\"word\": \"VALIDITY\", \"points\": 15, \"pangram\": true}, {\"word\": \"ADDITIVITY\", \"points\": 10, \"pangram\": false}, {\"word\": \"AVADAVAT\", \"points\": 8, \"pang\u2026\n  2. bash(command=\"puzzle bee --letters VALIDTY --cente...\")\n     \u2192 24\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+      "stats": {
+        "input_tokens": {
+          "mean": 3925.6,
+          "stdev": 63.4,
+          "min": 3869,
+          "max": 4035
+        },
+        "output_tokens": {
+          "mean": 195.8,
+          "stdev": 49.3,
+          "min": 161,
+          "max": 266
+        },
+        "total_tokens": {
+          "mean": 4121.4,
+          "stdev": 85.2,
+          "min": 4069,
+          "max": 4265
+        },
+        "llm_calls": {
+          "mean": 3.2,
+          "stdev": 0.4,
+          "min": 3,
+          "max": 4
+        },
+        "tool_calls": {
+          "mean": 2.2,
+          "stdev": 0.4,
+          "min": 2,
+          "max": 3
+        },
+        "tool_result_chars": {
+          "mean": 1608.8,
+          "stdev": 423.1,
+          "min": 852,
+          "max": 1798
+        },
+        "wall_ms": {
+          "mean": 8081.8,
+          "stdev": 1057.3,
+          "min": 6851,
+          "max": 9635
+        },
+        "correct_runs": 5,
+        "total_runs": 5
+      }
+    },
+    {
+      "arm": "cli+schema",
+      "task": "aggregate",
+      "capabilities": 3,
+      "runs": [
+        {
+          "input_tokens": 1449,
+          "output_tokens": 96,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 2,
+          "wall_ms": 3712,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json | jq '[.words[] | select((.word|length) >= 5)] | length'"
+          ],
+          "final_text": "**24**",
+          "correct": true,
+          "total_tokens": 1545
+        },
+        {
+          "input_tokens": 1449,
+          "output_tokens": 96,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 2,
+          "wall_ms": 3551,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json | jq '[.words[] | select((.word|length) >= 5)] | length'"
+          ],
+          "final_text": "**24**",
+          "correct": true,
+          "total_tokens": 1545
+        },
+        {
+          "input_tokens": 1449,
+          "output_tokens": 96,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 2,
+          "wall_ms": 3670,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json | jq '[.words[] | select((.word | length) >= 5)] | length'"
+          ],
+          "final_text": "**24**",
+          "correct": true,
+          "total_tokens": 1545
+        },
+        {
+          "input_tokens": 1448,
+          "output_tokens": 95,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 2,
+          "wall_ms": 3685,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json | jq '[.words[] | select((.word|length)>=5)] | length'"
+          ],
+          "final_text": "**24**",
+          "correct": true,
+          "total_tokens": 1543
+        },
+        {
+          "input_tokens": 1448,
+          "output_tokens": 95,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 2,
+          "wall_ms": 3670,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json | jq '[.words[] | select((.word|length)>=5)] | length'"
+          ],
+          "final_text": "**24**",
+          "correct": true,
+          "total_tokens": 1543
+        }
+      ],
+      "trace": "\n\u2500\u2500\u2500\u2500 cli+schema \u00b7 aggregate \u00b7 3 commands on disk \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  1. bash(command=\"puzzle bee --letters VALIDTY --cente...\")\n     \u2192 24\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+      "stats": {
+        "input_tokens": {
+          "mean": 1448.6,
+          "stdev": 0.5,
+          "min": 1448,
+          "max": 1449
+        },
+        "output_tokens": {
+          "mean": 95.6,
+          "stdev": 0.5,
+          "min": 95,
+          "max": 96
+        },
+        "total_tokens": {
+          "mean": 1544.2,
+          "stdev": 1.1,
+          "min": 1543,
+          "max": 1545
+        },
+        "llm_calls": {
+          "mean": 2,
+          "stdev": 0.0,
+          "min": 2,
+          "max": 2
+        },
+        "tool_calls": {
+          "mean": 1,
+          "stdev": 0.0,
+          "min": 1,
+          "max": 1
+        },
+        "tool_result_chars": {
+          "mean": 2,
+          "stdev": 0.0,
+          "min": 2,
+          "max": 2
+        },
+        "wall_ms": {
+          "mean": 3657.6,
+          "stdev": 62.0,
+          "min": 3551,
+          "max": 3712
+        },
+        "correct_runs": 5,
+        "total_runs": 5
+      }
+    },
+    {
+      "arm": "mcp",
+      "task": "undocumented",
+      "capabilities": 3,
+      "runs": [
+        {
+          "input_tokens": 2548,
+          "output_tokens": 110,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 5551,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only matching word is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 2658
+        },
+        {
+          "input_tokens": 2548,
+          "output_tokens": 110,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 5679,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only matching word is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 2658
+        },
+        {
+          "input_tokens": 2548,
+          "output_tokens": 110,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 5485,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only matching word is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 2658
+        },
+        {
+          "input_tokens": 2548,
+          "output_tokens": 108,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 5510,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 2656
+        },
+        {
+          "input_tokens": 2548,
+          "output_tokens": 110,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 5690,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only matching word is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 2658
+        }
+      ],
+      "trace": "\n\u2500\u2500\u2500\u2500 mcp \u00b7 undocumented \u00b7 3 tools in context \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  1. solve_crossword_pattern(agent_name=\"agent-mcp\", pattern=\"C_O__W_RD\")\n     \u2192 [{'type': 'text', 'text': '{\"pattern\":\"C_O__W_RD\",\"length\":9,\"matches\":[\"CROSSWORD\"],\"count\":1}', 'id': 'lc_21339c6a-236e-4615-9a89-f72481b5179b'}]\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+      "stats": {
+        "input_tokens": {
+          "mean": 2548,
+          "stdev": 0.0,
+          "min": 2548,
+          "max": 2548
+        },
+        "output_tokens": {
+          "mean": 109.6,
+          "stdev": 0.9,
+          "min": 108,
+          "max": 110
+        },
+        "total_tokens": {
+          "mean": 2657.6,
+          "stdev": 0.9,
+          "min": 2656,
+          "max": 2658
+        },
+        "llm_calls": {
+          "mean": 2,
+          "stdev": 0.0,
+          "min": 2,
+          "max": 2
+        },
+        "tool_calls": {
+          "mean": 1,
+          "stdev": 0.0,
+          "min": 1,
+          "max": 1
+        },
+        "tool_result_chars": {
+          "mean": 147,
+          "stdev": 0.0,
+          "min": 147,
+          "max": 147
+        },
+        "wall_ms": {
+          "mean": 5583,
+          "stdev": 95.7,
+          "min": 5485,
+          "max": 5690
+        },
+        "correct_runs": 5,
+        "total_runs": 5
+      }
+    },
+    {
+      "arm": "cli",
+      "task": "undocumented",
+      "capabilities": 3,
+      "runs": [
+        {
+          "input_tokens": 1394,
+          "output_tokens": 131,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 75,
+          "wall_ms": 5236,
+          "actions": [
+            "puzzle crossword --pattern 'C_O__W_RD' --json 2>&1 || puzzle crossword --help"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 1525
+        },
+        {
+          "input_tokens": 1362,
+          "output_tokens": 100,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 75,
+          "wall_ms": 4792,
+          "actions": [
+            "puzzle crossword --pattern C_O__W_RD --json 2>/dev/null || puzzle crossword --help"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 1462
+        },
+        {
+          "input_tokens": 2697,
+          "output_tokens": 179,
+          "llm_calls": 3,
+          "tool_calls": 2,
+          "tool_result_chars": 777,
+          "wall_ms": 7483,
+          "actions": [
+            "puzzle --help; puzzle crossword --help",
+            "puzzle crossword --pattern C_O__W_RD --json"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 2876
+        },
+        {
+          "input_tokens": 1372,
+          "output_tokens": 110,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 75,
+          "wall_ms": 4619,
+          "actions": [
+            "puzzle crossword --pattern C_O__W_RD --json 2>/dev/null || puzzle crossword --pattern C_O__W_RD"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 1482
+        },
+        {
+          "input_tokens": 1362,
+          "output_tokens": 100,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 75,
+          "wall_ms": 4634,
+          "actions": [
+            "puzzle crossword --pattern C_O__W_RD --json 2>/dev/null || puzzle crossword --help"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 1462
+        }
+      ],
+      "trace": "\n\u2500\u2500\u2500\u2500 cli \u00b7 undocumented \u00b7 3 commands on disk \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  1. bash(command=\"puzzle crossword --pattern 'C_O__W_R...\")\n     \u2192 {\"pattern\": \"C_O__W_RD\", \"length\": 9, \"matches\": [\"CROSSWORD\"], \"count\": 1}\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+      "stats": {
+        "input_tokens": {
+          "mean": 1637.4,
+          "stdev": 592.5,
+          "min": 1362,
+          "max": 2697
+        },
+        "output_tokens": {
+          "mean": 124,
+          "stdev": 33.2,
+          "min": 100,
+          "max": 179
+        },
+        "total_tokens": {
+          "mean": 1761.4,
+          "stdev": 623.6,
+          "min": 1462,
+          "max": 2876
+        },
+        "llm_calls": {
+          "mean": 2.2,
+          "stdev": 0.4,
+          "min": 2,
+          "max": 3
+        },
+        "tool_calls": {
+          "mean": 1.2,
+          "stdev": 0.4,
+          "min": 1,
+          "max": 2
+        },
+        "tool_result_chars": {
+          "mean": 215.4,
+          "stdev": 313.9,
+          "min": 75,
+          "max": 777
+        },
+        "wall_ms": {
+          "mean": 5352.8,
+          "stdev": 1216.7,
+          "min": 4619,
+          "max": 7483
+        },
+        "correct_runs": 5,
+        "total_runs": 5
+      }
+    }
+  ],
+  "scaling": [
+    {
+      "arm": "mcp",
+      "task": "solve",
+      "capabilities": 3,
+      "runs": [
+        {
+          "input_tokens": 3339,
+          "output_tokens": 167,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 4530,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 3506
+        },
+        {
+          "input_tokens": 3339,
+          "output_tokens": 167,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 14778,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 3506
+        },
+        {
+          "input_tokens": 3339,
+          "output_tokens": 156,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 4048,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Results:**\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 3495
+        },
+        {
+          "input_tokens": 3339,
+          "output_tokens": 169,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 4202,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Results for VALIDTY (center: V)**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram(s):** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 3508
+        },
+        {
+          "input_tokens": 3366,
+          "output_tokens": 175,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 5029,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Word count:** 34\n**Total points:** 171\n**Pangram:** VALIDITY (15 pts)",
+          "correct": true,
+          "total_tokens": 3541
+        }
+      ],
+      "trace": "\n\u2500\u2500\u2500\u2500 mcp \u00b7 solve \u00b7 3 tools in context \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  1. solve_spelling_bee(agent_name=\"agent-mcp\", letters=\"VALIDTY\", center=\"V\")\n     \u2192 [{'type': 'text', 'text': '{\"words\":[{\"word\":\"VALIDITY\",\"points\":15,\"pangram\":true},{\"word\":\"ADDITIVITY\",\"points\":10,\"pangram\":false},{\"word\":\"AVADAVAT\",\"point\u2026\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+      "stats": {
+        "input_tokens": {
+          "mean": 3344.4,
+          "stdev": 12.1,
+          "min": 3339,
+          "max": 3366
+        },
+        "output_tokens": {
+          "mean": 166.8,
+          "stdev": 6.9,
+          "min": 156,
+          "max": 175
+        },
+        "total_tokens": {
+          "mean": 3511.2,
+          "stdev": 17.4,
+          "min": 3495,
+          "max": 3541
+        },
+        "llm_calls": {
+          "mean": 2,
+          "stdev": 0.0,
+          "min": 2,
+          "max": 2
+        },
+        "tool_calls": {
+          "mean": 1,
+          "stdev": 0.0,
+          "min": 1,
+          "max": 1
+        },
+        "tool_result_chars": {
+          "mean": 1665,
+          "stdev": 0.0,
+          "min": 1665,
+          "max": 1665
+        },
+        "wall_ms": {
+          "mean": 6517.4,
+          "stdev": 4633.1,
+          "min": 4048,
+          "max": 14778
+        },
+        "correct_runs": 5,
+        "total_runs": 5
+      }
+    },
+    {
+      "arm": "cli",
+      "task": "solve",
+      "capabilities": 3,
+      "runs": [
+        {
+          "input_tokens": 2231,
+          "output_tokens": 139,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 4866,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "**Results for VALIDTY (center: V)**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram(s):** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 2370
+        },
+        {
+          "input_tokens": 2217,
+          "output_tokens": 106,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 4015,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 2323
+        },
+        {
+          "input_tokens": 2217,
+          "output_tokens": 107,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 4267,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "**Results:**\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY",
+          "correct": true,
+          "total_tokens": 2324
+        },
+        {
+          "input_tokens": 2217,
+          "output_tokens": 123,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 4958,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 2340
+        },
+        {
+          "input_tokens": 2217,
+          "output_tokens": 113,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 4324,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "**Results:**\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 pts)",
+          "correct": true,
+          "total_tokens": 2330
+        }
+      ],
+      "trace": "\n\u2500\u2500\u2500\u2500 cli \u00b7 solve \u00b7 3 commands on disk \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  1. bash(command=\"puzzle bee --letters VALIDTY --cente...\")\n     \u2192 {\"words\": [{\"word\": \"VALIDITY\", \"points\": 15, \"pangram\": true}, {\"word\": \"ADDITIVITY\", \"points\": 10, \"pangram\": false}, {\"word\": \"AVADAVAT\", \"points\": 8, \"pang\u2026\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+      "stats": {
+        "input_tokens": {
+          "mean": 2219.8,
+          "stdev": 6.3,
+          "min": 2217,
+          "max": 2231
+        },
+        "output_tokens": {
+          "mean": 117.6,
+          "stdev": 13.7,
+          "min": 106,
+          "max": 139
+        },
+        "total_tokens": {
+          "mean": 2337.4,
+          "stdev": 19.4,
+          "min": 2323,
+          "max": 2370
+        },
+        "llm_calls": {
+          "mean": 2,
+          "stdev": 0.0,
+          "min": 2,
+          "max": 2
+        },
+        "tool_calls": {
+          "mean": 1,
+          "stdev": 0.0,
+          "min": 1,
+          "max": 1
+        },
+        "tool_result_chars": {
+          "mean": 1796,
+          "stdev": 0.0,
+          "min": 1796,
+          "max": 1796
+        },
+        "wall_ms": {
+          "mean": 4486,
+          "stdev": 407.2,
+          "min": 4015,
+          "max": 4958
+        },
+        "correct_runs": 5,
+        "total_runs": 5
+      }
+    },
+    {
+      "arm": "mcp",
+      "task": "solve",
+      "capabilities": 15,
+      "runs": [
+        {
+          "input_tokens": 7629,
+          "output_tokens": 167,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 5391,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 7796
+        },
+        {
+          "input_tokens": 7629,
+          "output_tokens": 169,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 5826,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram(s):** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 7798
+        },
+        {
+          "input_tokens": 7629,
+          "output_tokens": 169,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 5769,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram(s):** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 7798
+        },
+        {
+          "input_tokens": 7629,
+          "output_tokens": 167,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 5931,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 7796
+        },
+        {
+          "input_tokens": 7629,
+          "output_tokens": 169,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 5488,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram(s):** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 7798
+        }
+      ],
+      "trace": "\n\u2500\u2500\u2500\u2500 mcp \u00b7 solve \u00b7 15 tools in context \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  1. solve_spelling_bee(agent_name=\"agent-mcp\", letters=\"VALIDTY\", center=\"V\")\n     \u2192 [{'type': 'text', 'text': '{\"words\":[{\"word\":\"VALIDITY\",\"points\":15,\"pangram\":true},{\"word\":\"ADDITIVITY\",\"points\":10,\"pangram\":false},{\"word\":\"AVADAVAT\",\"point\u2026\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+      "stats": {
+        "input_tokens": {
+          "mean": 7629,
+          "stdev": 0.0,
+          "min": 7629,
+          "max": 7629
+        },
+        "output_tokens": {
+          "mean": 168.2,
+          "stdev": 1.1,
+          "min": 167,
+          "max": 169
+        },
+        "total_tokens": {
+          "mean": 7797.2,
+          "stdev": 1.1,
+          "min": 7796,
+          "max": 7798
+        },
+        "llm_calls": {
+          "mean": 2,
+          "stdev": 0.0,
+          "min": 2,
+          "max": 2
+        },
+        "tool_calls": {
+          "mean": 1,
+          "stdev": 0.0,
+          "min": 1,
+          "max": 1
+        },
+        "tool_result_chars": {
+          "mean": 1665,
+          "stdev": 0.0,
+          "min": 1665,
+          "max": 1665
+        },
+        "wall_ms": {
+          "mean": 5681,
+          "stdev": 230.6,
+          "min": 5391,
+          "max": 5931
+        },
+        "correct_runs": 5,
+        "total_runs": 5
+      }
+    },
+    {
+      "arm": "cli",
+      "task": "solve",
+      "capabilities": 15,
+      "runs": [
+        {
+          "input_tokens": 2231,
+          "output_tokens": 112,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 4212,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "**Word count:** 34\n**Total points:** 171\n**Pangram:** VALIDITY",
+          "correct": true,
+          "total_tokens": 2343
+        },
+        {
+          "input_tokens": 2217,
+          "output_tokens": 100,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 4023,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "**Word count:** 34\n**Total points:** 171\n**Pangram(s):** VALIDITY",
+          "correct": true,
+          "total_tokens": 2317
+        },
+        {
+          "input_tokens": 2217,
+          "output_tokens": 123,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 5433,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 2340
+        },
+        {
+          "input_tokens": 2217,
+          "output_tokens": 123,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 4532,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 2340
+        },
+        {
+          "input_tokens": 2217,
+          "output_tokens": 98,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 4124,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "**Word count:** 34\n**Total points:** 171\n**Pangram:** VALIDITY",
+          "correct": true,
+          "total_tokens": 2315
+        }
+      ],
+      "trace": "\n\u2500\u2500\u2500\u2500 cli \u00b7 solve \u00b7 15 commands on disk \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  1. bash(command=\"puzzle bee --letters VALIDTY --cente...\")\n     \u2192 {\"words\": [{\"word\": \"VALIDITY\", \"points\": 15, \"pangram\": true}, {\"word\": \"ADDITIVITY\", \"points\": 10, \"pangram\": false}, {\"word\": \"AVADAVAT\", \"points\": 8, \"pang\u2026\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+      "stats": {
+        "input_tokens": {
+          "mean": 2219.8,
+          "stdev": 6.3,
+          "min": 2217,
+          "max": 2231
+        },
+        "output_tokens": {
+          "mean": 111.2,
+          "stdev": 12.0,
+          "min": 98,
+          "max": 123
+        },
+        "total_tokens": {
+          "mean": 2331,
+          "stdev": 13.8,
+          "min": 2315,
+          "max": 2343
+        },
+        "llm_calls": {
+          "mean": 2,
+          "stdev": 0.0,
+          "min": 2,
+          "max": 2
+        },
+        "tool_calls": {
+          "mean": 1,
+          "stdev": 0.0,
+          "min": 1,
+          "max": 1
+        },
+        "tool_result_chars": {
+          "mean": 1796,
+          "stdev": 0.0,
+          "min": 1796,
+          "max": 1796
+        },
+        "wall_ms": {
+          "mean": 4464.8,
+          "stdev": 573.8,
+          "min": 4023,
+          "max": 5433
+        },
+        "correct_runs": 5,
+        "total_runs": 5
+      }
+    },
+    {
+      "arm": "mcp",
+      "task": "solve",
+      "capabilities": 40,
+      "runs": [
+        {
+          "input_tokens": 16339,
+          "output_tokens": 199,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 4898,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram(s):** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 16538
+        },
+        {
+          "input_tokens": 16309,
+          "output_tokens": 169,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 4604,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram(s):** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 16478
+        },
+        {
+          "input_tokens": 16309,
+          "output_tokens": 167,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 4358,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 16476
+        },
+        {
+          "input_tokens": 16336,
+          "output_tokens": 194,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 5180,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 16530
+        },
+        {
+          "input_tokens": 16309,
+          "output_tokens": 169,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1665,
+          "wall_ms": 4753,
+          "actions": [
+            "solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram(s):** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 16478
+        }
+      ],
+      "trace": "\n\u2500\u2500\u2500\u2500 mcp \u00b7 solve \u00b7 40 tools in context \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  1. solve_spelling_bee(agent_name=\"agent-mcp\", letters=\"VALIDTY\", center=\"V\")\n     \u2192 [{'type': 'text', 'text': '{\"words\":[{\"word\":\"VALIDITY\",\"points\":15,\"pangram\":true},{\"word\":\"ADDITIVITY\",\"points\":10,\"pangram\":false},{\"word\":\"AVADAVAT\",\"point\u2026\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+      "stats": {
+        "input_tokens": {
+          "mean": 16320.4,
+          "stdev": 15.6,
+          "min": 16309,
+          "max": 16339
+        },
+        "output_tokens": {
+          "mean": 179.6,
+          "stdev": 15.5,
+          "min": 167,
+          "max": 199
+        },
+        "total_tokens": {
+          "mean": 16500,
+          "stdev": 31.2,
+          "min": 16476,
+          "max": 16538
+        },
+        "llm_calls": {
+          "mean": 2,
+          "stdev": 0.0,
+          "min": 2,
+          "max": 2
+        },
+        "tool_calls": {
+          "mean": 1,
+          "stdev": 0.0,
+          "min": 1,
+          "max": 1
+        },
+        "tool_result_chars": {
+          "mean": 1665,
+          "stdev": 0.0,
+          "min": 1665,
+          "max": 1665
+        },
+        "wall_ms": {
+          "mean": 4758.6,
+          "stdev": 308.8,
+          "min": 4358,
+          "max": 5180
+        },
+        "correct_runs": 5,
+        "total_runs": 5
+      }
+    },
+    {
+      "arm": "cli",
+      "task": "solve",
+      "capabilities": 40,
+      "runs": [
+        {
+          "input_tokens": 2217,
+          "output_tokens": 101,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 4036,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY",
+          "correct": true,
+          "total_tokens": 2318
+        },
+        {
+          "input_tokens": 2217,
+          "output_tokens": 123,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 4892,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 2340
+        },
+        {
+          "input_tokens": 2217,
+          "output_tokens": 123,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 4777,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram:** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 2340
+        },
+        {
+          "input_tokens": 2217,
+          "output_tokens": 100,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 4229,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "**Word count:** 34\n**Total points:** 171\n**Pangram(s):** VALIDITY",
+          "correct": true,
+          "total_tokens": 2317
+        },
+        {
+          "input_tokens": 2217,
+          "output_tokens": 125,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 1796,
+          "wall_ms": 4837,
+          "actions": [
+            "puzzle bee --letters VALIDTY --center V --json"
+          ],
+          "final_text": "**Results for VALIDTY (center: V):**\n\n- **Word count:** 34\n- **Total points:** 171\n- **Pangram(s):** VALIDITY (15 points)",
+          "correct": true,
+          "total_tokens": 2342
+        }
+      ],
+      "trace": "\n\u2500\u2500\u2500\u2500 cli \u00b7 solve \u00b7 40 commands on disk \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  1. bash(command=\"puzzle bee --letters VALIDTY --cente...\")\n     \u2192 {\"words\": [{\"word\": \"VALIDITY\", \"points\": 15, \"pangram\": true}, {\"word\": \"ADDITIVITY\", \"points\": 10, \"pangram\": false}, {\"word\": \"AVADAVAT\", \"points\": 8, \"pang\u2026\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+      "stats": {
+        "input_tokens": {
+          "mean": 2217,
+          "stdev": 0.0,
+          "min": 2217,
+          "max": 2217
+        },
+        "output_tokens": {
+          "mean": 114.4,
+          "stdev": 12.7,
+          "min": 100,
+          "max": 125
+        },
+        "total_tokens": {
+          "mean": 2331.4,
+          "stdev": 12.7,
+          "min": 2317,
+          "max": 2342
+        },
+        "llm_calls": {
+          "mean": 2,
+          "stdev": 0.0,
+          "min": 2,
+          "max": 2
+        },
+        "tool_calls": {
+          "mean": 1,
+          "stdev": 0.0,
+          "min": 1,
+          "max": 1
+        },
+        "tool_result_chars": {
+          "mean": 1796,
+          "stdev": 0.0,
+          "min": 1796,
+          "max": 1796
+        },
+        "wall_ms": {
+          "mean": 4554.2,
+          "stdev": 393.1,
+          "min": 4036,
+          "max": 4892
+        },
+        "correct_runs": 5,
+        "total_runs": 5
+      }
+    },
+    {
+      "arm": "mcp",
+      "task": "undocumented",
+      "capabilities": 3,
+      "runs": [
+        {
+          "input_tokens": 2548,
+          "output_tokens": 124,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 5656,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only dictionary word matching **C_O__W_RD** is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 2672
+        },
+        {
+          "input_tokens": 2548,
+          "output_tokens": 110,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 6794,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only matching word is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 2658
+        },
+        {
+          "input_tokens": 2548,
+          "output_tokens": 108,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 5391,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 2656
+        },
+        {
+          "input_tokens": 2548,
+          "output_tokens": 108,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 5953,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 2656
+        },
+        {
+          "input_tokens": 2548,
+          "output_tokens": 110,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 5666,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only matching word is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 2658
+        }
+      ],
+      "trace": "\n\u2500\u2500\u2500\u2500 mcp \u00b7 undocumented \u00b7 3 tools in context \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  1. solve_crossword_pattern(agent_name=\"agent-mcp\", pattern=\"C_O__W_RD\")\n     \u2192 [{'type': 'text', 'text': '{\"pattern\":\"C_O__W_RD\",\"length\":9,\"matches\":[\"CROSSWORD\"],\"count\":1}', 'id': 'lc_06616a60-7515-4576-9a74-ef7960c66a9a'}]\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+      "stats": {
+        "input_tokens": {
+          "mean": 2548,
+          "stdev": 0.0,
+          "min": 2548,
+          "max": 2548
+        },
+        "output_tokens": {
+          "mean": 112,
+          "stdev": 6.8,
+          "min": 108,
+          "max": 124
+        },
+        "total_tokens": {
+          "mean": 2660,
+          "stdev": 6.8,
+          "min": 2656,
+          "max": 2672
+        },
+        "llm_calls": {
+          "mean": 2,
+          "stdev": 0.0,
+          "min": 2,
+          "max": 2
+        },
+        "tool_calls": {
+          "mean": 1,
+          "stdev": 0.0,
+          "min": 1,
+          "max": 1
+        },
+        "tool_result_chars": {
+          "mean": 147,
+          "stdev": 0.0,
+          "min": 147,
+          "max": 147
+        },
+        "wall_ms": {
+          "mean": 5892,
+          "stdev": 542.0,
+          "min": 5391,
+          "max": 6794
+        },
+        "correct_runs": 5,
+        "total_runs": 5
+      }
+    },
+    {
+      "arm": "cli",
+      "task": "undocumented",
+      "capabilities": 3,
+      "runs": [
+        {
+          "input_tokens": 1362,
+          "output_tokens": 100,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 75,
+          "wall_ms": 4955,
+          "actions": [
+            "puzzle crossword --pattern C_O__W_RD --json 2>/dev/null || puzzle crossword --help"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 1462
+        },
+        {
+          "input_tokens": 1362,
+          "output_tokens": 100,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 75,
+          "wall_ms": 5371,
+          "actions": [
+            "puzzle crossword --pattern C_O__W_RD --json 2>/dev/null || puzzle crossword --help"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 1462
+        },
+        {
+          "input_tokens": 2411,
+          "output_tokens": 149,
+          "llm_calls": 3,
+          "tool_calls": 2,
+          "tool_result_chars": 508,
+          "wall_ms": 7134,
+          "actions": [
+            "puzzle --help",
+            "puzzle crossword --pattern C_O__W_RD --json 2>&1 || puzzle crossword -h"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 2560
+        },
+        {
+          "input_tokens": 3839,
+          "output_tokens": 381,
+          "llm_calls": 4,
+          "tool_calls": 3,
+          "tool_result_chars": 484,
+          "wall_ms": 10140,
+          "actions": [
+            "puzzle pattern --pattern \"C_O__W_RD\" --json 2>/dev/null || puzzle pattern C_O__W_RD --json",
+            "puzzle crossword --help",
+            "puzzle crossword --pattern \"C_O__W_RD\" --json"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 4220
+        },
+        {
+          "input_tokens": 1359,
+          "output_tokens": 97,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 75,
+          "wall_ms": 4789,
+          "actions": [
+            "puzzle crossword --pattern C_O__W_RD --json 2>/dev/null || puzzle --help"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 1456
+        }
+      ],
+      "trace": "\n\u2500\u2500\u2500\u2500 cli \u00b7 undocumented \u00b7 3 commands on disk \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  1. bash(command=\"puzzle crossword --pattern C_O__W_RD...\")\n     \u2192 {\"pattern\": \"C_O__W_RD\", \"length\": 9, \"matches\": [\"CROSSWORD\"], \"count\": 1}\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+      "stats": {
+        "input_tokens": {
+          "mean": 2066.6,
+          "stdev": 1090.1,
+          "min": 1359,
+          "max": 3839
+        },
+        "output_tokens": {
+          "mean": 165.4,
+          "stdev": 122.5,
+          "min": 97,
+          "max": 381
+        },
+        "total_tokens": {
+          "mean": 2232,
+          "stdev": 1209.1,
+          "min": 1456,
+          "max": 4220
+        },
+        "llm_calls": {
+          "mean": 2.6,
+          "stdev": 0.9,
+          "min": 2,
+          "max": 4
+        },
+        "tool_calls": {
+          "mean": 1.6,
+          "stdev": 0.9,
+          "min": 1,
+          "max": 3
+        },
+        "tool_result_chars": {
+          "mean": 243.4,
+          "stdev": 230.7,
+          "min": 75,
+          "max": 508
+        },
+        "wall_ms": {
+          "mean": 6477.8,
+          "stdev": 2249.3,
+          "min": 4789,
+          "max": 10140
+        },
+        "correct_runs": 5,
+        "total_runs": 5
+      }
+    },
+    {
+      "arm": "mcp",
+      "task": "undocumented",
+      "capabilities": 15,
+      "runs": [
+        {
+          "input_tokens": 6838,
+          "output_tokens": 124,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 6205,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only dictionary word matching **C_O__W_RD** is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 6962
+        },
+        {
+          "input_tokens": 6838,
+          "output_tokens": 108,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 5583,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 6946
+        },
+        {
+          "input_tokens": 6838,
+          "output_tokens": 108,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 6141,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 6946
+        },
+        {
+          "input_tokens": 6867,
+          "output_tokens": 152,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 6219,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only dictionary word matching **C_O__W_RD** is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 7019
+        },
+        {
+          "input_tokens": 6838,
+          "output_tokens": 124,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 5517,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only dictionary word matching **C_O__W_RD** is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 6962
+        }
+      ],
+      "trace": "\n\u2500\u2500\u2500\u2500 mcp \u00b7 undocumented \u00b7 15 tools in context \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  1. solve_crossword_pattern(agent_name=\"agent-mcp\", pattern=\"C_O__W_RD\")\n     \u2192 [{'type': 'text', 'text': '{\"pattern\":\"C_O__W_RD\",\"length\":9,\"matches\":[\"CROSSWORD\"],\"count\":1}', 'id': 'lc_844d4682-8b17-430e-bf11-87284c0a4407'}]\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+      "stats": {
+        "input_tokens": {
+          "mean": 6843.8,
+          "stdev": 13.0,
+          "min": 6838,
+          "max": 6867
+        },
+        "output_tokens": {
+          "mean": 123.2,
+          "stdev": 18.0,
+          "min": 108,
+          "max": 152
+        },
+        "total_tokens": {
+          "mean": 6967,
+          "stdev": 30.1,
+          "min": 6946,
+          "max": 7019
+        },
+        "llm_calls": {
+          "mean": 2,
+          "stdev": 0.0,
+          "min": 2,
+          "max": 2
+        },
+        "tool_calls": {
+          "mean": 1,
+          "stdev": 0.0,
+          "min": 1,
+          "max": 1
+        },
+        "tool_result_chars": {
+          "mean": 147,
+          "stdev": 0.0,
+          "min": 147,
+          "max": 147
+        },
+        "wall_ms": {
+          "mean": 5933,
+          "stdev": 351.6,
+          "min": 5517,
+          "max": 6219
+        },
+        "correct_runs": 5,
+        "total_runs": 5
+      }
+    },
+    {
+      "arm": "cli",
+      "task": "undocumented",
+      "capabilities": 15,
+      "runs": [
+        {
+          "input_tokens": 1361,
+          "output_tokens": 99,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 75,
+          "wall_ms": 4908,
+          "actions": [
+            "puzzle crossword --pattern \"C_O__W_RD\" --json 2>/dev/null || puzzle --help"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 1460
+        },
+        {
+          "input_tokens": 1364,
+          "output_tokens": 102,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 75,
+          "wall_ms": 4942,
+          "actions": [
+            "puzzle crossword --pattern \"C_O__W_RD\" --json 2>/dev/null || puzzle crossword --help"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 1466
+        },
+        {
+          "input_tokens": 1491,
+          "output_tokens": 228,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 75,
+          "wall_ms": 5823,
+          "actions": [
+            "puzzle crossword --pattern C_O__W_RD --json 2>&1 | head -50"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 1719
+        },
+        {
+          "input_tokens": 1364,
+          "output_tokens": 102,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 75,
+          "wall_ms": 4911,
+          "actions": [
+            "puzzle crossword --pattern \"C_O__W_RD\" --json 2>/dev/null || puzzle crossword --help"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 1466
+        },
+        {
+          "input_tokens": 1380,
+          "output_tokens": 117,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 75,
+          "wall_ms": 4779,
+          "actions": [
+            "puzzle crossword --pattern \"C_O__W_RD\" --json"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 1497
+        }
+      ],
+      "trace": "\n\u2500\u2500\u2500\u2500 cli \u00b7 undocumented \u00b7 15 commands on disk \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  1. bash(command=\"puzzle crossword --pattern \\\"C_O__W_...\")\n     \u2192 {\"pattern\": \"C_O__W_RD\", \"length\": 9, \"matches\": [\"CROSSWORD\"], \"count\": 1}\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+      "stats": {
+        "input_tokens": {
+          "mean": 1392,
+          "stdev": 55.8,
+          "min": 1361,
+          "max": 1491
+        },
+        "output_tokens": {
+          "mean": 129.6,
+          "stdev": 55.5,
+          "min": 99,
+          "max": 228
+        },
+        "total_tokens": {
+          "mean": 1521.6,
+          "stdev": 111.3,
+          "min": 1460,
+          "max": 1719
+        },
+        "llm_calls": {
+          "mean": 2,
+          "stdev": 0.0,
+          "min": 2,
+          "max": 2
+        },
+        "tool_calls": {
+          "mean": 1,
+          "stdev": 0.0,
+          "min": 1,
+          "max": 1
+        },
+        "tool_result_chars": {
+          "mean": 75,
+          "stdev": 0.0,
+          "min": 75,
+          "max": 75
+        },
+        "wall_ms": {
+          "mean": 5072.6,
+          "stdev": 424.1,
+          "min": 4779,
+          "max": 5823
+        },
+        "correct_runs": 5,
+        "total_runs": 5
+      }
+    },
+    {
+      "arm": "mcp",
+      "task": "undocumented",
+      "capabilities": 40,
+      "runs": [
+        {
+          "input_tokens": 15518,
+          "output_tokens": 124,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 6097,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only dictionary word matching **C_O__W_RD** is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 15642
+        },
+        {
+          "input_tokens": 15518,
+          "output_tokens": 124,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 6285,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only dictionary word matching **C_O__W_RD** is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 15642
+        },
+        {
+          "input_tokens": 15518,
+          "output_tokens": 108,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 5935,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 15626
+        },
+        {
+          "input_tokens": 15518,
+          "output_tokens": 124,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 6160,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only dictionary word matching **C_O__W_RD** is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 15642
+        },
+        {
+          "input_tokens": 15518,
+          "output_tokens": 124,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 147,
+          "wall_ms": 6024,
+          "actions": [
+            "solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})"
+          ],
+          "final_text": "The only dictionary word matching **C_O__W_RD** is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 15642
+        }
+      ],
+      "trace": "\n\u2500\u2500\u2500\u2500 mcp \u00b7 undocumented \u00b7 40 tools in context \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  1. solve_crossword_pattern(agent_name=\"agent-mcp\", pattern=\"C_O__W_RD\")\n     \u2192 [{'type': 'text', 'text': '{\"pattern\":\"C_O__W_RD\",\"length\":9,\"matches\":[\"CROSSWORD\"],\"count\":1}', 'id': 'lc_91416634-1910-4d86-b1bb-6256bba65bf3'}]\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+      "stats": {
+        "input_tokens": {
+          "mean": 15518,
+          "stdev": 0.0,
+          "min": 15518,
+          "max": 15518
+        },
+        "output_tokens": {
+          "mean": 120.8,
+          "stdev": 7.2,
+          "min": 108,
+          "max": 124
+        },
+        "total_tokens": {
+          "mean": 15638.8,
+          "stdev": 7.2,
+          "min": 15626,
+          "max": 15642
+        },
+        "llm_calls": {
+          "mean": 2,
+          "stdev": 0.0,
+          "min": 2,
+          "max": 2
+        },
+        "tool_calls": {
+          "mean": 1,
+          "stdev": 0.0,
+          "min": 1,
+          "max": 1
+        },
+        "tool_result_chars": {
+          "mean": 147,
+          "stdev": 0.0,
+          "min": 147,
+          "max": 147
+        },
+        "wall_ms": {
+          "mean": 6100.2,
+          "stdev": 133.1,
+          "min": 5935,
+          "max": 6285
+        },
+        "correct_runs": 5,
+        "total_runs": 5
+      }
+    },
+    {
+      "arm": "cli",
+      "task": "undocumented",
+      "capabilities": 40,
+      "runs": [
+        {
+          "input_tokens": 2413,
+          "output_tokens": 151,
+          "llm_calls": 3,
+          "tool_calls": 2,
+          "tool_result_chars": 508,
+          "wall_ms": 6984,
+          "actions": [
+            "puzzle --help",
+            "puzzle crossword --pattern C_O__W_RD --json 2>/dev/null || puzzle crossword -h"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 2564
+        },
+        {
+          "input_tokens": 1364,
+          "output_tokens": 102,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 75,
+          "wall_ms": 4946,
+          "actions": [
+            "puzzle crossword --pattern \"C_O__W_RD\" --json 2>/dev/null || puzzle crossword --help"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 1466
+        },
+        {
+          "input_tokens": 1359,
+          "output_tokens": 97,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 75,
+          "wall_ms": 4798,
+          "actions": [
+            "puzzle crossword --pattern C_O__W_RD --json 2>/dev/null || puzzle --help"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 1456
+        },
+        {
+          "input_tokens": 1361,
+          "output_tokens": 99,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 75,
+          "wall_ms": 5079,
+          "actions": [
+            "puzzle crossword --pattern \"C_O__W_RD\" --json 2>/dev/null || puzzle --help"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 1460
+        },
+        {
+          "input_tokens": 1362,
+          "output_tokens": 100,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "tool_result_chars": 75,
+          "wall_ms": 4795,
+          "actions": [
+            "puzzle crossword --pattern C_O__W_RD --json 2>/dev/null || puzzle crossword --help"
+          ],
+          "final_text": "The only match is **CROSSWORD**.",
+          "correct": true,
+          "total_tokens": 1462
+        }
+      ],
+      "trace": "\n\u2500\u2500\u2500\u2500 cli \u00b7 undocumented \u00b7 40 commands on disk \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  1. bash(command=\"puzzle --help\")\n     \u2192 usage: puzzle [-h] {bee,crossword,wordle} ... Word-puzzle solvers over the ENABLE1 dictionary (172,823 words). positional arguments: {bee,crossword,wordle} bee\u2026\n  2. bash(command=\"puzzle crossword --pattern C_O__W_RD...\")\n     \u2192 {\"pattern\": \"C_O__W_RD\", \"length\": 9, \"matches\": [\"CROSSWORD\"], \"count\": 1}\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+      "stats": {
+        "input_tokens": {
+          "mean": 1571.8,
+          "stdev": 470.2,
+          "min": 1359,
+          "max": 2413
+        },
+        "output_tokens": {
+          "mean": 109.8,
+          "stdev": 23.1,
+          "min": 97,
+          "max": 151
+        },
+        "total_tokens": {
+          "mean": 1681.6,
+          "stdev": 493.3,
+          "min": 1456,
+          "max": 2564
+        },
+        "llm_calls": {
+          "mean": 2.2,
+          "stdev": 0.4,
+          "min": 2,
+          "max": 3
+        },
+        "tool_calls": {
+          "mean": 1.2,
+          "stdev": 0.4,
+          "min": 1,
+          "max": 2
+        },
+        "tool_result_chars": {
+          "mean": 161.6,
+          "stdev": 193.6,
+          "min": 75,
+          "max": 508
+        },
+        "wall_ms": {
+          "mean": 5320.4,
+          "stdev": 937.4,
+          "min": 4795,
+          "max": 6984
+        },
+        "correct_runs": 5,
+        "total_runs": 5
+      }
+    }
+  ]
+}

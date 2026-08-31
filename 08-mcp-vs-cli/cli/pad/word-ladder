@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+"""Find a word ladder between two words of equal length."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="word-ladder", description="Find a word ladder between two words of equal length.")
+p.add_argument("--start", type=str, required=True, help="start")
+p.add_argument("--end", type=str, required=True, help="end")
+p.add_argument("--max-steps", type=int, default=8, help="max_steps")
+a = p.parse_args()
+print("word-ladder: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""Find every word reachable on a Boggle board."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="boggle-solve", description="Find every word reachable on a Boggle board.")
+p.add_argument("--grid", type=str, required=True, help="grid")
+p.add_argument("--min-length", type=int, default=3, help="min_length")
+a = p.parse_args()
+print("boggle-solve: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

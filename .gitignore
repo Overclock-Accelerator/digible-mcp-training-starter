@@ -1,0 +1,12 @@
+__pycache__/
+.DS_Store
+.env
+.env.*
+.env.local
+.venv/
+*.db
+*.pyc
+*.sqlite3
+exports/*.csv
+venv/
+!.env.local.example

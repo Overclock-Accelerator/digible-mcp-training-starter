@@ -1,0 +1,30 @@
+What the CLI agent's PATH actually contains at each padding level.
+Generated from cli/pad/, which comes from the same pad_catalog.py the
+MCP server registers as tools.
+
+$ ls $PATH_DIR   # 3 capabilities (1 command: puzzle + 0 pad)
+
+  puzzle
+
+$ ls $PATH_DIR   # 15 capabilities (13 commands: puzzle + 12 pad)
+
+  check-spelling  count-syllables  expand-abbreviation  find-anagrams
+  find-palindromes  find-rhymes  hidden-words  lemmatize
+  pluralize  puzzle  scrabble-score  stem-word
+  word-frequency
+
+$ ls $PATH_DIR   # 40 capabilities (38 commands: puzzle + 37 pad)
+
+  acrostic-build  antonym-lookup  boggle-solve  caesar-shift
+  check-spelling  clue-difficulty  contains-search  count-syllables
+  crossword-fill  cryptogram-solve  define-word  detect-pangram
+  etymology  expand-abbreviation  find-anagrams  find-palindromes
+  find-rhymes  hidden-words  lemmatize  letter-histogram
+  longest-word  min-edit-distance  nearest-words  pluralize
+  prefix-search  puzzle  random-word  readability-score
+  scrabble-score  soundex-match  stem-word  suffix-search
+  suggest-hyphenation  synonym-lookup  validate-word  word-frequency
+  word-ladder  word-search-grid
+
+The model never sees this listing unless it goes looking.
+The MCP arm sends the equivalent catalogue on every single request.

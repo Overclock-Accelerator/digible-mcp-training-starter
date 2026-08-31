@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""Look up how common a word is in a reference corpus."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="word-frequency", description="Look up how common a word is in a reference corpus.")
+p.add_argument("--word", type=str, required=True, help="word")
+p.add_argument("--corpus", type=str, default="enable1", help="corpus")
+a = p.parse_args()
+print("word-frequency: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

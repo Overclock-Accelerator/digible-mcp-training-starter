@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""Score the reading difficulty of a passage."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="readability-score", description="Score the reading difficulty of a passage.")
+p.add_argument("--text", type=str, required=True, help="text")
+p.add_argument("--metric", type=str, default="flesch", help="metric")
+a = p.parse_args()
+print("readability-score: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

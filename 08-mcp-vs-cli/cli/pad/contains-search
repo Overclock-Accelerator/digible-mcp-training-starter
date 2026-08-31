@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""List dictionary words containing a substring."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="contains-search", description="List dictionary words containing a substring.")
+p.add_argument("--substring", type=str, required=True, help="substring")
+p.add_argument("--max-results", type=int, default=25, help="max_results")
+a = p.parse_args()
+print("contains-search: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""Rate how hard a crossword clue is for its answer."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="clue-difficulty", description="Rate how hard a crossword clue is for its answer.")
+p.add_argument("--clue", type=str, required=True, help="clue")
+p.add_argument("--answer", type=str, required=True, help="answer")
+a = p.parse_args()
+print("clue-difficulty: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

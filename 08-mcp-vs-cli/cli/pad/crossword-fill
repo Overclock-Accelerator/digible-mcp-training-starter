@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""Fill an empty crossword grid with dictionary words."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="crossword-fill", description="Fill an empty crossword grid with dictionary words.")
+p.add_argument("--grid", type=str, required=True, help="grid")
+p.add_argument("--theme-words", type=str, required=True, help="theme_words")
+a = p.parse_args()
+print("crossword-fill: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>04 — Deploying an MCP server</title>
+<style>
+:root{
+  --bg:#fbfaf7; --panel:#ffffff; --ink:#1a1a1a; --ink-2:#4a4a48; --ink-3:#6e6e6a;
+  --rule:#e2ded4; --rule-2:#d0cabb;
+  --accent:#8a4b1f; --accent-soft:#f3e9df;
+  --code-bg:#f6f3ed; --code-ink:#2c2a26; --code-rule:#e2ded4;
+  --ok:#2f6a3f; --ok-soft:#e6f0e7;
+  --warn:#8a5a00; --warn-soft:#fbf1dc;
+  --stop:#9a2f2f; --stop-soft:#f8e7e4;
+  --shadow:0 1px 2px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme:dark){
+:root{
+  --bg:#14140f; --panel:#1b1b16; --ink:#f0ede4; --ink-2:#c4c0b4; --ink-3:#95918a;
+  --rule:#33322a; --rule-2:#454338;
+  --accent:#e0a06a; --accent-soft:#2b2119;
+  --code-bg:#121210; --code-ink:#e4e0d6; --code-rule:#33322a;
+  --ok:#8fd0a0; --ok-soft:#1b2a1e;
+  --warn:#e8c37a; --warn-soft:#2b2416;
+  --stop:#eda49a; --stop-soft:#2e1c1a;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:400 19px/1.65 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  padding:0 20px 120px;
+}
+.wrap{max-width:920px;margin:0 auto}
+
+/* ---- masthead ---- */
+header.mast{padding:64px 0 36px;border-bottom:3px solid var(--ink)}
+.eyebrow{
+  font:600 14px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 18px;
+}
+h1{font-size:clamp(38px,6vw,60px);line-height:1.06;margin:0 0 20px;letter-spacing:-.022em;font-weight:700}
+.standfirst{font-size:22px;line-height:1.55;color:var(--ink-2);margin:0;max-width:44em}
+.meta{
+  margin-top:28px;display:flex;flex-wrap:wrap;gap:10px;
+  font:500 14px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+.meta span{
+  background:var(--panel);border:1px solid var(--rule);border-radius:999px;
+  padding:8px 14px;color:var(--ink-3);
+}
+
+/* ---- sections ---- */
+section{padding-top:52px}
+h2{
+  font-size:clamp(26px,3.4vw,34px);line-height:1.2;margin:0 0 8px;letter-spacing:-.015em;font-weight:700;
+  display:flex;gap:16px;align-items:baseline;
+}
+h2 .num{
+  font:700 16px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color:var(--accent);background:var(--accent-soft);border-radius:6px;
+  padding:8px 10px;flex:none;letter-spacing:.05em;
+}
+h3{font-size:21px;line-height:1.35;margin:34px 0 10px;font-weight:650;letter-spacing:-.008em}
+h4{font-size:17px;margin:24px 0 8px;font-weight:650;color:var(--ink-2)}
+p{margin:0 0 16px;max-width:44em}
+.lede{color:var(--ink-2);font-size:20px;max-width:44em;margin-bottom:22px}
+ul,ol{max-width:44em;margin:0 0 16px;padding-left:1.3em}
+li{margin:0 0 9px}
+strong{font-weight:650}
+a{color:var(--accent);text-underline-offset:3px}
+hr.soft{border:0;border-top:1px solid var(--rule);margin:44px 0}
+
+/* ---- code ---- */
+pre{
+  background:var(--code-bg);color:var(--code-ink);border:1px solid var(--code-rule);
+  border-radius:10px;padding:18px 20px;overflow-x:auto;margin:0 0 20px;
+  font:400 15.5px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  -webkit-user-select:all;user-select:all; tab-size:2;
+}
+pre code{white-space:pre;display:block}
+code{
+  font:400 .875em/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  background:var(--code-bg);border:1px solid var(--code-rule);
+  border-radius:4px;padding:.1em .38em;
+}
+pre code{background:none;border:0;padding:0}
+.filename{
+  font:600 13px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color:var(--ink-3);letter-spacing:.04em;margin:0 0 7px;text-transform:none;
+}
+
+/* ---- callouts ---- */
+.call{
+  border-left:5px solid var(--rule-2);background:var(--panel);border-radius:0 10px 10px 0;
+  padding:18px 22px;margin:0 0 22px;box-shadow:var(--shadow);
+}
+.call p:last-child,.call ul:last-child,.call pre:last-child{margin-bottom:0}
+.call .tag{
+  display:block;font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.14em;text-transform:uppercase;margin:0 0 10px;
+}
+.call.note{border-left-color:var(--accent);background:var(--accent-soft)}
+.call.note .tag{color:var(--accent)}
+.call.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+.call.warn .tag{color:var(--warn)}
+.call.stop{border-left-color:var(--stop);background:var(--stop-soft)}
+.call.stop .tag{color:var(--stop)}
+.call.ok{border-left-color:var(--ok);background:var(--ok-soft)}
+.call.ok .tag{color:var(--ok)}
+
+/* ---- steps ---- */
+ol.steps{list-style:none;padding:0;counter-reset:s;max-width:none}
+ol.steps>li{
+  counter-increment:s;position:relative;padding:0 0 4px 58px;margin:0 0 30px;
+}
+ol.steps>li::before{
+  content:counter(s);position:absolute;left:0;top:1px;
+  width:38px;height:38px;border-radius:50%;
+  background:var(--ink);color:var(--bg);
+  font:700 17px/38px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  text-align:center;
+}
+ol.steps>li>h3{margin:4px 0 8px}
+
+/* ---- table ---- */
+.tw{overflow-x:auto;margin:0 0 22px;border:1px solid var(--rule);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:16.5px;min-width:520px}
+th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{
+  font:700 12.5px/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+  background:var(--code-bg);
+}
+tr:last-child td{border-bottom:0}
+td code{font-size:.85em;white-space:nowrap}
+
+/* ---- before/after ---- */
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:0 0 22px}
+@media (max-width:760px){.ba{grid-template-columns:1fr}}
+.ba>div{min-width:0}
+.ba h4{margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.pill{
+  font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.1em;text-transform:uppercase;padding:5px 8px;border-radius:4px;
+}
+.pill.bad{background:var(--stop-soft);color:var(--stop)}
+.pill.good{background:var(--ok-soft);color:var(--ok)}
+.ba pre{margin:0;font-size:14.5px}
+
+/* ---- verified badge ---- */
+.vf{
+  display:inline-block;font:600 12.5px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.06em;color:var(--ok);background:var(--ok-soft);
+  border-radius:4px;padding:6px 9px;margin:0 0 14px;
+}
+.vf.un{color:var(--warn);background:var(--warn-soft)}
+
+footer{margin-top:72px;padding-top:26px;border-top:1px solid var(--rule);color:var(--ink-3);font-size:15.5px}
+footer p{max-width:46em}
+@media print{body{padding:0}.call,pre,.tw{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <p class="eyebrow">MCP Training · Part 04</p>
+  <h1>Deploying an MCP&nbsp;server</h1>
+  <p class="standfirst">Everything so far ran on your laptop. This is what changed when the PuzzleMaster server moved to a URL that other people can reach — including the one thing that worked locally and could not possibly work in production.</p>
+  <div class="meta">
+    <span>~10 min live</span>
+    <span>Prefect Horizon</span>
+    <span>mcp-puzzlemaster.fastmcp.app</span>
+    <span>Verified 2026-08-31</span>
+  </div>
+</header>
+
+<section id="what">
+  <h2><span class="num">01</span> What Horizon is</h2>
+  <p class="lede">Prefect Horizon is a managed platform for hosting MCP servers. If you have read anything about <strong>FastMCP Cloud</strong>, you already know it — Horizon is FastMCP Cloud, renamed and expanded. Same team, at Prefect.</p>
+
+  <p>That lineage matters more than a rename usually does. Prefect wrote FastMCP, the framework behind the servers in <code>01</code> and <code>02</code>. The people who host the server wrote the library the server is built on, so the hosting layer is aware of what an MCP server actually is: it inspects your tools at build time and can tell you what it found.</p>
+
+  <p>Horizon is sold as four pillars — Deploy, Registry, Gateway, Agents. <strong>We use exactly one of them: Deploy.</strong> Everything on this page is Horizon Deploy.</p>
+
+  <div class="call note">
+    <span class="tag">The one-sentence version</span>
+    <p>You connect a GitHub repository, name a Python file inside it, and Horizon gives you an HTTPS URL that speaks MCP over Streamable HTTP. Pushing to your default branch redeploys it.</p>
+  </div>
+
+  <h3>Git-backed only — there is no deploy CLI</h3>
+  <p>This is the first thing that surprises people, so it is worth stating flatly. There is no <code>horizon deploy</code>. There is no <code>fastmcp push</code>. <strong>Deployment is driven by git.</strong> You connect a repo, and the act of pushing is the act of deploying.</p>
+
+  <p>There is a <code>fastmcp</code> CLI, and it does have <code>login</code>, <code>logout</code>, <code>whoami</code>, and <code>inspect</code> — but none of those deploy anything. There is also a REST API at <code>https://horizon.prefect.io/api/v0/...</code> authenticated with an <code>fmcp_</code>-prefixed bearer token, if you want to drive Horizon from CI. But the normal path, and the one we used, is: push to <code>main</code>.</p>
+
+  <p>The useful consequence: <strong>your deployment history is your git history.</strong> Every build is pinned to an exact 40-character commit SHA, resolved before the build starts. Moving a branch afterwards cannot retroactively change a build that already ran.</p>
+
+  <p>Pull requests get their own <strong>preview deployments</strong> at their own URLs, which is how you try a new tool without pointing production at it.</p>
+</section>
+
+<hr class="soft">
+
+<section id="prepare">
+  <h2><span class="num">02</span> Preparing the repo</h2>
+  <p class="lede">Horizon reads four things out of your repository. Get these right and the build is uneventful, which is the goal.</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>What</th><th>Ours</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Entrypoint</strong></td><td><code>server.py:mcp</code></td><td>Which file, and which object in it, is the server. Required — there is no default.</td></tr>
+      <tr><td><strong>Dependencies</strong></td><td><code>requirements.txt</code></td><td>Auto-discovered. Must include <code>fastmcp</code>.</td></tr>
+      <tr><td><strong>Python version</strong></td><td><code>.python-version</code> → <code>3.12</code></td><td>Pins the runtime. Default is 3.12 if absent.</td></tr>
+      <tr><td><strong>Committed data</strong></td><td><code>enable1.txt</code></td><td>Ships inside the build artifact. Read-only at runtime, and that is fine.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>The entrypoint convention</h3>
+  <p>The entrypoint field uses the same syntax as <code>fastmcp run</code>: a relative file path, optionally followed by a colon and the name of the server object inside that file.</p>
+
+  <pre><code>main.py                        # a file — Horizon finds the server object
+server.py:mcp                  # explicit: the object named `mcp` in server.py
+services/weather/server.py:mcp # nested is fine</code></pre>
+
+  <p>The object name after <code>:</code> must be a valid Python identifier. The path cannot be absolute, cannot contain <code>..</code>, and must point inside the repository. We use <code>server.py:mcp</code> because being explicit costs nothing and removes a guess.</p>
+
+  <p>Concretely, this is what Horizon is looking for:</p>
+
+  <p class="filename">server.py</p>
+  <pre><code>from fastmcp import FastMCP
+
+mcp = FastMCP("puzzlemaster")   # &lt;- this object, named here
+
+@mcp.tool
+def solve_wordle(guesses: list[str], feedback: list[str], agent_name: str) -&gt; dict:
+    ...</code></pre>
+
+  <div class="call note">
+    <span class="tag">Check before you push</span>
+    <p>Run <code>fastmcp inspect server.py:mcp</code> locally. It prints the tools, resources, and prompts your server exposes — which is <em>exactly</em> what Horizon does during its build step. If <code>inspect</code> is unhappy on your machine, the build will be unhappy too, and finding that out locally is much faster than finding it out in a build log.</p>
+  </div>
+
+  <h3>Dependencies</h3>
+  <p>Horizon searches from the entrypoint's directory upward to the repository root and takes the first thing it finds, in this order:</p>
+  <ol>
+    <li><code>requirements.txt</code> — installed as a dependency file</li>
+    <li><code>uv.lock</code> — but only when a <code>pyproject.toml</code> sits next to it; installed with a frozen <code>uv sync</code></li>
+    <li><code>pyproject.toml</code> — installed as a project when it declares a build system</li>
+  </ol>
+
+  <p><strong>Whatever you use, <code>fastmcp</code> must be in it.</strong> Horizon relies on the FastMCP CLI to install, inspect, and run your server — even if your entrypoint is a low-level MCP server rather than a FastMCP one.</p>
+
+  <div class="call warn">
+    <span class="tag">Monorepo trap</span>
+    <p>Because the search walks <em>upward from the entrypoint</em>, a closer but unrelated <code>requirements.txt</code> can shadow the one you meant. If your build installs a set of packages you did not expect, this is why. The fix is to configure an explicit dependency file path in the server settings rather than relying on discovery.</p>
+  </div>
+
+  <h3>The Python version floor</h3>
+  <p>Horizon resolves the Python version by walking up from the entrypoint directory looking for a <code>.python-version</code> file or version metadata in <code>pyproject.toml</code>.</p>
+
+  <div class="call stop">
+    <span class="tag">This will bite you</span>
+    <p><strong>Horizon supports Python 3.11, 3.12, 3.13, and 3.14. It does not support 3.10.</strong></p>
+    <p style="margin-top:12px">This repository targets "Python &gt;= 3.10", and everything in <code>00</code> through <code>02</code> runs fine on 3.10 locally. That floor does not survive the move to Horizon. If you do not pin a version, you silently get 3.12 — which is usually what you wanted, but "silently" is doing a lot of work in that sentence.</p>
+  </div>
+
+  <p class="filename">.python-version</p>
+  <pre><code>3.12</code></pre>
+
+  <p>One line. Commit it. Now the runtime is a decision in your repo rather than a default you are relying on.</p>
+
+  <h3>Why the word list is committed</h3>
+  <p><code>enable1.txt</code> is 172,823 words and about 1.9 MB, and it is checked into the repository. In a normal Python project you might reach for "download it on first run" or "fetch it from S3". Here, committing it is not laziness — it is the correct call, for two separate reasons.</p>
+
+  <p><strong>It removes a network call from startup.</strong> Horizon warns explicitly against network calls during module import, because import happens inside a cold start and a cold start happens inside somebody's 170-second request budget. A dictionary fetched at import is a dictionary that can time out or 503 during a demo.</p>
+
+  <p><strong>Committed files ship in the build artifact.</strong> The artifact Horizon builds contains your source, your installed dependencies, and everything else in the repo at that commit. So <code>open("shared/data/enable1.txt")</code> works at runtime, on every instance, forever — because that file was baked in at build time, not written at run time.</p>
+
+  <p>Hold onto that distinction. It is the whole of the next-but-one section.</p>
+</section>
+
+<hr class="soft">
+
+<section id="connect">
+  <h2><span class="num">03</span> Connecting GitHub and creating the server</h2>
+
+  <p class="vf un">UI flow described from Horizon's documentation. Field labels may have shifted since — trust the screen over this page.</p>
+
+  <ol class="steps">
+    <li>
+      <h3>Sign in and create an organization</h3>
+      <p>Go to <a href="https://horizon.prefect.io">horizon.prefect.io</a> and sign in. Horizon asks you to create an <strong>organization</strong>, which is the thing that owns your servers and their access settings. Ours is <strong>Overclock Accelerator</strong>, on the <strong>PRO</strong> plan.</p>
+      <p>The plan matters in two specific ways later: PRO can make a server <strong>public</strong>, and PRO can <strong>invite org members</strong>. Both come back in Part 05.</p>
+    </li>
+    <li>
+      <h3>Install the Horizon GitHub App</h3>
+      <p>From onboarding, or later from <strong>Settings → Integrations</strong>. Horizon opens a GitHub authorization window and asks GitHub to install or configure the Horizon GitHub App.</p>
+      <p>GitHub then asks which repositories Horizon may see — <strong>all repositories in the account, or only selected ones</strong>. Pick selected repositories and grant just the one. There is no reason to hand a hosting platform read access to everything you own, and the picker only ever shows what the installation granted.</p>
+      <div class="call note">
+        <span class="tag">Where the boundary sits</span>
+        <p>GitHub owns repository access and source history. Horizon owns the server record, the build record, the deployment URL, environment variables, access policy, and observability. <strong>GitHub credentials are never exposed to MCP clients</strong> — connecting a repo does not give the people using your server any access to your code.</p>
+      </div>
+    </li>
+    <li>
+      <h3>Create the server</h3>
+      <p>Pick the repository from the picker, then fill in:</p>
+      <div class="tw">
+      <table>
+        <thead><tr><th>Field</th><th>What it does</th><th>Ours</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Server name</strong></td><td>Determines the URL. Treat it as a client-facing identifier and avoid renaming later.</td><td><code>mcp-puzzlemaster</code></td></tr>
+          <tr><td><strong>Description</strong></td><td>Shown in the dashboard and registry.</td><td>—</td></tr>
+          <tr><td><strong>Entrypoint</strong></td><td>File, optionally <code>:object</code>.</td><td><code>server.py:mcp</code></td></tr>
+          <tr><td><strong>Authentication</strong></td><td>When on, only authenticated users in your org can connect. Horizon runs the whole OAuth flow for you.</td><td>See Part 05</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p>The server name is the load-bearing one. It becomes <code>https://&lt;server-name&gt;.fastmcp.app/mcp</code>, that URL is stable across every future deploy, and anything pointing at it breaks if you rename.</p>
+    </li>
+  </ol>
+</section>
+
+<hr class="soft">
+
+<section id="secrets">
+  <h2><span class="num">04</span> Secrets</h2>
+  <p class="lede">PuzzleMaster needs one secret in production: <code>DATABASE_URL</code>, the connection string for the Neon Postgres instance holding the audit log. It is not in the repository, and it never will be.</p>
+
+  <h3>Why secrets never live in the repo</h3>
+  <p>The obvious reason is that the repo is public. But the reason holds even if it were private, and it is worth saying out loud because "it's a private repo" is the excuse that gets people burned:</p>
+
+  <ul>
+    <li><strong>Git does not forget.</strong> Committing a secret and deleting it in the next commit does not remove it — it is in the history, in every clone, in every fork, and in the GitHub API. The only real remediation is rotating the credential.</li>
+    <li><strong>Repo access and production access are different questions.</strong> A contractor reviewing a PR needs to read your code. They do not need your production database. Putting the credential in the source merges two access decisions that should stay separate.</li>
+    <li><strong>Repos get less private over time, never more.</strong> This one went public on purpose. Plenty go public by accident.</li>
+  </ul>
+
+  <p>So the credential lives in Horizon, encrypted, and arrives in the process as an environment variable. The code never sees a literal.</p>
+
+  <p class="filename">server.py</p>
+  <pre><code>import os
+
+DATABASE_URL = os.environ["DATABASE_URL"]   # set in Horizon, not in git</code></pre>
+
+  <div class="call note">
+    <span class="tag">Small thing, real payoff</span>
+    <p>Use <code>os.environ["X"]</code>, not <code>os.environ.get("X")</code>. The bracket form raises <code>KeyError</code> at import, which fails the build during Horizon's inspection step — you find out in a build log. The <code>.get()</code> form returns <code>None</code>, deploys green, and fails on the first tool call in front of an audience.</p>
+  </div>
+
+  <h3>Setting it</h3>
+  <p>Open the server, then <strong>Settings → Environment Variables → Add variable</strong>. Enter the key, the value, an optional description, and check which environments should receive it.</p>
+
+  <p>There are two environments, and they are separate records:</p>
+  <div class="tw">
+  <table>
+    <thead><tr><th>Environment</th><th>Used by</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Production</strong></td><td>Default-branch builds and the live deployment</td></tr>
+      <tr><td><strong>Preview</strong></td><td>Non-default branches and pull request preview builds</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>Checking both creates one record in each with the same initial value, but they diverge from then on — updating one does not update the other. That is a feature. <strong>Point Preview at a different database than Production</strong>, so a PR that mangles the audit table mangles a table nobody cares about.</p>
+
+  <h3>Four rules that will save you a build</h3>
+  <ul>
+    <li><strong>New variables are sensitive by default.</strong> Sensitive means write-only: the dashboard will never show you the value again. Marking an existing variable sensitive is <strong>irreversible</strong>. This is correct behaviour, but it does mean you should have the value somewhere else before you paste it in.</li>
+    <li><strong>Key naming is enforced.</strong> Uppercase letters, digits, and underscores; must start with an uppercase letter or underscore; 255 characters or fewer. <code>FASTMCP_CLOUD_</code> and <code>HORIZON_</code> are reserved prefixes. A bad key fails the build.</li>
+    <li><strong>Changing a variable does not update a running server.</strong> Variables are build inputs. You must create a new build and make sure the deployment selects that artifact. Editing the value and refreshing the page achieves nothing.</li>
+    <li><strong>Never print a secret.</strong> Horizon captures stdout and stderr as server logs. A debugging <code>print(os.environ)</code> puts your database password in a log viewer that your whole org can read. And recall from <code>02</code> that stdout is already forbidden for a different reason — over stdio it <em>is</em> the protocol channel.</li>
+  </ul>
+
+  <h3>Three secret stores, three consumers</h3>
+  <p>This is the part that quietly costs a team an afternoon, so it is worth saying explicitly and early. By the end of this training there are <strong>three different places a secret can live</strong>, and each one serves a different consumer. None of them can read the others.</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>Store</th><th>Who reads it</th><th>Holds</th><th>In git?</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong><code>.env.local</code></strong><br><span style="color:var(--ink-3)">repo root</span></td>
+        <td>The repo's Python agents, on your laptop</td>
+        <td><code>ANTHROPIC_API_KEY</code>, and <code>DATABASE_URL</code> if you point the local audit log at Postgres</td>
+        <td><strong>No</strong> — gitignored. <code>.env.local.example</code> is the committed template.</td>
+      </tr>
+      <tr>
+        <td><strong>Horizon environment variables</strong><br><span style="color:var(--ink-3)">Settings → Environment Variables</span></td>
+        <td>The deployed server, in production</td>
+        <td><code>DATABASE_URL</code></td>
+        <td><strong>No</strong> — encrypted in Horizon, injected at build and run time</td>
+      </tr>
+      <tr>
+        <td><strong><code>claude_desktop_config.json</code></strong><br><span style="color:var(--ink-3)">Claude Desktop's own config</span></td>
+        <td>Claude Desktop, when it connects to the remote server</td>
+        <td>Nothing, ideally — the OAuth flow handles it. A bearer token only if you force it.</td>
+        <td><strong>No</strong> — it lives outside the repo entirely</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>Locally, the repo convention is a single gitignored file at the root. Copy the template and fill it in:</p>
+
+  <pre><code>cp .env.local.example .env.local
+# then edit .env.local and paste your key</code></pre>
+
+  <p class="filename">.env.local</p>
+  <pre><code>ANTHROPIC_API_KEY=sk-ant-...
+
+# Only if you point the local audit log at Postgres
+# DATABASE_URL=postgresql://user:password@host:5432/dbname</code></pre>
+
+  <p>A dependency-free loader at <code>shared/envloader.py</code> walks up from each agent to find <code>.env.local</code> (then <code>.env</code>) and populates <code>os.environ</code>. <strong>It never overwrites a variable that is already set</strong>, so a shell <code>export</code> still wins if you want to override for one run. Nothing needs exporting in the normal case.</p>
+
+  <div class="call warn">
+    <span class="tag">The confusion to head off</span>
+    <p><strong>None of these three stores can see the others.</strong> Putting <code>DATABASE_URL</code> in <code>.env.local</code> does not configure the deployed server — that file never leaves your laptop, and Horizon builds from a clean checkout of your repo, where it is gitignored anyway. Setting it in Horizon does not make your local agents work either.</p>
+    <p style="margin-top:12px">The same variable name deliberately appears in two stores because the same code runs in two places. <strong>Same name, same meaning, two separate values you have to set twice.</strong> Local development points at a scratch database; production points at the real one. That is not duplication to eliminate — it is the whole reason the value is configuration rather than a literal.</p>
+  </div>
+
+  <p>The unifying rule across all three: <strong>a secret lives with the thing that consumes it, and never in the repository.</strong> The repo carries the <em>shape</em> of the configuration — <code>.env.local.example</code>, a documented variable name — and never a value.</p>
+</section>
+
+<hr class="soft">
+
+<section id="build">
+  <h2><span class="num">05</span> Build, deploy, live URL</h2>
+
+  <p>Once the server exists, Horizon resolves your default branch to a commit and builds. Four steps, in order:</p>
+
+  <ol class="steps">
+    <li>
+      <h3>Install dependencies</h3>
+      <p>FastMCP plus everything in your <code>requirements.txt</code>, into a clean checkout of that exact commit. Nothing from a previous build is reused. Package resolution errors surface here, before anything is promoted.</p>
+    </li>
+    <li>
+      <h3>Package</h3>
+      <p>Source, dependencies, and execution configuration become an immutable artifact.</p>
+    </li>
+    <li>
+      <h3>Inspect</h3>
+      <p>Horizon loads your entrypoint with FastMCP and produces a <strong>manifest</strong> of the tools, resources, and prompts you expose. This is the same thing <code>fastmcp inspect</code> does locally.</p>
+      <p><strong>This step imports your module</strong>, so import-time errors and import-time side effects fail the build here — even though dependency installation succeeded a moment earlier. A missing <code>DATABASE_URL</code> lands exactly here.</p>
+    </li>
+    <li>
+      <h3>Publish and promote</h3>
+      <p>A successful build publishes an immutable artifact. A deployment then selects an artifact to serve.</p>
+    </li>
+  </ol>
+
+  <p>The result is a stable URL ending in <code>/mcp</code>, of the form <code>https://&lt;server-name&gt;.fastmcp.app/mcp</code>. Ours:</p>
+
+  <pre><code>https://mcp-puzzlemaster.fastmcp.app/mcp</code></pre>
+
+  <p>It speaks <strong>Streamable HTTP</strong> — the transport MCP clients use over a network, and the replacement for the stdio transport every server in <code>00</code>–<code>02</code> used. That change is why this URL is reachable by a person with no Python installed, which is the entire subject of Part 05.</p>
+
+  <p>From here on, every push to the default branch triggers a new build and deployment. Pull requests get preview deployments at their own URLs.</p>
+
+  <div class="call ok">
+    <span class="tag">Verified 2026-08-31</span>
+    <p>The endpoint is live. An unauthenticated request returns <code>HTTP/2 401</code> with <code>www-authenticate: Bearer realm="FastMCP"</code> and a pointer to its OAuth discovery document — which is a server correctly refusing an anonymous caller, not a server that is down. Part 05 picks this up in detail.</p>
+  </div>
+</section>
+
+<hr class="soft">
+
+<section id="ephemeral">
+  <h2><span class="num">06</span> The ephemeral filesystem</h2>
+  <p class="lede">This is the part of the deployment that actually required a code change, and it is the most transferable lesson on the page. It is the moment "just write it to a file" stops working.</p>
+
+  <p>In <code>02</code>, the audit log is SQLite, and deliberately so:</p>
+
+  <blockquote style="margin:0 0 20px;padding:14px 20px;border-left:4px solid var(--rule-2);color:var(--ink-2);max-width:44em">
+    <p style="margin:0">"SQLite (not in-memory) so usage survives restarts — 'monitor over time' is meaningless if the counter resets."</p>
+  </blockquote>
+
+  <p>That reasoning is completely sound. On a laptop, SQLite is the right answer: no server to run, no credential to manage, one file, survives restarts. It is the correct engineering decision for the environment it was made in.</p>
+
+  <p>It cannot work on Horizon. Not "works badly" — cannot work.</p>
+
+  <h3>What the runtime actually promises</h3>
+  <p>Horizon's compute model documentation is unusually direct about this:</p>
+
+  <blockquote style="margin:0 0 20px;padding:14px 20px;border-left:4px solid var(--stop);color:var(--ink-2);max-width:44em">
+    <p style="margin:0">"Do not rely on files written during one request being available to another request. Do not rely on files written before a redeploy being available after the redeploy."</p>
+  </blockquote>
+
+  <p>Three separate mechanisms break <code>usage.db</code>, and each one alone is fatal:</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>Mechanism</th><th>Effect on a local SQLite file</th></tr></thead>
+    <tbody>
+      <tr><td><strong>No instance affinity</strong></td><td>Two requests can land on two different instances. Each has its own filesystem. Your audit trail silently forks into fragments.</td></tr>
+      <tr><td><strong>Scale to zero</strong></td><td>Compute starts on demand and goes away. The file goes with it.</td></tr>
+      <tr><td><strong>Immutable artifacts</strong></td><td>Every deploy builds a fresh artifact from a clean checkout. Anything written at runtime is not in it.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>The asymmetry that makes this confusing</h3>
+  <div class="call warn">
+    <span class="tag">Read this twice</span>
+    <p><strong>Committed files ship in the build artifact and are readable at runtime. Runtime writes do not survive.</strong></p>
+    <p style="margin-top:12px">This is why <code>enable1.txt</code> — 1.9 MB of dictionary, read on every single call — is completely fine, while <code>usage.db</code> is completely broken. Both are "just a file on disk". The difference is not size or access frequency. It is <em>who wrote it and when</em>. Build time, durable. Run time, gone.</p>
+  </div>
+
+  <p>If you take one thing from this page, take that. "Is it a file?" is the wrong question. "Was it written before or after the build?" is the right one.</p>
+
+  <h3>The shape of the change</h3>
+  <p>The fix is to move durable state off the local disk and into something that outlives the process. We used <strong>Neon Postgres</strong>, reached through <code>DATABASE_URL</code>. Here is the shape — this is the diff in miniature, not the whole file:</p>
+
+  <div class="ba">
+    <div>
+      <h4><span class="pill bad">Local · 02</span></h4>
+      <pre><code>import sqlite3
+
+DB = "usage.db"
+
+def _conn():
+    return sqlite3.connect(DB)
+
+def log(agent, tool, inp, out, ms, ok):
+    with _conn() as c:
+        c.execute(
+            "INSERT INTO invocations "
+            "(ts, agent_name, tool, inputs, "
+            " outputs, duration_ms, ok) "
+            "VALUES (?,?,?,?,?,?,?)",
+            (now(), agent, tool, inp,
+             out, ms, ok),
+        )</code></pre>
+    </div>
+    <div>
+      <h4><span class="pill good">Horizon · 04</span></h4>
+      <pre><code>import os, psycopg
+
+DB = os.environ["DATABASE_URL"]
+
+def _conn():
+    return psycopg.connect(DB)
+
+def log(agent, tool, inp, out, ms, ok):
+    with _conn() as c:
+        c.execute(
+            "INSERT INTO "
+            "mcp_training.invocations "
+            "(ts, agent_name, tool, inputs, "
+            " outputs, duration_ms, ok) "
+            "VALUES (%s,%s,%s,%s,%s,%s,%s)",
+            (now(), agent, tool, inp,
+             out, ms, ok),
+        )</code></pre>
+    </div>
+  </div>
+
+  <p>Read what actually changed:</p>
+  <ul>
+    <li>The <strong>driver</strong>: <code>sqlite3</code> → <code>psycopg</code>.</li>
+    <li>The <strong>target</strong>: a filename → a URL from the environment.</li>
+    <li>The <strong>placeholder style</strong>: <code>?</code> → <code>%s</code>. A small, real annoyance.</li>
+    <li>The <strong>table</strong>: gains a schema qualifier, <code>mcp_training.invocations</code>.</li>
+  </ul>
+
+  <p>What did <em>not</em> change: the columns, the middleware that calls <code>log()</code>, the tool bodies, the solvers, or <code>usage_graph</code> and <code>export_results</code> at the level of what they mean. The audit table's shape survives intact — <code>id, ts, agent_name, tool, inputs, outputs, duration_ms, ok</code>.</p>
+
+  <div class="call note">
+    <span class="tag">The seam again</span>
+    <p><code>02</code> put all logging behind FastMCP's <code>on_call_tool</code> middleware rather than decorating each tool. That decision — made for a completely different reason, so tool #6 gets audited for free — is why this migration touches one function instead of five. Centralising created a place to stand, and then a place to change.</p>
+  </div>
+
+  <p>The general rule Horizon states, and which applies to any scale-to-zero platform: <strong>store durable files outside the local runtime filesystem.</strong> Object storage for blobs, a managed database for rows. Local disk is scratch space for the duration of one request, and nothing more.</p>
+</section>
+
+<hr class="soft">
+
+<section id="obs">
+  <h2><span class="num">07</span> Observability you did not have to build</h2>
+  <p class="lede">In <code>02</code> we hand-built an audit log — a middleware, a table, a graph tool, a CSV export. Horizon ships request-level observability for free. Both statements are true at once, and the honest version of this section is about what each one is actually for.</p>
+
+  <h3>What Horizon gives you</h3>
+  <p>Every MCP request passes through Horizon's gateway, which records metadata before your code runs. Three views read from that one source:</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>Page</th><th>What it answers</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Logs</strong></td><td>Request by request. Method called, gateway status, timestamp, with a frequency histogram. Opening one shows the <strong>acting user or service account</strong>, the <strong>identified MCP client</strong>, request and response payloads, and what each gateway plugin did. Live-refreshing, pausable, filterable to errors only.</td></tr>
+      <tr><td><strong>Usage</strong></td><td>Tool calls, <strong>unique actors</strong>, error rate, and <strong>p95 latency</strong> over a window — pivoting actor ↔ tool. Select an actor to see its tools; select a tool to see its callers.</td></tr>
+      <tr><td><strong>Observability</strong></td><td>Aggregates. Duration (avg / p50 / p95 / p99), invocations over time, and memory against allocation.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>Plus two log streams attached to deployments: <strong>build logs</strong> (why a deploy never went live) and <strong>server logs</strong> (your stdout and stderr, so where your own logging and uncaught errors appear).</p>
+
+  <p>Retention is up to 3 days on standard plans, up to 30 on Enterprise.</p>
+
+  <div class="call note">
+    <span class="tag">A counting subtlety worth knowing</span>
+    <p>On the Observability page, an <strong>invocation</strong> is any MCP JSON-RPC message — including <code>initialize</code> and <code>tools/list</code>. A <strong>tool call</strong> is specifically <code>tools/call</code>. So every tool call is an invocation, but most invocations are not tool calls. If your request count looks suspiciously high, this is usually why: clients list your tools constantly.</p>
+  </div>
+
+  <h3>So was <code>02</code> wasted?</h3>
+  <p>No — and the reason is worth being precise about, because "the platform does that now" is a conclusion people reach too fast.</p>
+
+  <p><strong>Horizon observes the transport. The <code>02</code> table observes the application.</strong></p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th></th><th>Horizon gateway</th><th>The <code>02</code> audit table</th></tr></thead>
+    <tbody>
+      <tr><td>Sees</td><td>Who called which tool, when, from which client, how long, what status</td><td>The puzzle that went in and the answer that came out</td></tr>
+      <tr><td>Identity</td><td><strong>Verified</strong> — cryptographic, from the gateway</td><td><code>agent_name</code>, which the model fills in and could get wrong</td></tr>
+      <tr><td>Retention</td><td>3 days (30 on Enterprise)</td><td>Yours, forever, in your database</td></tr>
+      <tr><td>Queryable</td><td>Dashboard and REST API</td><td>SQL, and a CSV you can hand to anyone</td></tr>
+      <tr><td>Good for</td><td>Is it up? Is it slow? Who is using it?</td><td>Is it <em>right</em>? — and a ready-made eval set</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>The <code>02</code> README made the claim that the exported CSV is two things at once: an audit trail, and an eval dataset nobody had to hand-write. Horizon's logs cannot be that. They do not know that "VALIDTY, center V" is an input worth regression-testing, and they age out in three days.</p>
+
+  <p>The honest trade: <strong>build the application-level log because it is your eval data; take the transport-level log for free because rebuilding it is a waste of your afternoon.</strong> And note the one thing Horizon has that <code>02</code> structurally could not — <em>verified</em> identity. <code>02</code> was explicit that <code>agent_name</code> is telemetry, not authentication, because a model fills it in. The gateway's actor is established before your code runs. That is the upgrade you get by moving to HTTP, and it is exactly the <code>Depends()</code>-shaped guarantee <code>02</code> pointed at: trustworthy because unreachable, not trustworthy because convenient.</p>
+</section>
+
+<hr class="soft">
+
+<section id="gotchas">
+  <h2><span class="num">08</span> Gotchas</h2>
+  <p class="lede">Eight things that are obvious afterwards.</p>
+
+  <h3>1 · The Python version floor</h3>
+  <p>3.11, 3.12, 3.13, 3.14. <strong>Not 3.10</strong>, which this repo's contract permits. Commit a <code>.python-version</code> so the runtime is a decision, not a default.</p>
+
+  <h3>2 · Cold starts are real</h3>
+  <p>Horizon starts compute on demand and scales to zero. The first request to a fresh instance has to load the runtime, the dependencies, and your module — and for us, parse 172,823 words.</p>
+  <div class="call warn">
+    <span class="tag">Before you demo</span>
+    <p><strong>Warm the server with a <code>tools/list</code> before you present.</strong> Open the connector, or run a trivial call, a minute before you need it. The difference between a warm and a cold first response is the difference between a demo that lands and a demo where you talk over a spinner.</p>
+  </div>
+  <p>Structurally: keep import-time work small. No network calls at import, lazy-load anything large, cache reusable clients in module-level variables. Startup work is spent from the same 170-second budget as the request that triggered it.</p>
+
+  <h3>3 · The payload ceiling</h3>
+  <p><strong>6 MB per request and per response</strong> — a hard ceiling inherited from AWS Lambda's synchronous invocation limit, and there is no streaming. JSON and base64 overhead eat into it further, so treat 6 MB as the wall, not the target.</p>
+  <p>This is a live concern for PuzzleMaster: <code>export_results</code> returns a CSV of every logged invocation. Fine today. At a few hundred thousand rows it is a tool that fails in a way nobody predicted. The documented shape is to write the export to object storage and <strong>return a URL instead of the bytes</strong>.</p>
+
+  <h3>4 · The 170-second request timeout</h3>
+  <p>Every MCP request handler has 170 seconds, measured from client through gateway to your code. Long work should return a job ID immediately and continue asynchronously. Also note: Horizon does <strong>not</strong> support long-lived <code>GET /mcp</code> streams for hosted servers.</p>
+
+  <h3>5 · A green build is not a changed endpoint</h3>
+  <div class="call stop">
+    <span class="tag">The one that wastes an hour</span>
+    <p>Build success and deployment promotion are <strong>separate steps</strong>. A build can go green and the production URL can keep serving the previous artifact.</p>
+    <p style="margin-top:12px">When the code is obviously updated and the endpoint obviously is not, check three things in order: <strong>was that build for a preview deployment</strong> rather than production; <strong>does promotion need to happen</strong> explicitly; and <strong>has a newer build already been selected</strong> for that deployment. It is almost always the first one.</p>
+  </div>
+
+  <h3>6 · Environment variable changes need a new build</h3>
+  <p>Variables are build inputs, not runtime lookups. Change one and the running server keeps the old value until you build and deploy again. Same trap as above, different door.</p>
+
+  <h3>7 · Import-time side effects fail builds</h3>
+  <p>Horizon <em>imports your module</em> to inspect it. Anything at module scope runs during the build — including a missing environment variable, a database connection attempt, or a file read. Dependencies installing cleanly tells you nothing about whether inspection will pass.</p>
+
+  <h3>8 · Sessions expire after 24 hours</h3>
+  <p>Gateway session routing metadata has a 24-hour TTL, and there is no affinity guarantee even inside a session. A client that has been idle overnight may need to reinitialize. This is routing state, not application state — do not store anything durable in it.</p>
+</section>
+
+<hr class="soft">
+
+<section id="recap">
+  <h2><span class="num">09</span> Recap</h2>
+  <ul>
+    <li><strong>Horizon is FastMCP Cloud renamed</strong>, from the team that wrote FastMCP. We use one pillar of it: Deploy.</li>
+    <li><strong>Deployment is git-backed, with no CLI.</strong> Push to the default branch. PRs get preview deployments. Every build is pinned to a commit SHA.</li>
+    <li><strong>Four things in the repo:</strong> an entrypoint (<code>server.py:mcp</code>), dependencies including <code>fastmcp</code>, a <code>.python-version</code>, and any read-only data you want baked in.</li>
+    <li><strong>Secrets go in Horizon, encrypted, per environment</strong>, and never in git — because git does not forget and repos only ever get more public.</li>
+    <li><strong>Three secret stores, three consumers:</strong> <code>.env.local</code> for the repo's local Python agents, Horizon environment variables for the deployed server, and <code>claude_desktop_config.json</code> for Claude Desktop. None can read the others. The repo carries the shape of the configuration, never a value.</li>
+    <li><strong>The filesystem is ephemeral.</strong> Committed files ship in the artifact and are readable. Runtime writes are gone. SQLite → Postgres was not a preference; it was the only option.</li>
+    <li><strong>Horizon's observability is transport-level and free; yours is application-level and is your eval data.</strong> Keep both.</li>
+    <li><strong>The limits are real numbers:</strong> 170s per request, 6 MB per payload, 1024 MB memory, 15 min build, 24 h sessions.</li>
+  </ul>
+
+  <div class="call ok">
+    <span class="tag">Next</span>
+    <p>Part 05 takes this URL and hands it to someone who does not write code. That is the payoff for all of it — and the reason moving off stdio was worth the trouble.</p>
+  </div>
+</section>
+
+<footer>
+  <p><strong>04 — Deploying an MCP server.</strong> Part of the MCP training series.</p>
+  <p>Limits, build behaviour, and platform semantics verified against Horizon's documentation on 2026-08-31, and the live endpoint verified by direct request the same day. Dashboard field labels are described from documentation and may have moved — trust the screen in front of you over this page.</p>
+  <p>Repo: <code>github.com/Overclock-Accelerator/mcp-puzzlemaster</code> · Endpoint: <code>https://mcp-puzzlemaster.fastmcp.app/mcp</code></p>
+  <p>No credentials appear anywhere on this page. <code>DATABASE_URL</code> is referenced by name only.</p>
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""Solve a substitution cryptogram against the dictionary."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="cryptogram-solve", description="Solve a substitution cryptogram against the dictionary.")
+p.add_argument("--ciphertext", type=str, required=True, help="ciphertext")
+p.add_argument("--max-candidates", type=int, default=5, help="max_candidates")
+a = p.parse_args()
+print("cryptogram-solve: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

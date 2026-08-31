@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""List dictionary palindromes."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="find-palindromes", description="List dictionary palindromes.")
+p.add_argument("--min-length", type=int, default=5, help="min_length")
+p.add_argument("--max-results", type=int, default=50, help="max_results")
+a = p.parse_args()
+print("find-palindromes: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

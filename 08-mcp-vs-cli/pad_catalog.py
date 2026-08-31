@@ -1,0 +1,91 @@
+"""The 37 pad capabilities, in one place so both arms pad identically.
+
+The tool-count sweep only means anything if the MCP server and the CLI are
+padded with the *same* capabilities. This table is the single source: it is
+registered as MCP tools by `mcp_server.py` and generated as executable scripts
+by `cli/make_pad.py`, so "40 tools" and "40 commands" are the same 40 things.
+
+Each entry is (name, signature, docstring). Plausible on purpose — the kind of
+word utility a team actually ships — with real parameters and real prose, so
+the schema cost measured is representative rather than a strawman of one-line
+stubs. None of them are implemented; none of them are ever called.
+"""
+
+from __future__ import annotations
+
+PAD_TOOLS: list[tuple[str, str, str]] = [
+    ("find_anagrams", "word: str, min_length: int = 3",
+     "Find every dictionary anagram of a word or letter set.\n\n    Args:\n        agent_name: The name of the calling agent.\n        word: The letters to rearrange, e.g. \"LISTEN\".\n        min_length: Ignore anagrams shorter than this. Defaults to 3."),
+    ("count_syllables", "word: str",
+     "Estimate the syllable count of a word using dictionary heuristics.\n\n    Args:\n        agent_name: The name of the calling agent.\n        word: The word to analyse, e.g. \"SYLLABLE\"."),
+    ("find_rhymes", "word: str, perfect_only: bool = True",
+     "Find words that rhyme with the given word.\n\n    Args:\n        agent_name: The name of the calling agent.\n        word: The word to rhyme with, e.g. \"ORANGE\".\n        perfect_only: Restrict to perfect rhymes rather than slant rhymes."),
+    ("scrabble_score", "word: str, multiplier: int = 1",
+     "Score a word under standard Scrabble letter values.\n\n    Args:\n        agent_name: The name of the calling agent.\n        word: The word to score, letters only.\n        multiplier: Word multiplier, e.g. 2 for double-word."),
+    ("word_frequency", "word: str, corpus: str = \"enable1\"",
+     "Look up how common a word is in a reference corpus.\n\n    Args:\n        agent_name: The name of the calling agent.\n        word: The word to look up.\n        corpus: Which corpus to consult. Defaults to \"enable1\"."),
+    ("check_spelling", "text: str, max_suggestions: int = 5",
+     "Check a passage for misspellings and suggest corrections.\n\n    Args:\n        agent_name: The name of the calling agent.\n        text: The passage to check.\n        max_suggestions: How many corrections to offer per error."),
+    ("expand_abbreviation", "abbreviation: str",
+     "Expand a common abbreviation or acronym.\n\n    Args:\n        agent_name: The name of the calling agent.\n        abbreviation: The short form, e.g. \"ETA\"."),
+    ("pluralize", "word: str, count: int = 2",
+     "Return the correct plural form of a noun, handling irregulars.\n\n    Args:\n        agent_name: The name of the calling agent.\n        word: The singular noun.\n        count: The quantity, since some forms depend on it."),
+    ("stem_word", "word: str, algorithm: str = \"porter\"",
+     "Reduce a word to its stem.\n\n    Args:\n        agent_name: The name of the calling agent.\n        word: The word to stem.\n        algorithm: \"porter\", \"snowball\" or \"lancaster\"."),
+    ("lemmatize", "word: str, part_of_speech: str = \"noun\"",
+     "Reduce a word to its dictionary headword.\n\n    Args:\n        agent_name: The name of the calling agent.\n        word: The word to lemmatize.\n        part_of_speech: The word's part of speech, which changes the result."),
+    ("find_palindromes", "min_length: int = 5, max_results: int = 50",
+     "List dictionary palindromes.\n\n    Args:\n        agent_name: The name of the calling agent.\n        min_length: Shortest palindrome to return.\n        max_results: Cap on how many to return."),
+    ("hidden_words", "text: str, min_length: int = 4",
+     "Find words hidden across the letters of a phrase.\n\n    Args:\n        agent_name: The name of the calling agent.\n        text: The phrase to search inside.\n        min_length: Ignore hidden words shorter than this."),
+    ("word_ladder", "start: str, end: str, max_steps: int = 8",
+     "Find a word ladder between two words of equal length.\n\n    Args:\n        agent_name: The name of the calling agent.\n        start: The starting word.\n        end: The target word.\n        max_steps: Give up beyond this many rungs."),
+    ("suggest_hyphenation", "word: str",
+     "Suggest hyphenation break points for typesetting.\n\n    Args:\n        agent_name: The name of the calling agent.\n        word: The word to break."),
+    ("detect_pangram", "text: str, alphabet: str = \"abcdefghijklmnopqrstuvwxyz\"",
+     "Report whether a passage uses every letter of an alphabet.\n\n    Args:\n        agent_name: The name of the calling agent.\n        text: The passage to test.\n        alphabet: The alphabet to require. Defaults to English."),
+    ("acrostic_build", "message: str, theme: str = \"any\"",
+     "Build an acrostic whose initials spell a message.\n\n    Args:\n        agent_name: The name of the calling agent.\n        message: The message the initials should spell.\n        theme: Optional theme to bias word choice."),
+    ("cryptogram_solve", "ciphertext: str, max_candidates: int = 5",
+     "Solve a substitution cryptogram against the dictionary.\n\n    Args:\n        agent_name: The name of the calling agent.\n        ciphertext: The enciphered text.\n        max_candidates: How many decodings to return."),
+    ("caesar_shift", "text: str, shift: int = 3",
+     "Apply a Caesar shift to a passage.\n\n    Args:\n        agent_name: The name of the calling agent.\n        text: The text to shift.\n        shift: How many positions to rotate by."),
+    ("word_search_grid", "words: list[str], size: int = 12",
+     "Generate a word-search grid containing the given words.\n\n    Args:\n        agent_name: The name of the calling agent.\n        words: The words to hide in the grid.\n        size: Grid edge length."),
+    ("crossword_fill", "grid: str, theme_words: list[str]",
+     "Fill an empty crossword grid with dictionary words.\n\n    Args:\n        agent_name: The name of the calling agent.\n        grid: The grid as rows of '#' (block) and '.' (open).\n        theme_words: Words to place first if they fit."),
+    ("clue_difficulty", "clue: str, answer: str",
+     "Rate how hard a crossword clue is for its answer.\n\n    Args:\n        agent_name: The name of the calling agent.\n        clue: The clue text.\n        answer: The intended answer."),
+    ("synonym_lookup", "word: str, max_results: int = 10",
+     "Look up synonyms for a word.\n\n    Args:\n        agent_name: The name of the calling agent.\n        word: The word to look up.\n        max_results: Cap on how many synonyms to return."),
+    ("antonym_lookup", "word: str, max_results: int = 10",
+     "Look up antonyms for a word.\n\n    Args:\n        agent_name: The name of the calling agent.\n        word: The word to look up.\n        max_results: Cap on how many antonyms to return."),
+    ("define_word", "word: str, sense: int = 1",
+     "Return a dictionary definition.\n\n    Args:\n        agent_name: The name of the calling agent.\n        word: The word to define.\n        sense: Which numbered sense to return."),
+    ("etymology", "word: str",
+     "Return the recorded origin of a word.\n\n    Args:\n        agent_name: The name of the calling agent.\n        word: The word to trace."),
+    ("readability_score", "text: str, metric: str = \"flesch\"",
+     "Score the reading difficulty of a passage.\n\n    Args:\n        agent_name: The name of the calling agent.\n        text: The passage to score.\n        metric: \"flesch\", \"gunning_fog\" or \"smog\"."),
+    ("letter_histogram", "text: str, normalize: bool = False",
+     "Count letter frequencies in a passage.\n\n    Args:\n        agent_name: The name of the calling agent.\n        text: The passage to analyse.\n        normalize: Return proportions instead of raw counts."),
+    ("longest_word", "letters: str, must_include: str = \"\"",
+     "Find the longest dictionary word buildable from a letter set.\n\n    Args:\n        agent_name: The name of the calling agent.\n        letters: The available letters.\n        must_include: A letter that must appear, if any."),
+    ("prefix_search", "prefix: str, max_results: int = 25",
+     "List dictionary words starting with a prefix.\n\n    Args:\n        agent_name: The name of the calling agent.\n        prefix: The prefix to match.\n        max_results: Cap on results returned."),
+    ("suffix_search", "suffix: str, max_results: int = 25",
+     "List dictionary words ending with a suffix.\n\n    Args:\n        agent_name: The name of the calling agent.\n        suffix: The suffix to match.\n        max_results: Cap on results returned."),
+    ("contains_search", "substring: str, max_results: int = 25",
+     "List dictionary words containing a substring.\n\n    Args:\n        agent_name: The name of the calling agent.\n        substring: The substring to find.\n        max_results: Cap on results returned."),
+    ("min_edit_distance", "a: str, b: str, algorithm: str = \"levenshtein\"",
+     "Compute the edit distance between two words.\n\n    Args:\n        agent_name: The name of the calling agent.\n        a: The first word.\n        b: The second word.\n        algorithm: \"levenshtein\" or \"damerau\"."),
+    ("nearest_words", "word: str, max_distance: int = 1",
+     "Find dictionary words within an edit distance of a word.\n\n    Args:\n        agent_name: The name of the calling agent.\n        word: The word to search around.\n        max_distance: Maximum edit distance."),
+    ("soundex_match", "word: str, max_results: int = 20",
+     "Find words that sound alike by Soundex code.\n\n    Args:\n        agent_name: The name of the calling agent.\n        word: The word to match against.\n        max_results: Cap on results returned."),
+    ("validate_word", "word: str, dictionary: str = \"enable1\"",
+     "Check whether a string is in the dictionary.\n\n    Args:\n        agent_name: The name of the calling agent.\n        word: The candidate word.\n        dictionary: Which word list to check against."),
+    ("random_word", "length: int = 5, starts_with: str = \"\"",
+     "Return a random dictionary word.\n\n    Args:\n        agent_name: The name of the calling agent.\n        length: Required word length.\n        starts_with: Optional required first letter."),
+    ("boggle_solve", "grid: str, min_length: int = 3",
+     "Find every word reachable on a Boggle board.\n\n    Args:\n        agent_name: The name of the calling agent.\n        grid: The board, rows separated by '/'.\n        min_length: Ignore words shorter than this."),
+]

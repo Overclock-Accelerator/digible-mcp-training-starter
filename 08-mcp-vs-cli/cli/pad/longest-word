@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""Find the longest dictionary word buildable from a letter set."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="longest-word", description="Find the longest dictionary word buildable from a letter set.")
+p.add_argument("--letters", type=str, required=True, help="letters")
+p.add_argument("--must-include", type=str, default="", help="must_include")
+a = p.parse_args()
+print("longest-word: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

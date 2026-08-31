@@ -1,0 +1,582 @@
+Tool-call traces — first run of every cell, anthropic:claude-sonnet-5, generated 2026-08-31T13:17:01+00:00
+
+
+──── probe · 1 servers · 5 tools ─────────────────────────────────
+  (none — the model answered without calling a tool)
+──────────────────────────────────────────────────────────────────
+
+
+──── probe · 2 servers · 15 tools ────────────────────────────────
+  (none — the model answered without calling a tool)
+──────────────────────────────────────────────────────────────────
+
+
+──── probe · 3 servers · 35 tools ────────────────────────────────
+  (none — the model answered without calling a tool)
+──────────────────────────────────────────────────────────────────
+
+
+──── probe · 4 servers · 75 tools ────────────────────────────────
+  (none — the model answered without calling a tool)
+──────────────────────────────────────────────────────────────────
+
+
+──── probe · 5 servers · 155 tools ───────────────────────────────
+  (none — the model answered without calling a tool)
+──────────────────────────────────────────────────────────────────
+
+
+──── q_search · 1 servers · 5 tools ──────────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="database failover runbook")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "snippe…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_get · 1 servers · 5 tools ─────────────────────────────────
+  1. get_doc(agent_name="ops-assistant", doc_id="NW-0091", format="markdown")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-0091", "title": "On-call expectations", "space": "Engineering", "body": "# On-call expect…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_create · 1 servers · 5 tools ──────────────────────────────
+  1. create_doc(agent_name="ops-assistant", title="On-call handoff", body="Hand off the pager at 09:0...)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "created": true, "doc_id": "NW-5502", "title": "On-call handoff", "space": "Engineering", "url": "https…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_spaces · 1 servers · 5 tools ──────────────────────────────
+  1. list_spaces(agent_name="ops-assistant")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "spaces": ["Engineering", "Product", "Security", "Data Platform", "People Ops"]}', 'id': 'lc_cbcce563-6…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_history · 1 servers · 5 tools ─────────────────────────────
+  1. get_doc_history(agent_name="ops-assistant", doc_id="NW-4471")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "revisions": [{"revision": 12, "author": "priya.raman", "at": "2026-08-19T14:02:00…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_search · 1 servers · 5 tools ──────────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="blue-green deploy checklist")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-2210", "title": "Blue-green deploy checklist", "space": "Engineering", "snip…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_get · 1 servers · 5 tools ─────────────────────────────────
+  1. get_doc(agent_name="ops-assistant", doc_id="NW-4471")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "body": "# Database …
+──────────────────────────────────────────────────────────────────
+
+
+──── i_create · 1 servers · 5 tools ──────────────────────────────
+  1. create_doc(agent_name="ops-assistant", title="Escalation policy", body="Escalate to the secondar...)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "created": true, "doc_id": "NW-5502", "title": "Escalation policy", "space": "Engineering", "url": "htt…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_spaces · 1 servers · 5 tools ──────────────────────────────
+  1. list_spaces(agent_name="ops-assistant")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "spaces": ["Engineering", "Product", "Security", "Data Platform", "People Ops"]}', 'id': 'lc_7212496f-5…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_history · 1 servers · 5 tools ─────────────────────────────
+  1. get_doc_history(agent_name="ops-assistant", doc_id="NW-2210", limit=1)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-2210", "revisions": [{"revision": 7, "author": "dana.k", "at": "2026-08-24T11:15:00Z", "s…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_failover · 1 servers · 5 tools ────────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="database failover runbook")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "snippe…
+  2. get_doc(agent_name="ops-assistant", doc_id="NW-4471")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "body": "# Database …
+──────────────────────────────────────────────────────────────────
+
+
+──── a_oncall · 1 servers · 5 tools ──────────────────────────────
+  1. get_doc(agent_name="ops-assistant", doc_id="NW-0091")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-0091", "title": "On-call expectations", "space": "Engineering", "body": "# On-call expect…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_deploy · 1 servers · 5 tools ──────────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="blue-green deploy checklist")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-2210", "title": "Blue-green deploy checklist", "space": "Engineering", "snip…
+  2. get_doc(agent_name="ops-assistant", doc_id="NW-2210")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-2210", "title": "Blue-green deploy checklist", "space": "Engineering", "body": "# Blue-gr…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_whochanged · 1 servers · 5 tools ──────────────────────────
+  1. get_doc_history(agent_name="ops-assistant", doc_id="NW-4471", limit=1)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "revisions": [{"revision": 12, "author": "priya.raman", "at": "2026-08-19T14:02:00…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_spaces · 1 servers · 5 tools ──────────────────────────────
+  1. list_spaces(agent_name="ops-assistant")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "spaces": ["Engineering", "Product", "Security", "Data Platform", "People Ops"]}', 'id': 'lc_0826f5c5-c…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_search · 2 servers · 15 tools ─────────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="database failover runbook")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "snippe…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_get · 2 servers · 15 tools ────────────────────────────────
+  1. get_doc(agent_name="ops-assistant", doc_id="NW-0091", format="markdown")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-0091", "title": "On-call expectations", "space": "Engineering", "body": "# On-call expect…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_create · 2 servers · 15 tools ─────────────────────────────
+  1. create_doc(agent_name="ops-assistant", title="On-call handoff", body="Hand off the pager at 09:0...)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "created": true, "doc_id": "NW-5502", "title": "On-call handoff", "space": "Engineering", "url": "https…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_spaces · 2 servers · 15 tools ─────────────────────────────
+  1. list_spaces(agent_name="ops-assistant")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "spaces": ["Engineering", "Product", "Security", "Data Platform", "People Ops"]}', 'id': 'lc_6f3c2343-4…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_history · 2 servers · 15 tools ────────────────────────────
+  1. get_doc_history(agent_name="ops-assistant", doc_id="NW-4471")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "revisions": [{"revision": 12, "author": "priya.raman", "at": "2026-08-19T14:02:00…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_search · 2 servers · 15 tools ─────────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="blue-green deploy checklist")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-2210", "title": "Blue-green deploy checklist", "space": "Engineering", "snip…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_get · 2 servers · 15 tools ────────────────────────────────
+  1. get_doc(agent_name="ops-assistant", doc_id="NW-4471")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "body": "# Database …
+──────────────────────────────────────────────────────────────────
+
+
+──── i_create · 2 servers · 15 tools ─────────────────────────────
+  1. create_doc(agent_name="ops-assistant", title="Escalation policy", body="Escalate to the secondar...)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "created": true, "doc_id": "NW-5502", "title": "Escalation policy", "space": "Engineering", "url": "htt…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_spaces · 2 servers · 15 tools ─────────────────────────────
+  1. list_spaces(agent_name="ops-assistant")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "spaces": ["Engineering", "Product", "Security", "Data Platform", "People Ops"]}', 'id': 'lc_e44ab4c1-1…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_history · 2 servers · 15 tools ────────────────────────────
+  1. get_doc_history(agent_name="ops-assistant", doc_id="NW-2210", limit=1)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-2210", "revisions": [{"revision": 7, "author": "dana.k", "at": "2026-08-24T11:15:00Z", "s…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_failover · 2 servers · 15 tools ───────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="database failover runbook")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "snippe…
+  2. get_doc(agent_name="ops-assistant", doc_id="NW-4471")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "body": "# Database …
+──────────────────────────────────────────────────────────────────
+
+
+──── a_oncall · 2 servers · 15 tools ─────────────────────────────
+  1. get_doc(agent_name="ops-assistant", doc_id="NW-0091")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-0091", "title": "On-call expectations", "space": "Engineering", "body": "# On-call expect…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_deploy · 2 servers · 15 tools ─────────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="blue-green deploy checklist")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-2210", "title": "Blue-green deploy checklist", "space": "Engineering", "snip…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_whochanged · 2 servers · 15 tools ─────────────────────────
+  1. get_doc_history(agent_name="ops-assistant", doc_id="NW-4471", limit=1)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "revisions": [{"revision": 12, "author": "priya.raman", "at": "2026-08-19T14:02:00…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_spaces · 2 servers · 15 tools ─────────────────────────────
+  1. list_spaces(agent_name="ops-assistant")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "spaces": ["Engineering", "Product", "Security", "Data Platform", "People Ops"]}', 'id': 'lc_4d8931d2-b…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_search · 3 servers · 35 tools ─────────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="database failover runbook")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "snippe…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_get · 3 servers · 35 tools ────────────────────────────────
+  1. get_doc(agent_name="ops-assistant", doc_id="NW-0091", format="markdown")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-0091", "title": "On-call expectations", "space": "Engineering", "body": "# On-call expect…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_create · 3 servers · 35 tools ─────────────────────────────
+  1. create_doc(agent_name="ops-assistant", title="On-call handoff", body="Hand off the pager at 09:0...)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "created": true, "doc_id": "NW-5502", "title": "On-call handoff", "space": "Engineering", "url": "https…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_spaces · 3 servers · 35 tools ─────────────────────────────
+  1. list_spaces(agent_name="ops-assistant")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "spaces": ["Engineering", "Product", "Security", "Data Platform", "People Ops"]}', 'id': 'lc_cdc5f3a5-5…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_history · 3 servers · 35 tools ────────────────────────────
+  1. get_doc_history(agent_name="ops-assistant", doc_id="NW-4471")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "revisions": [{"revision": 12, "author": "priya.raman", "at": "2026-08-19T14:02:00…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_search · 3 servers · 35 tools ─────────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="blue-green deploy checklist")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-2210", "title": "Blue-green deploy checklist", "space": "Engineering", "snip…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_get · 3 servers · 35 tools ────────────────────────────────
+  1. get_doc(agent_name="ops-assistant", doc_id="NW-4471")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "body": "# Database …
+──────────────────────────────────────────────────────────────────
+
+
+──── i_create · 3 servers · 35 tools ─────────────────────────────
+  1. create_doc(agent_name="ops-assistant", title="Escalation policy", body="Escalate to the secondar...)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "created": true, "doc_id": "NW-5502", "title": "Escalation policy", "space": "Engineering", "url": "htt…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_spaces · 3 servers · 35 tools ─────────────────────────────
+  1. list_spaces(agent_name="ops-assistant")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "spaces": ["Engineering", "Product", "Security", "Data Platform", "People Ops"]}', 'id': 'lc_c60e742a-e…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_history · 3 servers · 35 tools ────────────────────────────
+  1. get_doc_history(agent_name="ops-assistant", doc_id="NW-2210", limit=1)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-2210", "revisions": [{"revision": 7, "author": "dana.k", "at": "2026-08-24T11:15:00Z", "s…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_failover · 3 servers · 35 tools ───────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="database failover runbook")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "snippe…
+  2. get_doc(agent_name="ops-assistant", doc_id="NW-4471")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "body": "# Database …
+──────────────────────────────────────────────────────────────────
+
+
+──── a_oncall · 3 servers · 35 tools ─────────────────────────────
+  1. get_doc(agent_name="ops-assistant", doc_id="NW-0091")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-0091", "title": "On-call expectations", "space": "Engineering", "body": "# On-call expect…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_deploy · 3 servers · 35 tools ─────────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="blue-green deploy checklist")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-2210", "title": "Blue-green deploy checklist", "space": "Engineering", "snip…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_whochanged · 3 servers · 35 tools ─────────────────────────
+  1. get_doc_history(agent_name="ops-assistant", doc_id="NW-4471", limit=1)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "revisions": [{"revision": 12, "author": "priya.raman", "at": "2026-08-19T14:02:00…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_spaces · 3 servers · 35 tools ─────────────────────────────
+  1. list_spaces(agent_name="ops-assistant")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "spaces": ["Engineering", "Product", "Security", "Data Platform", "People Ops"]}', 'id': 'lc_33b2db93-3…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_search · 4 servers · 75 tools ─────────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="database failover runbook")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "snippe…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_get · 4 servers · 75 tools ────────────────────────────────
+  1. get_doc(agent_name="ops-assistant", doc_id="NW-0091", format="markdown")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-0091", "title": "On-call expectations", "space": "Engineering", "body": "# On-call expect…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_create · 4 servers · 75 tools ─────────────────────────────
+  1. create_doc(agent_name="ops-assistant", title="On-call handoff", body="Hand off the pager at 09:0...)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "created": true, "doc_id": "NW-5502", "title": "On-call handoff", "space": "Engineering", "url": "https…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_spaces · 4 servers · 75 tools ─────────────────────────────
+  1. list_spaces(agent_name="ops-assistant")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "spaces": ["Engineering", "Product", "Security", "Data Platform", "People Ops"]}', 'id': 'lc_f8b287b3-9…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_history · 4 servers · 75 tools ────────────────────────────
+  1. get_doc_history(agent_name="ops-assistant", doc_id="NW-4471")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "revisions": [{"revision": 12, "author": "priya.raman", "at": "2026-08-19T14:02:00…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_search · 4 servers · 75 tools ─────────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="blue-green deploy checklist")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-2210", "title": "Blue-green deploy checklist", "space": "Engineering", "snip…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_get · 4 servers · 75 tools ────────────────────────────────
+  1. get_doc(agent_name="ops-assistant", doc_id="NW-4471")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "body": "# Database …
+──────────────────────────────────────────────────────────────────
+
+
+──── i_create · 4 servers · 75 tools ─────────────────────────────
+  1. create_doc(agent_name="ops-assistant", title="Escalation policy", body="Escalate to the secondar...)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "created": true, "doc_id": "NW-5502", "title": "Escalation policy", "space": "Engineering", "url": "htt…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_spaces · 4 servers · 75 tools ─────────────────────────────
+  1. list_spaces(agent_name="ops-assistant")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "spaces": ["Engineering", "Product", "Security", "Data Platform", "People Ops"]}', 'id': 'lc_eee5e074-8…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_history · 4 servers · 75 tools ────────────────────────────
+  1. get_doc_history(agent_name="ops-assistant", doc_id="NW-2210", limit=1)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-2210", "revisions": [{"revision": 7, "author": "dana.k", "at": "2026-08-24T11:15:00Z", "s…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_failover · 4 servers · 75 tools ───────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="database failover runbook")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "snippe…
+  2. get_doc(agent_name="ops-assistant", doc_id="NW-4471")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "body": "# Database …
+──────────────────────────────────────────────────────────────────
+
+
+──── a_oncall · 4 servers · 75 tools ─────────────────────────────
+  1. get_doc(agent_name="ops-assistant", doc_id="NW-0091")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-0091", "title": "On-call expectations", "space": "Engineering", "body": "# On-call expect…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_deploy · 4 servers · 75 tools ─────────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="blue-green deploy checklist")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-2210", "title": "Blue-green deploy checklist", "space": "Engineering", "snip…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_whochanged · 4 servers · 75 tools ─────────────────────────
+  1. get_doc_history(agent_name="ops-assistant", doc_id="NW-4471", limit=1)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "revisions": [{"revision": 12, "author": "priya.raman", "at": "2026-08-19T14:02:00…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_spaces · 4 servers · 75 tools ─────────────────────────────
+  1. list_spaces(agent_name="ops-assistant")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "spaces": ["Engineering", "Product", "Security", "Data Platform", "People Ops"]}', 'id': 'lc_0450fb6b-c…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_search · 5 servers · 155 tools ────────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="database failover runbook")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "snippe…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_get · 5 servers · 155 tools ───────────────────────────────
+  1. get_doc(agent_name="ops-assistant", doc_id="NW-0091", format="markdown")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-0091", "title": "On-call expectations", "space": "Engineering", "body": "# On-call expect…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_create · 5 servers · 155 tools ────────────────────────────
+  1. create_doc(agent_name="ops-assistant", title="On-call handoff", body="Hand off the pager at 09:0...)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "created": true, "doc_id": "NW-5502", "title": "On-call handoff", "space": "Engineering", "url": "https…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_spaces · 5 servers · 155 tools ────────────────────────────
+  1. list_spaces(agent_name="ops-assistant")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "spaces": ["Engineering", "Product", "Security", "Data Platform", "People Ops"]}', 'id': 'lc_1f6237d2-a…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_history · 5 servers · 155 tools ───────────────────────────
+  1. get_doc_history(agent_name="ops-assistant", doc_id="NW-4471")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "revisions": [{"revision": 12, "author": "priya.raman", "at": "2026-08-19T14:02:00…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_search · 5 servers · 155 tools ────────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="blue-green deploy checklist")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-2210", "title": "Blue-green deploy checklist", "space": "Engineering", "snip…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_get · 5 servers · 155 tools ───────────────────────────────
+  1. get_doc(agent_name="ops-assistant", doc_id="NW-4471")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "body": "# Database …
+──────────────────────────────────────────────────────────────────
+
+
+──── i_create · 5 servers · 155 tools ────────────────────────────
+  1. create_doc(agent_name="ops-assistant", title="Escalation policy", body="Escalate to the secondar...)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "created": true, "doc_id": "NW-5502", "title": "Escalation policy", "space": "Engineering", "url": "htt…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_spaces · 5 servers · 155 tools ────────────────────────────
+  1. list_spaces(agent_name="ops-assistant")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "spaces": ["Engineering", "Product", "Security", "Data Platform", "People Ops"]}', 'id': 'lc_f57d987b-d…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_history · 5 servers · 155 tools ───────────────────────────
+  1. get_doc_history(agent_name="ops-assistant", doc_id="NW-2210", limit=1)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-2210", "revisions": [{"revision": 7, "author": "dana.k", "at": "2026-08-24T11:15:00Z", "s…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_failover · 5 servers · 155 tools ──────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="database failover runbook")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "snippe…
+  2. get_doc(agent_name="ops-assistant", doc_id="NW-4471")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "body": "# Database …
+──────────────────────────────────────────────────────────────────
+
+
+──── a_oncall · 5 servers · 155 tools ────────────────────────────
+  1. get_doc(agent_name="ops-assistant", doc_id="NW-0091")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-0091", "title": "On-call expectations", "space": "Engineering", "body": "# On-call expect…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_deploy · 5 servers · 155 tools ────────────────────────────
+  1. search_docs(agent_name="ops-assistant", query="blue-green deploy checklist")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-2210", "title": "Blue-green deploy checklist", "space": "Engineering", "snip…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_whochanged · 5 servers · 155 tools ────────────────────────
+  1. get_doc_history(agent_name="ops-assistant", doc_id="NW-4471", limit=1)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "revisions": [{"revision": 12, "author": "priya.raman", "at": "2026-08-19T14:02:00…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_spaces · 5 servers · 155 tools ────────────────────────────
+  1. list_spaces(agent_name="ops-assistant")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "spaces": ["Engineering", "Product", "Security", "Data Platform", "People Ops"]}', 'id': 'lc_78dcbded-f…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_search · 5 servers · 155 tools · REVERSED order ───────────
+  1. search_docs(agent_name="ops-assistant", query="database failover runbook")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "snippe…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_get · 5 servers · 155 tools · REVERSED order ──────────────
+  1. get_doc(agent_name="ops-assistant", doc_id="NW-0091", format="markdown")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-0091", "title": "On-call expectations", "space": "Engineering", "body": "# On-call expect…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_create · 5 servers · 155 tools · REVERSED order ───────────
+  1. create_doc(agent_name="ops-assistant", title="On-call handoff", body="Hand off the pager at 09:0...)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "created": true, "doc_id": "NW-5502", "title": "On-call handoff", "space": "Engineering", "url": "https…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_spaces · 5 servers · 155 tools · REVERSED order ───────────
+  1. list_spaces(agent_name="ops-assistant")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "spaces": ["Engineering", "Product", "Security", "Data Platform", "People Ops"]}', 'id': 'lc_3b9a780c-9…
+──────────────────────────────────────────────────────────────────
+
+
+──── q_history · 5 servers · 155 tools · REVERSED order ──────────
+  1. get_doc_history(agent_name="ops-assistant", doc_id="NW-4471")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "revisions": [{"revision": 12, "author": "priya.raman", "at": "2026-08-19T14:02:00…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_search · 5 servers · 155 tools · REVERSED order ───────────
+  1. search_docs(agent_name="ops-assistant", query="blue-green deploy checklist")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-2210", "title": "Blue-green deploy checklist", "space": "Engineering", "snip…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_get · 5 servers · 155 tools · REVERSED order ──────────────
+  1. get_doc(agent_name="ops-assistant", doc_id="NW-4471")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "body": "# Database …
+──────────────────────────────────────────────────────────────────
+
+
+──── i_create · 5 servers · 155 tools · REVERSED order ───────────
+  1. create_doc(agent_name="ops-assistant", title="Escalation policy", body="Escalate to the secondar...)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "created": true, "doc_id": "NW-5502", "title": "Escalation policy", "space": "Engineering", "url": "htt…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_spaces · 5 servers · 155 tools · REVERSED order ───────────
+  1. list_spaces(agent_name="ops-assistant")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "spaces": ["Engineering", "Product", "Security", "Data Platform", "People Ops"]}', 'id': 'lc_706977bc-1…
+──────────────────────────────────────────────────────────────────
+
+
+──── i_history · 5 servers · 155 tools · REVERSED order ──────────
+  1. get_doc_history(agent_name="ops-assistant", doc_id="NW-2210", limit=1)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-2210", "revisions": [{"revision": 7, "author": "dana.k", "at": "2026-08-24T11:15:00Z", "s…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_failover · 5 servers · 155 tools · REVERSED order ─────────
+  1. search_docs(agent_name="ops-assistant", query="database failover runbook")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "snippe…
+  2. get_doc(agent_name="ops-assistant", doc_id="NW-4471")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "title": "Database failover runbook", "space": "Engineering", "body": "# Database …
+──────────────────────────────────────────────────────────────────
+
+
+──── a_oncall · 5 servers · 155 tools · REVERSED order ───────────
+  1. get_doc(agent_name="ops-assistant", doc_id="NW-0091")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-0091", "title": "On-call expectations", "space": "Engineering", "body": "# On-call expect…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_deploy · 5 servers · 155 tools · REVERSED order ───────────
+  1. search_docs(agent_name="ops-assistant", query="blue-green deploy checklist")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "results": [{"doc_id": "NW-2210", "title": "Blue-green deploy checklist", "space": "Engineering", "snip…
+  2. get_doc(agent_name="ops-assistant", doc_id="NW-2210")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-2210", "title": "Blue-green deploy checklist", "space": "Engineering", "body": "# Blue-gr…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_whochanged · 5 servers · 155 tools · REVERSED order ───────
+  1. get_doc_history(agent_name="ops-assistant", doc_id="NW-4471", limit=1)
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "doc_id": "NW-4471", "revisions": [{"revision": 12, "author": "priya.raman", "at": "2026-08-19T14:02:00…
+──────────────────────────────────────────────────────────────────
+
+
+──── a_spaces · 5 servers · 155 tools · REVERSED order ───────────
+  1. list_spaces(agent_name="ops-assistant")
+     → [{'type': 'text', 'text': '{"system": "Northwind Docs", "spaces": ["Engineering", "Product", "Security", "Data Platform", "People Ops"]}', 'id': 'lc_9a8f5b82-2…
+──────────────────────────────────────────────────────────────────

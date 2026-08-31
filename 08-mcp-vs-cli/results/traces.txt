@@ -1,0 +1,144 @@
+Tool-call traces — first run of every cell, anthropic:claude-sonnet-5, generated 2026-08-31T12:41:03+00:00
+
+Rendered by shared/toolvis.py. It elides long arguments, so the verbatim
+command follows each trace — for the CLI arm the jq pipeline IS the finding,
+and an elided one would hide it.
+
+
+──── mcp · solve · 3 tools in context ────────────────────────────
+  1. solve_spelling_bee(agent_name="agent-mcp", letters="VALIDTY", center="V")
+     → [{'type': 'text', 'text': '{"words":[{"word":"VALIDITY","points":15,"pangram":true},{"word":"ADDITIVITY","points":10,"pangram":false},{"word":"AVADAVAT","point…
+──────────────────────────────────────────────────────────────────
+  [1] solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})
+
+
+──── cli · solve · 3 commands on disk ────────────────────────────
+  1. bash(command="puzzle bee --letters VALIDTY --cente...")
+     → {"words": [{"word": "VALIDITY", "points": 15, "pangram": true}, {"word": "ADDITIVITY", "points": 10, "pangram": false}, {"word": "AVADAVAT", "points": 8, "pang…
+──────────────────────────────────────────────────────────────────
+  [1] puzzle bee --letters VALIDTY --center V --json
+
+
+──── mcp · aggregate · 3 tools in context ────────────────────────
+  1. solve_spelling_bee(agent_name="agent-mcp", letters="VALIDTY", center="V")
+     → [{'type': 'text', 'text': '{"words":[{"word":"VALIDITY","points":15,"pangram":true},{"word":"ADDITIVITY","points":10,"pangram":false},{"word":"AVADAVAT","point…
+──────────────────────────────────────────────────────────────────
+  [1] solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})
+
+
+──── cli · aggregate · 3 commands on disk ────────────────────────
+  1. bash(command="puzzle bee --letters VALIDTY --cente...")
+     → {"words": [{"word": "VALIDITY", "points": 15, "pangram": true}, {"word": "ADDITIVITY", "points": 10, "pangram": false}, {"word": "AVADAVAT", "points": 8, "pang…
+  2. bash(command="puzzle bee --letters VALIDTY --cente...")
+     → 24
+──────────────────────────────────────────────────────────────────
+  [1] puzzle bee --letters VALIDTY --center V --json | jq '[.[] | select(.length>=5 or (.|length)>=5)]' 2>/dev/null || puzzle bee --letters VALIDTY --center V --json
+  [2] puzzle bee --letters VALIDTY --center V --json | jq '[.words[] | select((.word|length)>=5)] | length'
+
+
+──── cli+schema · aggregate · 3 commands on disk ─────────────────
+  1. bash(command="puzzle bee --letters VALIDTY --cente...")
+     → 24
+──────────────────────────────────────────────────────────────────
+  [1] puzzle bee --letters VALIDTY --center V --json | jq '[.words[] | select((.word|length) >= 5)] | length'
+
+
+──── mcp · undocumented · 3 tools in context ─────────────────────
+  1. solve_crossword_pattern(agent_name="agent-mcp", pattern="C_O__W_RD")
+     → [{'type': 'text', 'text': '{"pattern":"C_O__W_RD","length":9,"matches":["CROSSWORD"],"count":1}', 'id': 'lc_21339c6a-236e-4615-9a89-f72481b5179b'}]
+──────────────────────────────────────────────────────────────────
+  [1] solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})
+
+
+──── cli · undocumented · 3 commands on disk ─────────────────────
+  1. bash(command="puzzle crossword --pattern 'C_O__W_R...")
+     → {"pattern": "C_O__W_RD", "length": 9, "matches": ["CROSSWORD"], "count": 1}
+──────────────────────────────────────────────────────────────────
+  [1] puzzle crossword --pattern 'C_O__W_RD' --json 2>&1 || puzzle crossword --help
+
+
+──── mcp · solve · 3 tools in context ────────────────────────────
+  1. solve_spelling_bee(agent_name="agent-mcp", letters="VALIDTY", center="V")
+     → [{'type': 'text', 'text': '{"words":[{"word":"VALIDITY","points":15,"pangram":true},{"word":"ADDITIVITY","points":10,"pangram":false},{"word":"AVADAVAT","point…
+──────────────────────────────────────────────────────────────────
+  [1] solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})
+
+
+──── cli · solve · 3 commands on disk ────────────────────────────
+  1. bash(command="puzzle bee --letters VALIDTY --cente...")
+     → {"words": [{"word": "VALIDITY", "points": 15, "pangram": true}, {"word": "ADDITIVITY", "points": 10, "pangram": false}, {"word": "AVADAVAT", "points": 8, "pang…
+──────────────────────────────────────────────────────────────────
+  [1] puzzle bee --letters VALIDTY --center V --json
+
+
+──── mcp · solve · 15 tools in context ───────────────────────────
+  1. solve_spelling_bee(agent_name="agent-mcp", letters="VALIDTY", center="V")
+     → [{'type': 'text', 'text': '{"words":[{"word":"VALIDITY","points":15,"pangram":true},{"word":"ADDITIVITY","points":10,"pangram":false},{"word":"AVADAVAT","point…
+──────────────────────────────────────────────────────────────────
+  [1] solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})
+
+
+──── cli · solve · 15 commands on disk ───────────────────────────
+  1. bash(command="puzzle bee --letters VALIDTY --cente...")
+     → {"words": [{"word": "VALIDITY", "points": 15, "pangram": true}, {"word": "ADDITIVITY", "points": 10, "pangram": false}, {"word": "AVADAVAT", "points": 8, "pang…
+──────────────────────────────────────────────────────────────────
+  [1] puzzle bee --letters VALIDTY --center V --json
+
+
+──── mcp · solve · 40 tools in context ───────────────────────────
+  1. solve_spelling_bee(agent_name="agent-mcp", letters="VALIDTY", center="V")
+     → [{'type': 'text', 'text': '{"words":[{"word":"VALIDITY","points":15,"pangram":true},{"word":"ADDITIVITY","points":10,"pangram":false},{"word":"AVADAVAT","point…
+──────────────────────────────────────────────────────────────────
+  [1] solve_spelling_bee({'agent_name': 'agent-mcp', 'letters': 'VALIDTY', 'center': 'V'})
+
+
+──── cli · solve · 40 commands on disk ───────────────────────────
+  1. bash(command="puzzle bee --letters VALIDTY --cente...")
+     → {"words": [{"word": "VALIDITY", "points": 15, "pangram": true}, {"word": "ADDITIVITY", "points": 10, "pangram": false}, {"word": "AVADAVAT", "points": 8, "pang…
+──────────────────────────────────────────────────────────────────
+  [1] puzzle bee --letters VALIDTY --center V --json
+
+
+──── mcp · undocumented · 3 tools in context ─────────────────────
+  1. solve_crossword_pattern(agent_name="agent-mcp", pattern="C_O__W_RD")
+     → [{'type': 'text', 'text': '{"pattern":"C_O__W_RD","length":9,"matches":["CROSSWORD"],"count":1}', 'id': 'lc_06616a60-7515-4576-9a74-ef7960c66a9a'}]
+──────────────────────────────────────────────────────────────────
+  [1] solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})
+
+
+──── cli · undocumented · 3 commands on disk ─────────────────────
+  1. bash(command="puzzle crossword --pattern C_O__W_RD...")
+     → {"pattern": "C_O__W_RD", "length": 9, "matches": ["CROSSWORD"], "count": 1}
+──────────────────────────────────────────────────────────────────
+  [1] puzzle crossword --pattern C_O__W_RD --json 2>/dev/null || puzzle crossword --help
+
+
+──── mcp · undocumented · 15 tools in context ────────────────────
+  1. solve_crossword_pattern(agent_name="agent-mcp", pattern="C_O__W_RD")
+     → [{'type': 'text', 'text': '{"pattern":"C_O__W_RD","length":9,"matches":["CROSSWORD"],"count":1}', 'id': 'lc_844d4682-8b17-430e-bf11-87284c0a4407'}]
+──────────────────────────────────────────────────────────────────
+  [1] solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})
+
+
+──── cli · undocumented · 15 commands on disk ────────────────────
+  1. bash(command="puzzle crossword --pattern \"C_O__W_...")
+     → {"pattern": "C_O__W_RD", "length": 9, "matches": ["CROSSWORD"], "count": 1}
+──────────────────────────────────────────────────────────────────
+  [1] puzzle crossword --pattern "C_O__W_RD" --json 2>/dev/null || puzzle --help
+
+
+──── mcp · undocumented · 40 tools in context ────────────────────
+  1. solve_crossword_pattern(agent_name="agent-mcp", pattern="C_O__W_RD")
+     → [{'type': 'text', 'text': '{"pattern":"C_O__W_RD","length":9,"matches":["CROSSWORD"],"count":1}', 'id': 'lc_91416634-1910-4d86-b1bb-6256bba65bf3'}]
+──────────────────────────────────────────────────────────────────
+  [1] solve_crossword_pattern({'agent_name': 'agent-mcp', 'pattern': 'C_O__W_RD'})
+
+
+──── cli · undocumented · 40 commands on disk ────────────────────
+  1. bash(command="puzzle --help")
+     → usage: puzzle [-h] {bee,crossword,wordle} ... Word-puzzle solvers over the ENABLE1 dictionary (172,823 words). positional arguments: {bee,crossword,wordle} bee…
+  2. bash(command="puzzle crossword --pattern C_O__W_RD...")
+     → {"pattern": "C_O__W_RD", "length": 9, "matches": ["CROSSWORD"], "count": 1}
+──────────────────────────────────────────────────────────────────
+  [1] puzzle --help
+  [2] puzzle crossword --pattern C_O__W_RD --json 2>/dev/null || puzzle crossword -h

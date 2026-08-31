@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MCP for all the tokens: what five servers cost one agent</title>
+<style>
+:root{
+  --bg:#fbfaf7; --panel:#ffffff; --ink:#1a1a1a; --ink-2:#4a4a48; --ink-3:#6e6e6a;
+  --rule:#e2ded4; --rule-2:#d0cabb;
+  --accent:#8a4b1f; --accent-soft:#f3e9df;
+  --code-bg:#f6f3ed; --code-ink:#2c2a26; --code-rule:#e2ded4;
+  --ok:#2f6a3f; --ok-soft:#e6f0e7;
+  --warn:#8a5a00; --warn-soft:#fbf1dc;
+  --stop:#9a2f2f; --stop-soft:#f8e7e4;
+  --shadow:0 1px 2px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme:dark){
+:root{
+  --bg:#14140f; --panel:#1b1b16; --ink:#f0ede4; --ink-2:#c4c0b4; --ink-3:#95918a;
+  --rule:#33322a; --rule-2:#454338;
+  --accent:#e0a06a; --accent-soft:#2b2119;
+  --code-bg:#121210; --code-ink:#e4e0d6; --code-rule:#33322a;
+  --ok:#8fd0a0; --ok-soft:#1b2a1e;
+  --warn:#e8c37a; --warn-soft:#2b2416;
+  --stop:#eda49a; --stop-soft:#2e1c1a;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:400 19px/1.65 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  padding:0 20px 120px;
+}
+.wrap{max-width:920px;margin:0 auto}
+
+/* ---- masthead ---- */
+header.mast{padding:64px 0 36px;border-bottom:3px solid var(--ink)}
+.eyebrow{
+  font:600 14px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 18px;
+}
+h1{font-size:clamp(38px,6vw,60px);line-height:1.06;margin:0 0 20px;letter-spacing:-.022em;font-weight:700}
+.standfirst{font-size:22px;line-height:1.55;color:var(--ink-2);margin:0;max-width:44em}
+.meta{
+  margin-top:28px;display:flex;flex-wrap:wrap;gap:10px;
+  font:500 14px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+.meta span{
+  background:var(--panel);border:1px solid var(--rule);border-radius:999px;
+  padding:8px 14px;color:var(--ink-3);
+}
+
+/* ---- sections ---- */
+section{padding-top:52px}
+h2{
+  font-size:clamp(26px,3.4vw,34px);line-height:1.2;margin:0 0 8px;letter-spacing:-.015em;font-weight:700;
+  display:flex;gap:16px;align-items:baseline;
+}
+h2 .num{
+  font:700 16px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color:var(--accent);background:var(--accent-soft);border-radius:6px;
+  padding:8px 10px;flex:none;letter-spacing:.05em;
+}
+h3{font-size:21px;line-height:1.35;margin:34px 0 10px;font-weight:650;letter-spacing:-.008em}
+h4{font-size:17px;margin:24px 0 8px;font-weight:650;color:var(--ink-2)}
+p{margin:0 0 16px;max-width:44em}
+.lede{color:var(--ink-2);font-size:20px;max-width:44em;margin-bottom:22px}
+ul,ol{max-width:44em;margin:0 0 16px;padding-left:1.3em}
+li{margin:0 0 9px}
+li>p:last-child,li>ul:last-child,li>ol:last-child,li>pre:last-child{margin-bottom:0}
+li>ul,li>ol{margin-top:9px}
+strong{font-weight:650}
+a{color:var(--accent);text-underline-offset:3px}
+hr.soft{border:0;border-top:1px solid var(--rule);margin:44px 0}
+
+/* ---- code ---- */
+pre{
+  background:var(--code-bg);color:var(--code-ink);border:1px solid var(--code-rule);
+  border-radius:10px;padding:18px 20px;overflow-x:auto;margin:0 0 20px;
+  font:400 15.5px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  -webkit-user-select:all;user-select:all; tab-size:2;
+}
+pre code{white-space:pre;display:block}
+code{
+  font:400 .875em/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  background:var(--code-bg);border:1px solid var(--code-rule);
+  border-radius:4px;padding:.1em .38em;
+}
+pre code{background:none;border:0;padding:0}
+.filename{
+  font:600 13px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color:var(--ink-3);letter-spacing:.04em;margin:0 0 7px;text-transform:none;
+}
+
+/* ---- callouts ---- */
+.call{
+  border-left:5px solid var(--rule-2);background:var(--panel);border-radius:0 10px 10px 0;
+  padding:18px 22px;margin:0 0 22px;box-shadow:var(--shadow);
+}
+.call p:last-child,.call ul:last-child,.call pre:last-child{margin-bottom:0}
+.call .tag{
+  display:block;font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.14em;text-transform:uppercase;margin:0 0 10px;
+}
+.call.note{border-left-color:var(--accent);background:var(--accent-soft)}
+.call.note .tag{color:var(--accent)}
+.call.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+.call.warn .tag{color:var(--warn)}
+.call.stop{border-left-color:var(--stop);background:var(--stop-soft)}
+.call.stop .tag{color:var(--stop)}
+.call.ok{border-left-color:var(--ok);background:var(--ok-soft)}
+.call.ok .tag{color:var(--ok)}
+
+/* ---- steps ---- */
+ol.steps{list-style:none;padding:0;counter-reset:s;max-width:none}
+ol.steps>li{
+  counter-increment:s;position:relative;padding:0 0 4px 58px;margin:0 0 30px;
+}
+ol.steps>li::before{
+  content:counter(s);position:absolute;left:0;top:1px;
+  width:38px;height:38px;border-radius:50%;
+  background:var(--ink);color:var(--bg);
+  font:700 17px/38px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  text-align:center;
+}
+ol.steps>li>h3{margin:4px 0 8px}
+
+/* ---- table ---- */
+.tw{overflow-x:auto;margin:0 0 22px;border:1px solid var(--rule);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:16.5px;min-width:520px}
+th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{
+  font:700 12.5px/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+  background:var(--code-bg);
+}
+tr:last-child td{border-bottom:0}
+td code{font-size:.85em;white-space:nowrap}
+
+/* ---- before/after ---- */
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:0 0 22px}
+@media (max-width:760px){.ba{grid-template-columns:1fr}}
+.ba>div{min-width:0}
+.ba h4{margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.pill{
+  font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.1em;text-transform:uppercase;padding:5px 8px;border-radius:4px;
+}
+.pill.bad{background:var(--stop-soft);color:var(--stop)}
+.pill.good{background:var(--ok-soft);color:var(--ok)}
+.ba pre{margin:0;font-size:14.5px}
+
+/* ---- verified badge ---- */
+.vf{
+  display:inline-block;font:600 12.5px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.06em;color:var(--ok);background:var(--ok-soft);
+  border-radius:4px;padding:6px 9px;margin:0 0 14px;
+}
+.vf.un{color:var(--warn);background:var(--warn-soft)}
+
+footer{margin-top:72px;padding-top:26px;border-top:1px solid var(--rule);color:var(--ink-3);font-size:15.5px}
+footer p{max-width:46em}
+@media print{body{padding:0}.call,pre,.tw{break-inside:avoid}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <p class="eyebrow">MCP Training · Part 07</p>
+  <h1>MCP for all the tokens: what five servers cost one agent</h1>
+  <p class="standfirst"><strong>The one idea:</strong> every tool description is text in the model&#x27;s context on <strong>every turn</strong>, so connecting a fifth MCP server is not a one-time cost — it is a permanent per-request tax, paid whether the agent uses those tools or not.</p>
+  <div class="meta">
+    <span>07-mcp-for-all-the-tokens/README.md</span>
+  </div>
+</header>
+
+<section>
+<p>The MCP-vs-CLI folder in this repo measured that tax on one server. This folder is the multi-server sequel: five vendors, 155 tools, and the second question that folder could not answer — <strong>does the agent also start picking the wrong tool?</strong></p>
+<p>Both halves are measured. Nothing here is estimated: LangChain surfaces the Anthropic API&#x27;s own <code>usage_metadata</code> on every AI message, and <code>metrics.py</code> sums it across the whole trajectory.</p>
+<p><strong>Results generated 2026-08-31 (UTC) with <code>anthropic:claude-sonnet-5</code>, 3 runs per cell, 285 API calls total.</strong> Re-running will move output tokens and wall clock a little; input tokens will not move at all.</p>
+<p><strong>The two headline numbers:</strong> ~180 input tokens per tool per request, and <strong>270/270 correct tool selections</strong> — including at 155 tools, on adversarial prompts, with the correct tools registered last. The cost of over-connecting servers is tokens, not correctness.</p>
+<h2>The scenario</h2>
+<p>A company that said yes to five vendors. Each one ships an MCP server, and each one is individually reasonable.</p>
+<div class="tw"><table><thead><tr><th>#</th><th>vendor</th><th>domain</th><th>tools</th><th>cumulative</th></tr></thead><tbody><tr><td>1</td><td>Northwind Docs</td><td>internal engineering documentation</td><td>5</td><td>5</td></tr><tr><td>2</td><td>Helios Helpdesk</td><td>customer support desk</td><td>10</td><td>15</td></tr><tr><td>3</td><td>Meridian CRM</td><td>sales and customer records</td><td>20</td><td>35</td></tr><tr><td>4</td><td>Lumen Analytics</td><td>product analytics and BI</td><td>40</td><td>75</td></tr><tr><td>5</td><td>Bastion Infra</td><td>cloud infrastructure platform</td><td>80</td><td>155</td></tr></tbody></table></div>
+<p>One agent connects to a growing prefix of that list — server 1, then 1+2, then 1+2+3 — via <code>MultiServerMCPClient</code>. The agent, the model and the prompts never change. The only variable is how many vendors are plugged in.</p>
+<p><strong>The names collide, because real vendors do not coordinate.</strong> Five teams independently solving &quot;let the agent find a document&quot; ship <code>search_docs</code>, <code>find_documents</code>, <code>lookup_document</code>, <code>query_knowledge_base</code> and <code>search_documentation</code>. Twenty of the 155 tools are deliberate near-duplicates of Northwind&#x27;s five, one per rival server:</p>
+<div class="tw"><table><thead><tr><th>Northwind (correct)</th><th>Helios</th><th>Meridian</th><th>Lumen</th><th>Bastion</th></tr></thead><tbody><tr><td><code>search_docs</code></td><td><code>find_documents</code></td><td><code>lookup_document</code></td><td><code>query_knowledge_base</code></td><td><code>search_documentation</code></td></tr><tr><td><code>get_doc</code></td><td><code>read_document</code></td><td><code>fetch_document</code></td><td><code>get_document_content</code></td><td><code>retrieve_doc</code></td></tr><tr><td><code>create_doc</code></td><td><code>create_page</code></td><td><code>new_document</code></td><td><code>create_doc_draft</code></td><td><code>publish_doc</code></td></tr><tr><td><code>list_spaces</code></td><td><code>list_workspaces</code></td><td><code>list_projects</code></td><td><code>list_namespaces</code></td><td><code>list_doc_spaces</code></td></tr><tr><td><code>get_doc_history</code></td><td><code>get_revision_history</code></td><td><code>document_history</code></td><td><code>get_page_versions</code></td><td><code>list_doc_revisions</code></td></tr></tbody></table></div>
+<p>Also planted, because the brief asked for it: <code>create_ticket</code> (Helios), <code>open_issue</code> (Meridian) and <code>file_bug</code> (Bastion) — three servers, three names, one idea.</p>
+<h2>Run it</h2>
+<p>The five servers are <strong>separate long-running processes over HTTP</strong>, on ports 8010–8014. Nothing spawns them: you start them, and the agent connects by URL. That is the point — five vendors really is five processes, and you can watch a call land in one vendor&#x27;s window while the conversation happens in another.</p>
+<p><strong>Terminal 1 — the servers:</strong></p>
+<pre><code>cd 07-mcp-for-all-the-tokens
+./start_servers.sh          # all five, logs to servers/logs/
+tail -f servers/logs/bastion-infra.log    # watch calls arrive
+./stop_servers.sh           # when you are done</code></pre>
+<p>Or run one by hand in its own window, which is better if you only care about two of them:</p>
+<pre><code>python servers/server.py --server northwind-docs   # http://127.0.0.1:8010/mcp
+python servers/server.py --server bastion-infra    # http://127.0.0.1:8014/mcp</code></pre>
+<p><strong>Terminal 2 — the agent.</strong> Needs <code>ANTHROPIC_API_KEY</code> in <code>../.env.local</code>:</p>
+<pre><code>python catalog.py                    # the stack + ports, no API key, no servers needed
+python show_schema.py --servers 5 --weigh   # what the tool block weighs, no API key
+python benchmark.py --runs 3         # the full sweep: 285 API calls, ~45 min
+python benchmark.py --render-only    # re-render every chart from the committed JSON, offline</code></pre>
+<p>If the servers are not up, every command that needs them exits immediately naming the ports and the start script rather than raising a stack trace.</p>
+<p>Single cells, for poking:</p>
+<pre><code>python agent.py --probe --servers 1        # 1,507 input tokens
+python agent.py --probe --servers 5        # 27,086 input tokens — same answer
+python agent.py --task a_failover --servers 5   # one scored task, then exit</code></pre>
+<h3>Talk to it — the demo worth doing live</h3>
+<p>Per the repo convention, <strong>running the agent with no arguments opens a conversation</strong>:</p>
+<pre><code>python agent.py --servers 1     # chat with 5 tools
+python agent.py --servers 5     # chat with 155 tools
+python agent.py --ask &quot;find me the docs on rate limits&quot;   # one question, then exit</code></pre>
+<p>Run the same ambiguous request against both and watch the tool-call line. That is a better demo than any table on this page, and it lets the room supply the request.</p>
+<div class="call note"><p><strong>The chat loop is for demonstration, not measurement.</strong> Every number in <code>results/</code> comes from <code>benchmark.py</code>, which drives <code>agent.run()</code> directly and never touches this CLI. Anything you see in a chat session is a single un-repeated sample.</p></div>
+<p>More in <a href="samples/README.html"><code>samples/</code></a>.</p>
+<h2>Part 1 — the tool-definition tax</h2>
+<p>The cleanest number in the folder comes from a prompt that calls <strong>no tool at all</strong>: <em>&quot;Reply with exactly the word READY.&quot;</em> One round-trip. Everything fixed except how many tool schemas were serialized into the request.</p>
+<div class="tw"><table><thead><tr><th>servers connected</th><th>tools</th><th>input tokens</th><th>vs. 1 server</th><th>tokens per extra tool</th></tr></thead><tbody><tr><td>Northwind</td><td>5</td><td>1,507 ± 0</td><td>1.00x</td><td>—</td></tr><tr><td>+ Helios</td><td>15</td><td>3,378 ± 0</td><td>2.24x</td><td>187</td></tr><tr><td>+ Meridian</td><td>35</td><td>7,235 ± 0</td><td>4.80x</td><td>191</td></tr><tr><td>+ Lumen</td><td>75</td><td>14,224 ± 0</td><td>9.44x</td><td>182</td></tr><tr><td>+ Bastion</td><td>155</td><td><strong>27,086 ± 0</strong></td><td><strong>17.97x</strong></td><td>171</td></tr></tbody></table></div>
+<p><strong>170–191 input tokens per tool per request</strong> — call it ~180 — near-flat across a 31x range in tool count. That matches the MCP-vs-CLI folder&#x27;s independently-measured ~178 tokens per tool per request on a single server — a different catalogue, a different domain, the same slope. The number travels.</p>
+<p>Zero standard deviation across all three runs, at every step: the tool block is deterministic text. It is not an average you might get lucky on. It is a fixed bill.</p>
+<p>The same thing measured without a model in the loop:</p>
+<pre><code>$ python show_schema.py --servers 5 --weigh
+  Northwind Docs       5 tools     2,774 chars
+  Helios Helpdesk     10 tools     5,014 chars
+  Meridian CRM        20 tools    10,149 chars
+  Lumen Analytics     40 tools    18,264 chars
+  Bastion Infra       80 tools    33,377 chars
+  TOTAL              155 tools    69,578 chars</code></pre>
+<p><strong>Sixty-nine thousand characters</strong>, re-serialized into every request for the life of the conversation. That is what &quot;we hooked up the infra server too, it&#x27;s free&quot; actually costs.</p>
+<h3>What it extrapolates to</h3>
+<p>At Sonnet&#x27;s list price of $3.00 per million input tokens:</p>
+<ul><li><strong>One turn</strong>, full stack attached, before the agent does any work: <strong>27,086 input tokens ≈ $0.081</strong>.</li><li><strong>A 40-turn working session</strong>: <strong>1,083,440 input tokens ≈ $3.25</strong> — of which <strong>1,023,160 tokens ($3.07)</strong> are tool definitions for servers the agent may never touch.</li><li><strong>The same session with only the server it needs</strong>: <strong>60,280 tokens ≈ $0.18</strong>.</li></ul>
+<p>That is an 18x difference in input spend for identical work. It is a straight-line extrapolation of a measured per-turn cost, not a measured 40-turn conversation, and it assumes no prompt caching — see the caveats.</p>
+<p>Real tasks cost more than the probe because they take two round-trips and the tool block is re-sent on each:</p>
+<div class="tw"><table><thead><tr><th>servers</th><th>tools</th><th>input tok / run</th><th>output tok</th><th>round-trips</th><th>wall</th></tr></thead><tbody><tr><td>1</td><td>5</td><td>3,375</td><td>182</td><td>2.1</td><td>6.1s</td></tr><tr><td>2</td><td>15</td><td>7,198</td><td>186</td><td>2.1</td><td>6.0s</td></tr><tr><td>3</td><td>35</td><td>15,169</td><td>181</td><td>2.1</td><td>6.1s</td></tr><tr><td>4</td><td>75</td><td>29,938</td><td>185</td><td>2.1</td><td>6.5s</td></tr><tr><td>5</td><td>155</td><td><strong>56,815</strong></td><td>189</td><td>2.1</td><td>7.5s</td></tr></tbody></table></div>
+<p><strong>16.8x more input tokens for identical work.</strong> Note the output column: 182 tokens at 5 tools, 189 at 155. The model is not deliberating harder or hedging with 155 options — all of the growth is on the input side, and all of it is definitions.</p>
+<h2>Part 2 — confusion: the part the MCP-vs-CLI folder could not measure</h2>
+<p>That folder found 35/35 correct selections, but only because it had three conventionally-named commands and nothing to confuse them with. Here wrong selection is genuinely available: 20 planted near-duplicates plus 130 more tools on top, and 15 tasks with exactly one correct answer each.</p>
+<div class="tw"><table><thead><tr><th>servers</th><th>tools</th><th>qualified</th><th>implied</th><th>adversarial</th><th>overall</th></tr></thead><tbody><tr><td>1</td><td>5</td><td>15/15</td><td>15/15</td><td>15/15</td><td><strong>45/45 · 100%</strong></td></tr><tr><td>2</td><td>15</td><td>15/15</td><td>15/15</td><td>15/15</td><td><strong>45/45 · 100%</strong></td></tr><tr><td>3</td><td>35</td><td>15/15</td><td>15/15</td><td>15/15</td><td><strong>45/45 · 100%</strong></td></tr><tr><td>4</td><td>75</td><td>15/15</td><td>15/15</td><td>15/15</td><td><strong>45/45 · 100%</strong></td></tr><tr><td>5</td><td><strong>155</strong></td><td>15/15</td><td>15/15</td><td>15/15</td><td><strong>45/45 · 100%</strong></td></tr><tr><td>5</td><td>155 <em>(position control — Northwind registered <strong>last</strong>)</em></td><td>15/15</td><td>15/15</td><td>15/15</td><td><strong>45/45 · 100%</strong></td></tr></tbody></table></div>
+<p><strong>270/270 correct first selections. Zero wrong-server calls. Zero recoveries needed.</strong></p>
+<p>And not only the first call. Across all <strong>292 tool calls</strong> in the entire sweep:</p>
+<div class="call note"><p><strong>Zero calls to any of the 150 non-Northwind tools. Ever.</strong> Not a mis-selection, not an exploratory call, not a recovery. Those 150 tools sat in the context window costing 25,579 input tokens a turn and were never once touched.</p></div>
+<p>The only multi-call runs were 22 instances of <code>search_docs → get_doc</code> — find the page, then read it. That is correct chaining on a search task, not recovery from a bad pick. Round-trips stayed flat at 2.1 across every step.</p>
+<h3>What we tried, so nobody thinks we did not try</h3>
+<p>A 100% result is only worth something if the test could plausibly have failed. Four escalations, in order:</p>
+<ol><li><strong>Plant near-duplicates across vendors.</strong> Five names for &quot;find a document&quot;, five for &quot;read one&quot;, five for &quot;list containers&quot; — 20 planted collisions. No effect.</li><li><strong>Stop naming the vendor.</strong> The <code>implied</code> tier never says &quot;Northwind&quot;; it leans on the <code>NW-####</code> id convention or Northwind&#x27;s own self-description, so the model has to read descriptions rather than pattern-match a proper noun. No effect — 75/75.</li><li><strong>Make a rival tool the better keyword match.</strong> The <code>adversarial</code> tier. <em>&quot;I need the failover runbook for the database&quot;</em> sits next to Bastion&#x27;s <code>failover_database</code>, which would execute a production failover. <em>&quot;What documentation spaces do we have&quot;</em> sits next to <code>list_doc_spaces</code>, a near-identical name on another server. No effect — 75/75.</li><li><strong>Bury the right answers at the bottom of the list.</strong> Position in a flat tool list is a known selection bias, and Northwind was registered first. <code>--reverse</code> puts the five correct tools <em>after</em> the other 150. No effect — 45/45.</li></ol>
+<p>What would be needed to break it is genuine ambiguity, not more tools: two descriptions both honestly applicable to the request — at which point there is no correct answer to score against, and it is a spec problem rather than a selection problem. Or exact name collisions across servers, which the adapter resolves before the model sees them. Or a smaller model.</p>
+<p>It held up for an unglamorous reason worth saying out loud: <strong>every Northwind description names Northwind.</strong> Description quality <em>is</em> selection accuracy, and these descriptions were written carefully — which is the advice, and also exactly why the experiment did not break. A server shipping terse, vendor-anonymous descriptions is running a different experiment.</p>
+<p>Full tables, including the bait each adversarial task carried, in <a href="results/accuracy.html"><code>results/accuracy.md</code></a>.</p>
+<h3>What the scored suite could not show: ambiguity produces fan-out</h3>
+<p>The scored tasks all have exactly one correct answer — that is what makes them scoreable, and it is also their limit. A request with <em>no</em> correct answer behaves differently, and the interactive agent is where you can see it.</p>
+<p>The identical question, <code>&quot;find me the docs on rate limits&quot;</code> — a topic that exists in none of the fixtures:</p>
+<div class="tw"><table><thead><tr><th></th><th>tool calls</th><th>what it did</th></tr></thead><tbody><tr><td><code>--servers 1</code> (5 tools)</td><td>4</td><td><code>search_docs</code> → <code>search_docs</code> (reworded) → <code>list_spaces</code> → <code>search_docs</code> (scoped to a space). All Northwind.</td></tr><tr><td><code>--servers 5</code> (155 tools)</td><td>3</td><td><code>search_documentation</code> (<strong>Bastion</strong>) → <code>search_docs</code> (<strong>Northwind</strong>) → <code>find_documents</code> (<strong>Helios</strong>). Three vendors.</td></tr></tbody></table></div>
+<p>Both fan out when there is nothing to find. What changes at 155 tools is the <em>direction</em>: with five servers connected the agent queries three different companies&#x27; systems for an internal engineering topic, because three of them plausibly could have it.</p>
+<p><strong>This is one interactive run each, not a measurement</strong> — no repeats, no scoring, and an under-specified request has no right answer to score against. It is reported because it is the honest complement to the 270/270: well-specified requests do not degrade, and under-specified ones spread across vendors instead of failing outright. If you want to make the point in the room, this is the command to type.</p>
+<h2>The conclusion</h2>
+<p><strong>Adding a server is not free, and it is not a one-time cost.</strong> Every tool description is text in the model&#x27;s context on every turn. Five reasonable vendors produce a 27,086-token entry fee that the agent pays before it does anything, on every turn, forever.</p>
+<p><strong>But the failure mode is the bill, not the behaviour.</strong> We tried four ways to make the agent pick the wrong tool at 155 options and could not. That is a sharper argument than the one we went looking for: nobody has to be talked out of a reliability scare, they have to be shown an invoice.</p>
+<p>The practical guidance:</p>
+<ul><li><strong>Connect the servers a given agent actually needs, not every server your company runs.</strong> One agent per job, each with its own small set. A docs agent does not need the infra server.</li><li><strong>Ship the tools agents call.</strong> A server with 80 tools imposes 80 tools&#x27; worth of tax on every consumer, forever.</li><li><strong>Price the connection before you make it.</strong> ~180 input tokens per tool per turn is the exchange rate.</li><li><strong>Do not economize on descriptions.</strong> They are what selection accuracy is made of. Cut <em>tools</em>, not words.</li></ul>
+<p><strong>Prompt caching is the real mitigation, and we did not measure it.</strong> Anthropic&#x27;s prompt caching can amortize a large static tool block across the turns of a session, cutting the repeat cost of cache hits substantially. It would soften this tax considerably — not eliminate it: the first request pays in full, cache entries expire, and changing the tool set invalidates the block. It is the obvious follow-up experiment.</p>
+<p>The direction past that, named here but not built: load tool definitions <strong>on demand</strong> — as importable modules read from a filesystem rather than injected into every request — so the schema tax scales with what an agent uses instead of what it has installed. Anthropic has published this as &quot;code execution with MCP&quot;. It is the same conclusion the MCP-vs-CLI folder reached from the other direction.</p>
+<h2>Caveats, stated plainly</h2>
+<ul><li><strong>One model, one task family.</strong> <code>claude-sonnet-5</code> only. A smaller model would plausibly be more susceptible to near-duplicate confusion, and this folder does not test that.</li><li><strong>No prompt caching, and this is the big one.</strong> Anthropic&#x27;s prompt caching can amortize a large static tool block across turns in a session, cutting the repeat cost of cache hits substantially. That would soften the per-turn tax considerably without eliminating it: the first request still pays in full, cache entries expire, and a changed tool set invalidates the block. <strong>We did not measure it.</strong> If someone in the room raises it, the honest answer is &quot;yes, that is the right mitigation, and it is the obvious follow-up experiment.&quot;</li><li><strong>Tool names are unique across the five servers.</strong> Real vendors collide outright — two servers both shipping <code>search_docs</code> is entirely plausible. <code>langchain-mcp-adapters</code> flattens every server into one namespace, so a genuine duplicate would silently shadow, and we would have measured adapter behaviour rather than model behaviour. <code>catalog.py</code> asserts uniqueness at import. <strong>The collision problem is real; it just is not what this folder measures.</strong></li><li><strong>Payloads are small.</strong> The fixture responses are a few hundred bytes. Nothing here says how tool-result volume interacts with tool-definition volume.</li><li><strong>Transport is not a variable.</strong> The committed numbers were measured over stdio; the servers now run over HTTP. The tool block serialized into the Anthropic request is byte-identical either way (69,578 chars both times), and all five tax-probe points reproduce to the digit over HTTP — 1,507 / 3,378 / 7,235 / 14,224 / 27,086. The results were therefore <strong>not</strong> re-run.</li><li><strong>Wall clock is API latency.</strong> Reported for completeness, not for conclusions.</li><li><strong>The distractor tools were never called at all.</strong> They return honest empty results if they ever are. That is the point: they cost their full schema regardless.</li></ul>
+<h2>Files</h2>
+<div class="tw"><table><thead><tr><th>File</th><th>What it is</th></tr></thead><tbody><tr><td><code>catalog.py</code></td><td>The five vendor catalogues — 155 tool definitions, with the 20 planted near-duplicates marked. Self-checks name uniqueness and counts at import.</td></tr><tr><td><code>servers/server.py</code></td><td>One generic FastMCP server, instantiated five times. Serves HTTP on its assigned port (<code>--stdio</code> escapes to spawned-subprocess mode). Real signatures, so FastMCP derives real JSON schemas.</td></tr><tr><td><code>start_servers.sh</code> / <code>stop_servers.sh</code></td><td>Start and stop all five on ports 8010–8014, logging to <code>servers/logs/</code>.</td></tr><tr><td><code>agent.py</code></td><td>The agent. Connects to the running servers by URL; never spawns them. <strong>No arguments opens a chat loop</strong> (<code>shared/repl.py</code>) — demonstration only. <code>--servers N</code> connects the first N vendors; <code>--ask</code> asks one free-form question; <code>--task</code> runs one scored task; <code>--reverse</code> is the tool-position control; <code>--probe</code> is the no-tool tax probe.</td></tr><tr><td><code>tasks.py</code></td><td>The 15 tasks — qualified, implied and adversarial — each with exactly one correct tool.</td></tr><tr><td><code>metrics.py</code></td><td>Token, round-trip and selection accounting from <code>usage_metadata</code>. Measured, never estimated.</td></tr><tr><td><code>benchmark.py</code></td><td>The harness: probes, matrix, position control; writes <code>results/</code>.</td></tr><tr><td><code>show_schema.py</code></td><td>What the model actually receives for a tool, and what the whole block weighs. No API key.</td></tr><tr><td><code>results/results.json</code></td><td>Every run, every metric, every tool call.</td></tr><tr><td><code>results/chart.txt</code></td><td>Rendered ASCII chart.</td></tr><tr><td><code>results/accuracy.md</code></td><td>Selection accuracy tables, including every wrong pick.</td></tr><tr><td><code>results/report.md</code></td><td>The written report, generated from the JSON.</td></tr><tr><td><code>results/traces.txt</code></td><td>Tool-call trace for the first run of every cell.</td></tr><tr><td><code>index.html</code></td><td>Self-contained session page. No external requests.</td></tr></tbody></table></div>
+</section>
+
+<footer><p>Generated from <code>07-mcp-for-all-the-tokens/README.md</code>, which is the editable source.
+Regenerate every page with <code>python shared/render_report.py --all</code>.</p></footer>
+</div>
+</body>
+</html>

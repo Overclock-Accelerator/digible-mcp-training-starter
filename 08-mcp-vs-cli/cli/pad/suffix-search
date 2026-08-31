@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""List dictionary words ending with a suffix."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="suffix-search", description="List dictionary words ending with a suffix.")
+p.add_argument("--suffix", type=str, required=True, help="suffix")
+p.add_argument("--max-results", type=int, default=25, help="max_results")
+a = p.parse_args()
+print("suffix-search: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

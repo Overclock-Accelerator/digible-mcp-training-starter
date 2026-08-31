@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+"""Compute the edit distance between two words."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="min-edit-distance", description="Compute the edit distance between two words.")
+p.add_argument("--a", type=str, required=True, help="a")
+p.add_argument("--b", type=str, required=True, help="b")
+p.add_argument("--algorithm", type=str, default="levenshtein", help="algorithm")
+a = p.parse_args()
+print("min-edit-distance: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

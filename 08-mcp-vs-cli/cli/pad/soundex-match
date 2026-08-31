@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""Find words that sound alike by Soundex code."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="soundex-match", description="Find words that sound alike by Soundex code.")
+p.add_argument("--word", type=str, required=True, help="word")
+p.add_argument("--max-results", type=int, default=20, help="max_results")
+a = p.parse_args()
+print("soundex-match: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

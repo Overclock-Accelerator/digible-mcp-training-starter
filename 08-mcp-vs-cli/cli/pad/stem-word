@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""Reduce a word to its stem."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="stem-word", description="Reduce a word to its stem.")
+p.add_argument("--word", type=str, required=True, help="word")
+p.add_argument("--algorithm", type=str, default="porter", help="algorithm")
+a = p.parse_args()
+print("stem-word: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

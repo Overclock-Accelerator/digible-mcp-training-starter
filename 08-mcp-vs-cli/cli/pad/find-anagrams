@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""Find every dictionary anagram of a word or letter set."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="find-anagrams", description="Find every dictionary anagram of a word or letter set.")
+p.add_argument("--word", type=str, required=True, help="word")
+p.add_argument("--min-length", type=int, default=3, help="min_length")
+a = p.parse_args()
+print("find-anagrams: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

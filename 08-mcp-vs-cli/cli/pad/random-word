@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""Return a random dictionary word."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="random-word", description="Return a random dictionary word.")
+p.add_argument("--length", type=int, default=5, help="length")
+p.add_argument("--starts-with", type=str, default="", help="starts_with")
+a = p.parse_args()
+print("random-word: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

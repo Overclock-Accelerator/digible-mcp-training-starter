@@ -1,0 +1,6 @@
+# The root .gitignore excludes *.db. This one is deliberately committed: the
+# activity has to work with no build step and no network. It is generated
+# deterministically from a fixed seed, and every row in it is synthetic.
+!digible.db
+__pycache__/
+*.pyc

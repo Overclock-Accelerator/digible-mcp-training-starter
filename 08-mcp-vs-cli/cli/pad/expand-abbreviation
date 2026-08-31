@@ -1,0 +1,9 @@
+#!/usr/bin/env python3
+"""Expand a common abbreviation or acronym."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="expand-abbreviation", description="Expand a common abbreviation or acronym.")
+p.add_argument("--abbreviation", type=str, required=True, help="abbreviation")
+a = p.parse_args()
+print("expand-abbreviation: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

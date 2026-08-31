@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""Find words that rhyme with the given word."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="find-rhymes", description="Find words that rhyme with the given word.")
+p.add_argument("--word", type=str, required=True, help="word")
+p.add_argument("--perfect-only", type=str, default=True, help="perfect_only")
+a = p.parse_args()
+print("find-rhymes: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

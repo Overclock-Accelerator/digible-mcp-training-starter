@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MCP Training — starter repo</title>
+<style>
+:root{
+  --bg:#fbfaf7; --panel:#ffffff; --ink:#1a1a1a; --ink-2:#4a4a48; --ink-3:#6e6e6a;
+  --rule:#e2ded4; --rule-2:#d0cabb;
+  --accent:#8a4b1f; --accent-soft:#f3e9df;
+  --code-bg:#f6f3ed; --code-ink:#2c2a26; --code-rule:#e2ded4;
+  --ok:#2f6a3f; --ok-soft:#e6f0e7;
+  --warn:#8a5a00; --warn-soft:#fbf1dc;
+  --stop:#9a2f2f; --stop-soft:#f8e7e4;
+  --shadow:0 1px 2px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme:dark){
+:root{
+  --bg:#14140f; --panel:#1b1b16; --ink:#f0ede4; --ink-2:#c4c0b4; --ink-3:#95918a;
+  --rule:#33322a; --rule-2:#454338;
+  --accent:#e0a06a; --accent-soft:#2b2119;
+  --code-bg:#121210; --code-ink:#e4e0d6; --code-rule:#33322a;
+  --ok:#8fd0a0; --ok-soft:#1b2a1e;
+  --warn:#e8c37a; --warn-soft:#2b2416;
+  --stop:#eda49a; --stop-soft:#2e1c1a;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:400 19px/1.65 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  padding:0 20px 120px;
+}
+.wrap{max-width:920px;margin:0 auto}
+
+/* ---- masthead ---- */
+header.mast{padding:64px 0 36px;border-bottom:3px solid var(--ink)}
+.eyebrow{
+  font:600 14px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 18px;
+}
+h1{font-size:clamp(38px,6vw,60px);line-height:1.06;margin:0 0 20px;letter-spacing:-.022em;font-weight:700}
+.standfirst{font-size:22px;line-height:1.55;color:var(--ink-2);margin:0;max-width:44em}
+.meta{
+  margin-top:28px;display:flex;flex-wrap:wrap;gap:10px;
+  font:500 14px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+.meta span{
+  background:var(--panel);border:1px solid var(--rule);border-radius:999px;
+  padding:8px 14px;color:var(--ink-3);
+}
+
+/* ---- sections ---- */
+section{padding-top:52px}
+h2{
+  font-size:clamp(26px,3.4vw,34px);line-height:1.2;margin:0 0 8px;letter-spacing:-.015em;font-weight:700;
+  display:flex;gap:16px;align-items:baseline;
+}
+h2 .num{
+  font:700 16px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color:var(--accent);background:var(--accent-soft);border-radius:6px;
+  padding:8px 10px;flex:none;letter-spacing:.05em;
+}
+h3{font-size:21px;line-height:1.35;margin:34px 0 10px;font-weight:650;letter-spacing:-.008em}
+h4{font-size:17px;margin:24px 0 8px;font-weight:650;color:var(--ink-2)}
+p{margin:0 0 16px;max-width:44em}
+.lede{color:var(--ink-2);font-size:20px;max-width:44em;margin-bottom:22px}
+ul,ol{max-width:44em;margin:0 0 16px;padding-left:1.3em}
+li{margin:0 0 9px}
+li>p:last-child,li>ul:last-child,li>ol:last-child,li>pre:last-child{margin-bottom:0}
+li>ul,li>ol{margin-top:9px}
+strong{font-weight:650}
+a{color:var(--accent);text-underline-offset:3px}
+hr.soft{border:0;border-top:1px solid var(--rule);margin:44px 0}
+
+/* ---- code ---- */
+pre{
+  background:var(--code-bg);color:var(--code-ink);border:1px solid var(--code-rule);
+  border-radius:10px;padding:18px 20px;overflow-x:auto;margin:0 0 20px;
+  font:400 15.5px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  -webkit-user-select:all;user-select:all; tab-size:2;
+}
+pre code{white-space:pre;display:block}
+code{
+  font:400 .875em/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  background:var(--code-bg);border:1px solid var(--code-rule);
+  border-radius:4px;padding:.1em .38em;
+}
+pre code{background:none;border:0;padding:0}
+.filename{
+  font:600 13px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color:var(--ink-3);letter-spacing:.04em;margin:0 0 7px;text-transform:none;
+}
+
+/* ---- callouts ---- */
+.call{
+  border-left:5px solid var(--rule-2);background:var(--panel);border-radius:0 10px 10px 0;
+  padding:18px 22px;margin:0 0 22px;box-shadow:var(--shadow);
+}
+.call p:last-child,.call ul:last-child,.call pre:last-child{margin-bottom:0}
+.call .tag{
+  display:block;font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.14em;text-transform:uppercase;margin:0 0 10px;
+}
+.call.note{border-left-color:var(--accent);background:var(--accent-soft)}
+.call.note .tag{color:var(--accent)}
+.call.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+.call.warn .tag{color:var(--warn)}
+.call.stop{border-left-color:var(--stop);background:var(--stop-soft)}
+.call.stop .tag{color:var(--stop)}
+.call.ok{border-left-color:var(--ok);background:var(--ok-soft)}
+.call.ok .tag{color:var(--ok)}
+
+/* ---- steps ---- */
+ol.steps{list-style:none;padding:0;counter-reset:s;max-width:none}
+ol.steps>li{
+  counter-increment:s;position:relative;padding:0 0 4px 58px;margin:0 0 30px;
+}
+ol.steps>li::before{
+  content:counter(s);position:absolute;left:0;top:1px;
+  width:38px;height:38px;border-radius:50%;
+  background:var(--ink);color:var(--bg);
+  font:700 17px/38px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  text-align:center;
+}
+ol.steps>li>h3{margin:4px 0 8px}
+
+/* ---- table ---- */
+.tw{overflow-x:auto;margin:0 0 22px;border:1px solid var(--rule);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:16.5px;min-width:520px}
+th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{
+  font:700 12.5px/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+  background:var(--code-bg);
+}
+tr:last-child td{border-bottom:0}
+td code{font-size:.85em;white-space:nowrap}
+
+/* ---- before/after ---- */
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:0 0 22px}
+@media (max-width:760px){.ba{grid-template-columns:1fr}}
+.ba>div{min-width:0}
+.ba h4{margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.pill{
+  font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.1em;text-transform:uppercase;padding:5px 8px;border-radius:4px;
+}
+.pill.bad{background:var(--stop-soft);color:var(--stop)}
+.pill.good{background:var(--ok-soft);color:var(--ok)}
+.ba pre{margin:0;font-size:14.5px}
+
+/* ---- verified badge ---- */
+.vf{
+  display:inline-block;font:600 12.5px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.06em;color:var(--ok);background:var(--ok-soft);
+  border-radius:4px;padding:6px 9px;margin:0 0 14px;
+}
+.vf.un{color:var(--warn);background:var(--warn-soft)}
+
+footer{margin-top:72px;padding-top:26px;border-top:1px solid var(--rule);color:var(--ink-3);font-size:15.5px}
+footer p{max-width:46em}
+@media print{body{padding:0}.call,pre,.tw{break-inside:avoid}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <p class="eyebrow">MCP Training</p>
+  <h1>MCP Training — starter repo</h1>
+  <p class="standfirst">Everything you need for the session: the demos we run together, and the starters for the parts you build yourself. Clone it, run <code>./setup.sh</code>, and you are ready.</p>
+  <div class="meta">
+    <span>README.md</span>
+  </div>
+</header>
+
+<section>
+<p>Last session&#x27;s lesson was that tools make agents deterministic. This session asks what happens when the tools stop living inside one agent.</p>
+<h2>The argument, in three moves</h2>
+<p><strong>Centralize.</strong> A tool defined inside an agent belongs to that agent. Every new consumer reimplements it, and the copies drift. Moving the tool behind an MCP server means one implementation, many clients.</p>
+<p><strong>Monitor.</strong> Once every call goes through one place, you can count them, attribute them, and export them. You cannot instrument what is scattered across six codebases.</p>
+<p><strong>Democratize.</strong> An MCP server is not a Python import, so reaching it does not require being able to write Python. The same server a developer wires into an agent, a non-engineer reaches from Claude Desktop.</p>
+<p>Each folder makes exactly one of these concrete, and the argument is cumulative — <code>01</code> deliberately does not justify itself until <code>02</code>.</p>
+<h2>Prerequisites</h2>
+<ul><li><strong>Python 3.10 or newer.</strong> <code>python3 --version</code> to check.</li><li><strong>An Anthropic API key</strong>, for the folders that actually run a model. Get one at <a href="https://console.anthropic.com/">console.anthropic.com</a>. Several folders need no key at all — they are marked below.</li><li><strong><code>git</code>, <code>curl</code>, <code>jq</code></strong> — only <code>06</code> needs <code>curl</code> and <code>jq</code>.</li><li>A terminal you are comfortable opening three windows of. Most of these demos are a server in one window and an agent in another, and seeing both at once is the point.</li></ul>
+<p>No accounts, no signups, no Node, no Docker.</p>
+<h2>Setup</h2>
+<pre><code>git clone &lt;this repo&gt;
+cd mcp-training
+./setup.sh                          # venv + pinned deps + solver tests
+cp .env.local.example .env.local    # then put your ANTHROPIC_API_KEY in it</code></pre>
+<p>If <code>./setup.sh</code> ends with <code>10 passed, 0 failed</code>, your environment is good.</p>
+<p>Run anything with the repo&#x27;s own interpreter — no <code>activate</code> needed, and it cannot pick up the wrong virtualenv:</p>
+<pre><code>./.venv/bin/python 01-mcp-bee/mcp_server.py      # terminal 1
+./.venv/bin/python 01-mcp-bee/agent_with_mcp.py  # terminal 2</code></pre>
+<p><code>.env.local</code> is gitignored. Every agent here loads it through <code>shared/envloader.py</code>, so you never export anything in your shell — and you can prove it, which is worth doing once:</p>
+<pre><code>env -u ANTHROPIC_API_KEY ./.venv/bin/python 01-mcp-bee/agent_with_mcp.py &quot;...&quot;</code></pre>
+<h2>The folders</h2>
+<p><strong>Demo</strong> means we run it together and you follow along. <strong>Activity</strong> means you build it, with a specification to check yourself against.</p>
+<div class="tw"><table><thead><tr><th></th><th></th><th>Key?</th><th>What it is</th></tr></thead><tbody><tr><td><code>00-agent-bee</code></td><td>demo</td><td>yes</td><td>A LangChain agent solving NYT Spelling Bee with a local tool. The &quot;before&quot; — this is good code, and nothing is wrong with it yet.</td></tr><tr><td><code>01-mcp-bee</code></td><td>demo</td><td>yes</td><td>The same solver moved behind a FastMCP server. Three files, diffable side by side. The solver body is byte-identical; only the seam moves.</td></tr><tr><td><code>02-mcp-puzzlemaster</code></td><td>demo</td><td>yes</td><td>Three agents — bee, crossword, wordle — sharing one server, one dictionary, one audit log. Usage graphs by agent and by tool, plus CSV export.</td></tr><tr><td><code>03-mcp-bookstore</code></td><td><strong>activity</strong></td><td>yes</td><td>Refactor a real LangChain agent onto MCP yourself, in four checkpoints, then add writes an agent is structurally unable to perform. The hands-on hour.</td></tr><tr><td><code>04-mcp-deployment</code></td><td>demo</td><td>no</td><td>Taking a local MCP server to a hosted one, and the six things that broke. A single page — open it in a browser.</td></tr><tr><td><code>05-mcps-for-all</code></td><td>demo</td><td>no</td><td>Reaching an MCP server without writing any Python, from Claude Desktop. A single page — open it in a browser.</td></tr><tr><td><code>06-mcp-breakdown</code></td><td><strong>activity</strong></td><td>no</td><td>Take three real production MCP servers apart — Zapier, Snowflake, Datadog — and find out how little of one you are allowed to read. You keep the worksheet.</td></tr><tr><td><code>07-mcp-for-all-the-tokens</code></td><td>demo</td><td>yes</td><td>What tool definitions cost in context, measured. Committed results, so the numbers are there whether or not you re-run the benchmark.</td></tr><tr><td><code>08-mcp-vs-cli</code></td><td>demo</td><td>yes</td><td>The same work done through MCP tools and through a CLI the agent shells out to, measured against each other.</td></tr><tr><td><code>09-alt-mcp-query-sprawl</code></td><td><strong>activity</strong></td><td>yes</td><td>Six agents that each independently reinvented the same six database primitives. Count the duplication, then collapse it behind one server.</td></tr></tbody></table></div>
+<p>Run them in order. <code>04</code> and <code>05</code> are HTML pages — open them straight from disk; they make no network requests.</p>
+<h3>Deployed servers</h3>
+<p>Two servers from this course are live, public, and reachable with <strong>no sign-in</strong>. Nothing on your machine is needed to talk to them.</p>
+<div class="tw"><table><thead><tr><th></th><th>Endpoint</th></tr></thead><tbody><tr><td>PuzzleMaster</td><td><code>https://mcp-puzzlemaster.fastmcp.app/mcp</code></td></tr><tr><td>Digible Metrics</td><td><code>https://mcp-digible-metrics.fastmcp.app/mcp</code></td></tr></tbody></table></div>
+<p><code>05-mcps-for-all</code> walks through pointing Claude Desktop at the first one.</p>
+<h2>Two things that will bite you</h2>
+<p><strong>Pin <code>mcp</code>.</strong> PyPI&#x27;s latest is 2.1.1, but <code>langchain-mcp-adapters</code> requires <code>mcp&lt;2.0.0</code>. <code>requirements.txt</code> pins 1.29.1. An unpinned <code>pip install mcp</code> breaks every agent here.</p>
+<p><strong>Everything is async.</strong> MCP tools arrive as coroutines with no synchronous counterpart. <code>agent.invoke()</code> will construct without complaint and then fail the instant the model actually calls a tool. Use <code>ainvoke</code>.</p>
+<h2>A note on the word list</h2>
+<p>All solvers read <code>shared/data/enable1.txt</code> — ENABLE1, 172,823 words, public domain, committed here so the session never depends on the network. It is not NYT&#x27;s list, and it cannot be. Against the real 2026-08-28 puzzle it finds 34 words for 171 points where NYT accepted 21 for 119.</p>
+<p>That gap is worth sitting with. The solver is not wrong; it is answering a different question than the editor was. Deterministic tools give you exactly what you asked for, which is not always the same as what you wanted.</p>
+<h2>The HTML pages</h2>
+<p>Every README and results file also exists as a self-contained HTML page next to it — <code>00-agent-bee/README.md</code> and <code>00-agent-bee/README.html</code>, and so on. The HTML is what gets projected: same content, legible at the back of a room, dark-mode aware, and it opens straight from disk with no network.</p>
+<p><strong>The <code>.md</code> files are the source. The <code>.html</code> files are generated output.</strong> If you edit a markdown file, regenerate:</p>
+<pre><code>./.venv/bin/python shared/render_report.py --all          # every page
+./.venv/bin/python shared/render_report.py --list         # which files convert</code></pre>
+<p>Not converted, on purpose: <code>06-mcp-breakdown/WORKSHEET.md</code>, because you fill it in by hand and markdown is the right format for that.</p>
+<h2>License</h2>
+<p>MIT. See <a href="LICENSE">LICENSE</a>.</p>
+</section>
+
+<footer><p>Generated from <code>README.md</code>, which is the editable source.
+Regenerate every page with <code>python shared/render_report.py --all</code>.</p></footer>
+</div>
+</body>
+</html>

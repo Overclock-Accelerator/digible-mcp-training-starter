@@ -1,0 +1,83 @@
+MCP tools vs. CLI + bash — same solvers, same model, same prompts
+model anthropic:claude-sonnet-5   5 runs per cell   generated 2026-08-31T12:41:03+00:00
+
+── solve: baseline: identical work, both sides briefed
+
+  input_tokens
+    mcp        ########################################   3339.0 tok  ±0.0  [3339–3339]
+    cli        ###########################                2217.0 tok  ±0.0  [2217–2217]
+
+  output_tokens
+    mcp        ########################################    165.2 tok  ±8.8  [156–178]
+    cli        ##############################              124.0 tok  ±1.4  [123–126]
+
+    mcp        round-trips 2.0   tool calls 1.0   tool output 1665 chars   wall 7.5s   correct 5/5
+    cli        round-trips 2.0   tool calls 1.0   tool output 1796 chars   wall 4.9s   correct 5/5
+
+── aggregate: composition: intermediate results in context vs. piped away
+
+  input_tokens
+    mcp        ##################################         3345.0 tok  ±0.0  [3345–3345]
+    cli        ########################################   3925.6 tok  ±63.4  [3869–4035]
+    cli+schema ###############                            1448.6 tok  ±0.5  [1448–1449]
+
+  output_tokens
+    mcp        ########################################    427.8 tok  ±20.4  [416–463]
+    cli        ##################                          195.8 tok  ±49.3  [161–266]
+    cli+schema #########                                    95.6 tok  ±0.5  [95–96]
+
+    mcp        round-trips 2.0   tool calls 1.0   tool output 1665 chars   wall 7.7s   correct 5/5
+    cli        round-trips 3.2   tool calls 2.2   tool output 1609 chars   wall 8.1s   correct 5/5
+    cli+schema round-trips 2.0   tool calls 1.0   tool output 2 chars   wall 3.7s   correct 5/5
+
+── undocumented: discovery: self-describing schema vs. --help spelunking
+
+  input_tokens
+    mcp        ########################################   2548.0 tok  ±0.0  [2548–2548]
+    cli        ##########################                 1637.4 tok  ±592.5  [1362–2697]
+
+  output_tokens
+    mcp        ###################################         109.6 tok  ±0.9  [108–110]
+    cli        ########################################    124.0 tok  ±33.2  [100–179]
+
+    mcp        round-trips 2.0   tool calls 1.0   tool output 147 chars   wall 5.6s   correct 5/5
+    cli        round-trips 2.2   tool calls 1.2   tool output 215 chars   wall 5.4s   correct 5/5
+
+
+══ capabilities in context vs. capabilities on disk
+
+── input tokens vs. capability count — task: solve (baseline)
+
+  mcp   3 tools ########                                   3344.4 tok  ±12.1
+  mcp  15 tools ###################                        7629.0 tok  ±0.0
+  mcp  40 tools ########################################  16320.4 tok  ±15.6
+
+  cli   3 cmds  #####                                      2219.8 tok  ±6.3
+  cli  15 cmds  #####                                      2219.8 tok  ±6.3
+  cli  40 cmds  #####                                      2217.0 tok  ±0.0
+
+  the honest counter-cost — what a big catalogue does to the CLI:
+    mcp   3  out  166.8 tok ±6.9   round-trips 2.0   tool calls 1.0   correct 5/5
+    mcp  15  out  168.2 tok ±1.1   round-trips 2.0   tool calls 1.0   correct 5/5
+    mcp  40  out  179.6 tok ±15.5   round-trips 2.0   tool calls 1.0   correct 5/5
+    cli   3  out  117.6 tok ±13.7   round-trips 2.0   tool calls 1.0   correct 5/5
+    cli  15  out  111.2 tok ±12.0   round-trips 2.0   tool calls 1.0   correct 5/5
+    cli  40  out  114.4 tok ±12.7   round-trips 2.0   tool calls 1.0   correct 5/5
+
+── input tokens vs. capability count — task: undocumented (discovery)
+
+  mcp   3 tools #######                                    2548.0 tok  ±0.0
+  mcp  15 tools ##################                         6843.8 tok  ±13.0
+  mcp  40 tools ########################################  15518.0 tok  ±0.0
+
+  cli   3 cmds  #####                                      2066.6 tok  ±1090.1
+  cli  15 cmds  ####                                       1392.0 tok  ±55.8
+  cli  40 cmds  ####                                       1571.8 tok  ±470.2
+
+  the honest counter-cost — what a big catalogue does to the CLI:
+    mcp   3  out  112.0 tok ±6.8   round-trips 2.0   tool calls 1.0   correct 5/5
+    mcp  15  out  123.2 tok ±18.0   round-trips 2.0   tool calls 1.0   correct 5/5
+    mcp  40  out  120.8 tok ±7.2   round-trips 2.0   tool calls 1.0   correct 5/5
+    cli   3  out  165.4 tok ±122.5   round-trips 2.6   tool calls 1.6   correct 5/5
+    cli  15  out  129.6 tok ±55.5   round-trips 2.0   tool calls 1.0   correct 5/5
+    cli  40  out  109.8 tok ±23.1   round-trips 2.2   tool calls 1.2   correct 5/5

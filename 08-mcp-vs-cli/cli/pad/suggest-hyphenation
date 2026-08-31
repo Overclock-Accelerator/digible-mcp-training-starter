@@ -1,0 +1,9 @@
+#!/usr/bin/env python3
+"""Suggest hyphenation break points for typesetting."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="suggest-hyphenation", description="Suggest hyphenation break points for typesetting.")
+p.add_argument("--word", type=str, required=True, help="word")
+a = p.parse_args()
+print("suggest-hyphenation: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

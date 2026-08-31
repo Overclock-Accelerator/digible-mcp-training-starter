@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""Find dictionary words within an edit distance of a word."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="nearest-words", description="Find dictionary words within an edit distance of a word.")
+p.add_argument("--word", type=str, required=True, help="word")
+p.add_argument("--max-distance", type=int, default=1, help="max_distance")
+a = p.parse_args()
+print("nearest-words: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

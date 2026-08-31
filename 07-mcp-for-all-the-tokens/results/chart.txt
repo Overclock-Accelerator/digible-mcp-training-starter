@@ -1,0 +1,47 @@
+Five MCP servers, one agent — what the tool definitions cost
+model anthropic:claude-sonnet-5   3 runs per cell   generated 2026-08-31T13:17:01+00:00
+
+══ 1. THE TAX PROBE — input tokens for a prompt that calls no tool at all
+   one round-trip; the only thing that changes is how many schemas were sent
+
+  1 srv    5 tools  ##                                         1507.0 tok  ±0.0   +Northwind Docs
+  2 srv   15 tools  #####                                      3378.0 tok  ±0.0   +Helios Helpdesk
+  3 srv   35 tools  ###########                                7235.0 tok  ±0.0   +Meridian CRM
+  4 srv   75 tools  #####################                     14224.0 tok  ±0.0   +Lumen Analytics
+  5 srv  155 tools  ########################################  27086.0 tok  ±0.0   +Bastion Infra
+
+  tokens per additional tool, measured against step 1:
+    step 2   15 tools    187.1 tok/tool
+    step 3   35 tools    190.9 tok/tool
+    step 4   75 tools    181.7 tok/tool
+    step 5  155 tools    170.5 tok/tool
+
+
+══ 2. REAL TASKS — input tokens per run, summed over every round-trip
+
+  1 srv    5 tools  ##                                         3374.9 tok in   182.3 out   2.1 round-trips   6.1s
+  2 srv   15 tools  ####                                       7198.3 tok in   185.9 out   2.1 round-trips   6.0s
+  3 srv   35 tools  #######                                   15169.0 tok in   181.1 out   2.1 round-trips   6.1s
+  4 srv   75 tools  ###############                           29937.7 tok in   185.3 out   2.1 round-trips   6.5s
+  5 srv  155 tools  ############################              56815.2 tok in   188.9 out   2.1 round-trips   7.5s
+
+
+══ 3. SELECTION ACCURACY — same fifteen tasks, same fifteen right answers;
+   the only thing growing is the number of plausible wrong ones
+
+  1 srv    5 tools  ########################################  45/45 = 100.0%   wrong-server 0   extra round-trips 4
+  2 srv   15 tools  ########################################  45/45 = 100.0%   wrong-server 0   extra round-trips 3
+  3 srv   35 tools  ########################################  45/45 = 100.0%   wrong-server 0   extra round-trips 3
+  4 srv   75 tools  ########################################  45/45 = 100.0%   wrong-server 0   extra round-trips 4
+  5 srv  155 tools  ########################################  45/45 = 100.0%   wrong-server 0   extra round-trips 4
+
+  split by phrasing (qualified names the vendor; implied does not;
+  adversarial is phrased so a rival tool keyword-matches better):
+
+    qualified    5t:15/15  15t:15/15  35t:15/15  75t:15/15  155t:15/15
+    implied      5t:15/15  15t:15/15  35t:15/15  75t:15/15  155t:15/15
+    adversarial  5t:15/15  15t:15/15  35t:15/15  75t:15/15  155t:15/15
+
+  position control — 155 tools, Northwind registered LAST:
+
+    45/45 = 100.0%   wrong-server 0   extra round-trips 4

@@ -1,0 +1,9 @@
+#!/usr/bin/env python3
+"""Return the recorded origin of a word."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="etymology", description="Return the recorded origin of a word.")
+p.add_argument("--word", type=str, required=True, help="word")
+a = p.parse_args()
+print("etymology: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

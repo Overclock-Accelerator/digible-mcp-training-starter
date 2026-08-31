@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""Generate a word-search grid containing the given words."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="word-search-grid", description="Generate a word-search grid containing the given words.")
+p.add_argument("--words", type=str, required=True, help="words")
+p.add_argument("--size", type=int, default=12, help="size")
+a = p.parse_args()
+print("word-search-grid: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)

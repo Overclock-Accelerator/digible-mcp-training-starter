@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>05 — MCPs for everyone</title>
+<style>
+:root{
+  --bg:#fbfaf7; --panel:#ffffff; --ink:#1a1a1a; --ink-2:#4a4a48; --ink-3:#6e6e6a;
+  --rule:#e2ded4; --rule-2:#d0cabb;
+  --accent:#8a4b1f; --accent-soft:#f3e9df;
+  --code-bg:#f6f3ed; --code-ink:#2c2a26; --code-rule:#e2ded4;
+  --ok:#2f6a3f; --ok-soft:#e6f0e7;
+  --warn:#8a5a00; --warn-soft:#fbf1dc;
+  --stop:#9a2f2f; --stop-soft:#f8e7e4;
+  --shadow:0 1px 2px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme:dark){
+:root{
+  --bg:#14140f; --panel:#1b1b16; --ink:#f0ede4; --ink-2:#c4c0b4; --ink-3:#95918a;
+  --rule:#33322a; --rule-2:#454338;
+  --accent:#e0a06a; --accent-soft:#2b2119;
+  --code-bg:#121210; --code-ink:#e4e0d6; --code-rule:#33322a;
+  --ok:#8fd0a0; --ok-soft:#1b2a1e;
+  --warn:#e8c37a; --warn-soft:#2b2416;
+  --stop:#eda49a; --stop-soft:#2e1c1a;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:400 19px/1.65 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  padding:0 20px 120px;
+}
+.wrap{max-width:920px;margin:0 auto}
+
+header.mast{padding:64px 0 36px;border-bottom:3px solid var(--ink)}
+.eyebrow{
+  font:600 14px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 18px;
+}
+h1{font-size:clamp(38px,6vw,60px);line-height:1.06;margin:0 0 20px;letter-spacing:-.022em;font-weight:700}
+.standfirst{font-size:22px;line-height:1.55;color:var(--ink-2);margin:0;max-width:44em}
+.meta{
+  margin-top:28px;display:flex;flex-wrap:wrap;gap:10px;
+  font:500 14px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+.meta span{
+  background:var(--panel);border:1px solid var(--rule);border-radius:999px;
+  padding:8px 14px;color:var(--ink-3);
+}
+
+section{padding-top:52px}
+h2{
+  font-size:clamp(26px,3.4vw,34px);line-height:1.2;margin:0 0 8px;letter-spacing:-.015em;font-weight:700;
+  display:flex;gap:16px;align-items:baseline;
+}
+h2 .num{
+  font:700 16px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color:var(--accent);background:var(--accent-soft);border-radius:6px;
+  padding:8px 10px;flex:none;letter-spacing:.05em;
+}
+h3{font-size:21px;line-height:1.35;margin:34px 0 10px;font-weight:650;letter-spacing:-.008em}
+h4{font-size:17px;margin:24px 0 8px;font-weight:650;color:var(--ink-2)}
+p{margin:0 0 16px;max-width:44em}
+.lede{color:var(--ink-2);font-size:20px;max-width:44em;margin-bottom:22px}
+ul,ol{max-width:44em;margin:0 0 16px;padding-left:1.3em}
+li{margin:0 0 9px}
+strong{font-weight:650}
+a{color:var(--accent);text-underline-offset:3px}
+hr.soft{border:0;border-top:1px solid var(--rule);margin:44px 0}
+
+pre{
+  background:var(--code-bg);color:var(--code-ink);border:1px solid var(--code-rule);
+  border-radius:10px;padding:18px 20px;overflow-x:auto;margin:0 0 20px;
+  font:400 15.5px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  -webkit-user-select:all;user-select:all; tab-size:2;
+}
+pre code{white-space:pre;display:block}
+code{
+  font:400 .875em/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  background:var(--code-bg);border:1px solid var(--code-rule);
+  border-radius:4px;padding:.1em .38em;
+}
+pre code{background:none;border:0;padding:0}
+.filename{
+  font:600 13px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color:var(--ink-3);letter-spacing:.04em;margin:0 0 7px;
+}
+
+.call{
+  border-left:5px solid var(--rule-2);background:var(--panel);border-radius:0 10px 10px 0;
+  padding:18px 22px;margin:0 0 22px;box-shadow:var(--shadow);
+}
+.call p:last-child,.call ul:last-child,.call pre:last-child,.call ol:last-child{margin-bottom:0}
+.call .tag{
+  display:block;font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.14em;text-transform:uppercase;margin:0 0 10px;
+}
+.call.note{border-left-color:var(--accent);background:var(--accent-soft)}
+.call.note .tag{color:var(--accent)}
+.call.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+.call.warn .tag{color:var(--warn)}
+.call.stop{border-left-color:var(--stop);background:var(--stop-soft)}
+.call.stop .tag{color:var(--stop)}
+.call.ok{border-left-color:var(--ok);background:var(--ok-soft)}
+.call.ok .tag{color:var(--ok)}
+
+ol.steps{list-style:none;padding:0;counter-reset:s;max-width:none}
+ol.steps>li{counter-increment:s;position:relative;padding:0 0 4px 58px;margin:0 0 30px}
+ol.steps>li::before{
+  content:counter(s);position:absolute;left:0;top:1px;
+  width:38px;height:38px;border-radius:50%;
+  background:var(--ink);color:var(--bg);
+  font:700 17px/38px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  text-align:center;
+}
+ol.steps>li>h3{margin:4px 0 8px}
+
+.tw{overflow-x:auto;margin:0 0 22px;border:1px solid var(--rule);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:16.5px;min-width:520px}
+th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{
+  font:700 12.5px/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);background:var(--code-bg);
+}
+tr:last-child td{border-bottom:0}
+td code{font-size:.85em}
+
+.vf{
+  display:inline-block;font:600 12.5px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.06em;color:var(--ok);background:var(--ok-soft);
+  border-radius:4px;padding:6px 9px;margin:0 0 14px;
+}
+.vf.un{color:var(--warn);background:var(--warn-soft)}
+
+/* path cards */
+.paths{display:grid;grid-template-columns:1fr;gap:16px;margin:0 0 26px}
+.path{
+  border:1px solid var(--rule);border-left:5px solid var(--rule-2);
+  border-radius:0 10px 10px 0;background:var(--panel);padding:20px 22px;box-shadow:var(--shadow);
+}
+.path.best{border-left-color:var(--ok)}
+.path h3{margin:0 0 6px;font-size:20px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.path p{margin:0 0 10px}
+.path p:last-child{margin:0}
+.badge{
+  font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.1em;text-transform:uppercase;padding:5px 8px;border-radius:4px;
+  background:var(--code-bg);color:var(--ink-3);border:1px solid var(--rule);
+}
+.badge.good{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.badge.meh{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+
+.say{
+  border:1px dashed var(--rule-2);border-radius:10px;padding:14px 18px;margin:0 0 14px;
+  background:var(--panel);font-size:18.5px;
+}
+.say b{
+  display:block;font:700 11.5px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin:0 0 8px;
+}
+
+footer{margin-top:72px;padding-top:26px;border-top:1px solid var(--rule);color:var(--ink-3);font-size:15.5px}
+footer p{max-width:46em}
+@media print{body{padding:0}.call,pre,.tw,.path{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <p class="eyebrow">MCP Training · Part 05</p>
+  <h1>MCPs for everyone</h1>
+  <p class="standfirst">The same server a developer wires into an agent, reached by someone who has never opened a terminal. This is the payoff for everything in parts 00 through 04 — and the reason it was worth moving off stdio.</p>
+  <div class="meta">
+    <span>~10 min live</span>
+    <span>Claude Desktop 1.40609.0</span>
+    <span>Claude Code 2.1.251</span>
+    <span>Verified 2026-08-31</span>
+  </div>
+</header>
+
+<section id="why">
+  <h2><span class="num">01</span> Why this matters</h2>
+  <p class="lede">The repo README made a three-part argument: centralize, monitor, democratize. Parts 01 and 02 delivered the first two. This is the third, and it is the one that changes who gets to participate.</p>
+
+  <p>Here is the claim, from the README:</p>
+
+  <blockquote style="margin:0 0 22px;padding:14px 20px;border-left:4px solid var(--accent);color:var(--ink-2);max-width:44em">
+    <p style="margin:0">"An MCP server is not a Python import, so reaching it does not require being able to write Python. The same server a developer wires into an agent, a non-engineer reaches from Claude Desktop."</p>
+  </blockquote>
+
+  <p>Take that literally, because it is literally true. In <code>02</code>, using the Spelling Bee solver required: a Python 3.10+ install, a virtualenv, six pinned packages, an <code>ANTHROPIC_API_KEY</code> copied into <code>.env.local</code>, and the knowledge that <code>agent.invoke()</code> will fail where <code>ainvoke</code> works. That is not a high bar for an engineer. It is an <em>absolute</em> bar for everyone else — not "difficult", but "no".</p>
+
+  <p>After part 04, the same solver is at a URL. The requirements collapse to: <strong>have Claude Desktop, paste a URL once.</strong></p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th></th><th>Before (parts 00–02)</th><th>After (part 04)</th></tr></thead>
+    <tbody>
+      <tr><td>Transport</td><td>stdio — a subprocess on your laptop</td><td>Streamable HTTP — a URL</td></tr>
+      <tr><td>To use it you need</td><td>Python, a venv, pinned deps, a key in <code>.env.local</code></td><td>Claude Desktop</td></tr>
+      <tr><td>Who can</td><td>People who write Python</td><td>Anyone in the room</td></tr>
+      <tr><td>Who maintains it</td><td>Everyone, separately, drifting</td><td>One repo, one deploy</td></tr>
+      <tr><td>Identity in the log</td><td><code>agent_name</code> — the model fills it in</td><td>Verified actor from the gateway</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="call note">
+    <span class="tag">The point</span>
+    <p>Nothing about the <em>server</em> changed to make this true. The solver bodies are still byte-identical to <code>shared/solvers_reference.py</code>, exactly as they have been since <code>00</code>. What changed is the seam — and moving the seam to HTTP moved the audience from "engineers" to "colleagues".</p>
+  </div>
+</section>
+
+<hr class="soft">
+
+<section id="auth-state">
+  <h2><span class="num">02</span> First: is the server open?</h2>
+  <p class="lede">Before any config, know which of two worlds you are in — because it changes what attendees will see when they click Connect.</p>
+
+  <p class="vf">Verified by direct request, 2026-08-31</p>
+
+  <p>As of the day this page was written, <code>https://mcp-puzzlemaster.fastmcp.app/mcp</code> has <strong>Horizon authentication turned on</strong>. An unauthenticated request gets:</p>
+
+  <pre><code>HTTP/2 401
+www-authenticate: Bearer realm="FastMCP",
+  resource_metadata="https://mcp-puzzlemaster.fastmcp.app/.well-known/oauth-protected-resource"
+
+{"error":"invalid_request","error_description":"Bearer token required"}</code></pre>
+
+  <p>That is not an error. That is a server correctly refusing an anonymous caller and politely telling it where to go and ask permission. Follow that pointer and the server advertises a full OAuth 2.1 setup: authorization code flow with PKCE, and <strong>dynamic client registration</strong> — meaning a client can register itself, on the spot, with no one issuing it credentials by hand.</p>
+
+  <p>That last detail is why this works for non-engineers at all. Nobody has to generate a token. The client and the server negotiate it between themselves, and the human just sees a sign-in window.</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>If auth is…</th><th>The attendee experience is…</th></tr></thead>
+    <tbody>
+      <tr><td><strong>ON</strong> (as of writing)</td><td>Paste the URL, click Connect, a Horizon sign-in window opens. They need an account in the Overclock Accelerator Horizon org.</td></tr>
+      <tr><td><strong>OFF</strong> (public server)</td><td>Paste the URL, click Connect, done. No sign-in, no account, no token.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="call warn">
+    <span class="tag">Decide this before the session</span>
+    <p>Overclock Accelerator is on the Horizon <strong>PRO</strong> plan, which allows both public servers and org member invites. So there are two workable options:</p>
+    <ol style="margin-top:10px">
+      <li><strong>Turn Horizon auth off for the session.</strong> Simplest by a wide margin — the config drops to a bare URL and nobody signs in to anything. It is a read-only puzzle solver over a public dictionary, so the exposure is a stranger solving a crossword. Turn it back on afterwards.</li>
+      <li><strong>Invite attendees to the org</strong> ahead of time. More faithful to how you would really ship this, but it is a room of people doing an email round-trip during a ten-minute slot.</li>
+    </ol>
+    <p style="margin-top:10px">Everything below works either way. Where it matters, both cases are covered.</p>
+  </div>
+</section>
+
+<hr class="soft">
+
+<section id="desktop">
+  <h2><span class="num">03</span> Connecting Claude Desktop</h2>
+  <p class="lede">There are two different mechanisms in Claude Desktop that both look like "adding an MCP server", and knowing which is which will save you the twenty minutes almost everyone loses here.</p>
+
+  <p class="vf">Verified: Claude Desktop <strong>1.40609.0</strong> on macOS (Darwin 25.6.0), 2026-08-31</p>
+  <p class="vf un">Not verified by clicking: menu labels below come from Anthropic's help centre and Horizon's documentation, not from a walkthrough of this build. Trust the screen over this page.</p>
+
+  <div class="call stop">
+    <span class="tag">Read this before you touch any config</span>
+    <p><strong>Claude Desktop does not read <code>.env.local</code>.</strong> It has never read it and it never will.</p>
+    <p style="margin-top:12px">The repo's Python agents get their key from <code>.env.local</code> at the repo root, loaded by <code>shared/envloader.py</code>. That is a convention that exists <em>inside this repository</em>, for <em>this repository's Python</em>. Claude Desktop is a separate application that knows nothing about your repo, was not launched from it, and has no idea the file exists.</p>
+    <p style="margin-top:12px">Claude Desktop reads exactly one file: <strong><code>claude_desktop_config.json</code></strong>, in its own application-support directory. If this server needs auth, the credential goes <em>there</em> — or, better, through the OAuth flow, where you never handle a credential at all.</p>
+  </div>
+
+  <p>People conflate these constantly, and the reason is understandable: both are "the file where the key goes", and both involve Claude. But they serve different programs on different sides of a boundary.</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th></th><th><code>.env.local</code></th><th><code>claude_desktop_config.json</code></th></tr></thead>
+    <tbody>
+      <tr><td>Read by</td><td>The repo's Python agents</td><td>Claude Desktop</td></tr>
+      <tr><td>Lives at</td><td>The repo root</td><td>Claude's app-support directory, outside the repo</td></tr>
+      <tr><td>Loaded by</td><td><code>shared/envloader.py</code>, at import</td><td>Claude Desktop, at launch</td></tr>
+      <tr><td>Holds</td><td><code>ANTHROPIC_API_KEY</code> — so an agent can talk to a model</td><td>Which MCP servers to connect to, and how</td></tr>
+      <tr><td>Needed for this page?</td><td><strong>No.</strong> Not at all.</td><td>Only if you use Path B or C below</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="call ok">
+    <span class="tag">The good news</span>
+    <p><strong>You do not need an <code>ANTHROPIC_API_KEY</code> for anything on this page.</strong> That key exists so the repo's Python agents can call a model. Claude Desktop already <em>is</em> the model, with your own subscription behind it. An attendee following this page needs no key, no <code>.env.local</code>, and no repo — which is precisely the point of Part 05.</p>
+  </div>
+
+  <div class="paths">
+    <div class="path best">
+      <h3>Path A — Connectors <span class="badge good">Recommended</span></h3>
+      <p>A UI flow. Paste a URL, click Connect, sign in if asked. <strong>This is the one that handles OAuth</strong>, which is exactly what our server requires. No file editing, no restart.</p>
+      <p><strong>Use this for non-engineers. Use this in the live demo.</strong></p>
+    </div>
+    <div class="path">
+      <h3>Path B — <code>claude_desktop_config.json</code> <span class="badge meh">For the config-curious</span></h3>
+      <p>A JSON file on disk. Historically this was <strong>stdio-only</strong> — for launching local server processes. Support for remote URLs has been arriving, and Horizon publishes a config shape for it, but the two authoritative sources disagree about whether it works. Details and both shapes below.</p>
+    </div>
+    <div class="path">
+      <h3>Path C — <code>mcp-remote</code> bridge <span class="badge">Fallback</span></h3>
+      <p>Wrap the remote server as a local stdio process that does the OAuth dance for you. Needs Node. Ugly, and it has always worked.</p>
+    </div>
+  </div>
+
+  <h3>Path A — Add a custom connector</h3>
+
+  <ol class="steps">
+    <li>
+      <h3>Open connector settings</h3>
+      <p>In Claude Desktop, go to <strong>Settings → Connectors</strong> (listed under <strong>Customize</strong> in some builds).</p>
+      <p>On a <strong>Team or Enterprise</strong> plan, only an Owner can add one, and they do it from <strong>Organization settings → Connectors → Add</strong>, then hover <strong>Custom</strong> and choose <strong>Web</strong>. Everyone else waits for that and picks up at step 4.</p>
+    </li>
+    <li>
+      <h3>Add custom connector</h3>
+      <p>Click <strong>“+”</strong>, then <strong>“Add custom connector”</strong>.</p>
+    </li>
+    <li>
+      <h3>Paste the name and URL</h3>
+      <div class="tw">
+      <table>
+        <thead><tr><th>Field</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Name</td><td><code>PuzzleMaster</code></td></tr>
+          <tr><td>Remote MCP server URL</td><td><code>https://mcp-puzzlemaster.fastmcp.app/mcp</code></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p>There is an <strong>Advanced settings</strong> section offering an OAuth Client ID and Client Secret. <strong>Leave both empty.</strong> Our server supports dynamic client registration, so Claude registers itself. Those fields exist for servers that require pre-issued credentials.</p>
+      <p>Click <strong>Add</strong>.</p>
+    </li>
+    <li>
+      <h3>Connect</h3>
+      <p>Find the connector in the list — it carries a <strong>Custom</strong> label — and click <strong>Connect</strong>.</p>
+      <p>If Horizon auth is on, a browser window opens for sign-in. Approve it, and the window hands the credential back to Claude. If auth is off, it connects immediately.</p>
+    </li>
+    <li>
+      <h3>Turn it on in a conversation</h3>
+      <div class="call warn">
+        <span class="tag">The step everyone misses</span>
+        <p><strong>Adding a connector does not enable it in your chats.</strong> In a conversation, click the <strong>“+”</strong> at the lower left, choose <strong>“Add connectors”</strong>, and toggle PuzzleMaster on.</p>
+        <p style="margin-top:10px">If someone says "I added it and nothing happened", it is this, roughly nine times out of ten.</p>
+      </div>
+    </li>
+  </ol>
+
+  <h3>Path B — the config file</h3>
+
+  <p>You asked for the exact config, so here it is with the caveat attached, because the caveat is the useful part.</p>
+
+  <h4>Where the file lives</h4>
+  <div class="tw">
+  <table>
+    <thead><tr><th>OS</th><th>Path</th></tr></thead>
+    <tbody>
+      <tr><td><strong>macOS</strong></td><td><code>~/Library/Application Support/Claude/claude_desktop_config.json</code></td></tr>
+      <tr><td><strong>Windows</strong></td><td><code>%APPDATA%\Claude\claude_desktop_config.json</code><br><span style="color:var(--ink-3)">expands to <code>C:\Users\&lt;you&gt;\AppData\Roaming\Claude\claude_desktop_config.json</code></span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>Do not make anyone type those paths. Both are reachable from inside the app: <strong>Settings → Developer → Edit Config</strong>, which opens the file in your editor and creates it if it does not exist.</p>
+
+  <h4>The remote-server shape, as Horizon documents it</h4>
+  <p class="filename">claude_desktop_config.json — auth OFF (public server)</p>
+  <pre><code>{
+  "mcpServers": {
+    "puzzlemaster": {
+      "url": "https://mcp-puzzlemaster.fastmcp.app/mcp",
+      "transport": "http"
+    }
+  }
+}</code></pre>
+
+  <p class="filename">claude_desktop_config.json — auth ON, with a Horizon API key</p>
+  <pre><code>{
+  "mcpServers": {
+    "puzzlemaster": {
+      "url": "https://mcp-puzzlemaster.fastmcp.app/mcp",
+      "transport": "http",
+      "headers": {
+        "Authorization": "Bearer fmcp_YOUR_HORIZON_API_KEY_HERE"
+      }
+    }
+  }
+}</code></pre>
+
+  <div class="call stop">
+    <span class="tag">Two honest warnings about Path B</span>
+    <p><strong>1. The sources disagree about whether this works.</strong> Horizon's documentation publishes exactly this shape for Claude Desktop. Anthropic's help centre describes <code>claude_desktop_config.json</code> as a <em>separate mechanism</em> for local servers, and says remote connectors do not use it. There are public bug reports of Claude Desktop reading a URL entry, failing to recognise it as remote, and logging a missing-extension error instead of starting an OAuth flow.</p>
+    <p style="margin-top:12px">We did not test this shape against build 1.40609.0. If you try it and no tools appear, that is not your JSON — go to Path A.</p>
+    <p style="margin-top:12px"><strong>2. That bearer token is a real secret in a plaintext file.</strong> An <code>fmcp_</code> key grants your Horizon access to anyone who reads that file — and this file gets screen-shared, backed up, and synced. The connector flow in Path A stores its credential properly instead. Prefer it. If you must use a key, treat that file as sensitive, and rotate the key if it is ever shown on a projector.</p>
+  </div>
+
+  <h4>You must fully quit to reload</h4>
+  <div class="call warn">
+    <span class="tag">Restart, properly</span>
+    <p>Claude Desktop reads this file <strong>at launch only</strong>. Closing the window is not quitting.</p>
+    <p style="margin-top:10px"><strong>macOS:</strong> <code>Cmd + Q</code>, or Claude → Quit. Not the red dot.<br>
+    <strong>Windows:</strong> quit from the system tray, not just the window <code>X</code>.</p>
+    <p style="margin-top:10px">Connectors added through Path A do not need a restart. This applies only to the config file.</p>
+  </div>
+
+  <h3>Path C — the <code>mcp-remote</code> bridge</h3>
+  <p>If Path A is unavailable and Path B does nothing, this is the fallback that has worked throughout. It runs a small local process that presents the remote server as a local stdio one and handles the OAuth browser flow itself.</p>
+
+  <p class="filename">claude_desktop_config.json</p>
+  <pre><code>{
+  "mcpServers": {
+    "puzzlemaster": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote@latest",
+        "https://mcp-puzzlemaster.fastmcp.app/mcp"
+      ]
+    }
+  }
+}</code></pre>
+
+  <p>Requires Node.js. On first connect it opens a browser to sign in and caches the credential locally. Note that this is a genuine local subprocess — which means, unlike Paths A and B, the connection originates from the laptop rather than from Anthropic's cloud. Occasionally that difference is the thing that makes it work.</p>
+</section>
+
+<hr class="soft">
+
+<section id="verify">
+  <h2><span class="num">04</span> Verifying it worked</h2>
+  <p class="lede">Three checks, cheapest first.</p>
+
+  <ol class="steps">
+    <li>
+      <h3>The connector shows as connected</h3>
+      <p><strong>Settings → Connectors.</strong> PuzzleMaster should appear with a <strong>Custom</strong> label and read as connected rather than offering a Connect button. If the icon is greyed out, it is not connected.</p>
+    </li>
+    <li>
+      <h3>The tools are listed</h3>
+      <p>In a conversation, click the <strong>“+”</strong> → <strong>Add connectors</strong> and toggle PuzzleMaster on. Expanding it should show five tools:</p>
+      <div class="tw">
+      <table>
+        <thead><tr><th>Tool</th><th>In plain language</th></tr></thead>
+        <tbody>
+          <tr><td><code>solve_spelling_bee</code></td><td>Find every valid word for a Spelling Bee puzzle</td></tr>
+          <tr><td><code>solve_crossword_pattern</code></td><td>Fill a pattern like <code>c_o__w_rd</code></td></tr>
+          <tr><td><code>solve_wordle</code></td><td>Narrow Wordle candidates from guesses and colours</td></tr>
+          <tr><td><code>usage_graph</code></td><td>Show who has been calling what</td></tr>
+          <tr><td><code>export_results</code></td><td>Dump the audit trail as CSV</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p>Five tools listed means the handshake succeeded and Claude has read the server's manifest. That is a real end-to-end success signal — you cannot list tools without a working authenticated connection.</p>
+    </li>
+    <li>
+      <h3>Ask it something and watch for the tool call</h3>
+      <p>The proof is the tool-use indicator in the response. Claude will show that it called PuzzleMaster, and you can expand it to see what it sent and what came back.</p>
+      <div class="call note">
+        <span class="tag">Worth pointing at on the projector</span>
+        <p>Expand the tool call and show the room the raw input and output. This is the same JSON that <code>02</code>'s middleware wrote into the audit table, and the same request Horizon's Logs page is recording right now. Three views of one event — it makes the whole architecture click for people who have been taking it on faith.</p>
+      </div>
+    </li>
+  </ol>
+
+  <div class="call warn">
+    <span class="tag">Warm it first</span>
+    <p>Horizon scales to zero, so the first request after an idle period pays a cold start — loading the runtime, the dependencies, and 172,823 words of dictionary. <strong>Do one throwaway call a minute before you present.</strong> Otherwise your opening demo is a spinner.</p>
+  </div>
+</section>
+
+<hr class="soft">
+
+<section id="try">
+  <h2><span class="num">05</span> Things to try</h2>
+  <p class="lede">In plain language. No syntax, no parameters — the model works out which tool to call and what to put in it. That translation <em>is</em> the demo.</p>
+
+  <div class="say"><b>Spelling Bee</b>Today's Spelling Bee letters are V A L I D T Y and the centre letter is V. What words can I make?</div>
+
+  <div class="say"><b>Crossword</b>I need a nine-letter word matching the pattern c_o__w_rd.</div>
+
+  <div class="say"><b>Wordle</b>I played CRANE and got green, yellow, black, black, black. What could the answer be?</div>
+
+  <div class="say"><b>Monitoring — the one non-engineers find surprising</b>Show me the usage graph grouped by agent.</div>
+
+  <div class="say"><b>Export</b>Export the results and tell me what's in the file.</div>
+
+  <h3>What to point out while it runs</h3>
+
+  <p><strong>Nobody typed a parameter.</strong> The user said "V A L I D T Y, centre letter V" and the model produced <code>letters="VALIDTY", center="V"</code>. The tool is still perfectly rigid — it takes exactly the arguments it always took. The model is doing the translation from human phrasing into that rigid shape. Last session's lesson was that tools make agents deterministic; this is the other half of that trade, and it is the half that lets a non-engineer drive.</p>
+
+  <p><strong>The answers are the same ones the Python agent got.</strong> Same server, same dictionary, same code path. Not a re-implementation that will drift.</p>
+
+  <p><strong>Ask for the usage graph.</strong> It reports every call from every source — the Python agents from <code>02</code> and the Claude Desktop session you are currently running, side by side in one chart. This is the centralize-and-monitor argument made visible, and it is the moment the room usually gets it.</p>
+
+  <div class="call note">
+    <span class="tag">Say the number out loud</span>
+    <p>Against the real 2026-08-28 puzzle, our public word list finds <strong>34 words for 171 points</strong>. NYT accepted <strong>21 words for 119</strong>.</p>
+    <p style="margin-top:12px">The solver is not broken. It is answering a different question than the editor was — "which letter combinations are in ENABLE1" versus "which words did a human decide belong in today's puzzle". Worth saying to a non-technical audience explicitly: <strong>a deterministic tool gives you exactly what you asked for, which is not always what you wanted.</strong> Making the tool easy to reach does not make that gap go away. It just puts it in front of more people.</p>
+  </div>
+</section>
+
+<hr class="soft">
+
+<section id="code">
+  <h2><span class="num">06</span> The same server in Claude Code</h2>
+  <p class="lede">For contrast. Identical server, identical URL, one command instead of a settings panel.</p>
+
+  <p class="vf">Verified against Claude Code <strong>2.1.251</strong>, 2026-08-31 — flags below are from the installed binary's own <code>--help</code></p>
+
+  <pre><code>claude mcp add --scope local --transport http \
+  puzzlemaster https://mcp-puzzlemaster.fastmcp.app/mcp</code></pre>
+
+  <p>Then, inside Claude Code, type <code>/mcp</code> to complete the interactive sign-in. Check it with:</p>
+
+  <pre><code>claude mcp list</code></pre>
+
+  <h3>Scopes</h3>
+  <div class="tw">
+  <table>
+    <thead><tr><th>Scope</th><th>Where it is stored</th><th>Use when</th></tr></thead>
+    <tbody>
+      <tr><td><code>local</code> <em>(default)</em></td><td>This project, just you</td><td>Trying it out</td></tr>
+      <tr><td><code>user</code></td><td>All your projects</td><td>You want it everywhere</td></tr>
+      <tr><td><code>project</code></td><td><code>.mcp.json</code>, committed</td><td>The whole team should get it on clone</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p><code>--scope project</code> is the interesting one: it writes <code>.mcp.json</code> into the repository, so the next person to clone gets the server configured without being told it exists. Centralization reaching one step further than the server itself.</p>
+
+  <h3>If a server needs a static token instead of interactive sign-in</h3>
+  <pre><code>claude mcp add --transport http puzzlemaster \
+  https://mcp-puzzlemaster.fastmcp.app/mcp \
+  --header "Authorization: Bearer fmcp_YOUR_HORIZON_API_KEY_HERE"</code></pre>
+
+  <p>Prefer the interactive flow. A key in a shell command lands in your shell history, and <code>--scope project</code> would commit it. There are also <code>--client-id</code>, <code>--client-secret</code>, and <code>--callback-port</code> flags for servers that require pre-registered OAuth clients; ours does not.</p>
+
+  <div class="call note">
+    <span class="tag">The contrast worth drawing</span>
+    <p>One is a settings panel, one is a shell command, and they reach the identical endpoint and get the identical five tools. <strong>The server does not know or care which one is calling.</strong></p>
+    <p style="margin-top:12px">That is the whole architectural payoff. You do not maintain a version for engineers and a version for everyone else. You maintain one server, and clients differ only in how a human tells them where it is.</p>
+  </div>
+</section>
+
+<hr class="soft">
+
+<section id="guardrails">
+  <h2><span class="num">07</span> What a non-engineer can and cannot do</h2>
+  <p class="lede">"Anyone can use it" is not the same as "anyone can do anything with it". Worth being precise, because this is the question a security-minded person in the room is already forming.</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>Can</th><th>Cannot</th></tr></thead>
+    <tbody>
+      <tr><td>Call any of the five tools, in plain language</td><td>Add, change, or remove a tool</td></tr>
+      <tr><td>See every result, and the raw input/output of each call</td><td>Change what a tool does with its input</td></tr>
+      <tr><td>View the usage graph and export the audit CSV</td><td>Reach the Postgres database directly</td></tr>
+      <tr><td>Combine tools with everything else in the conversation</td><td>Reach anything the server does not expose as a tool</td></tr>
+      <tr><td>Connect and disconnect the server themselves</td><td>Deploy, redeploy, or roll back</td></tr>
+      <tr><td>See the tool descriptions and parameter schemas</td><td>See <code>DATABASE_URL</code> or any environment variable</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Where the guardrails actually live</h3>
+  <p>Not in the client. Everything above is enforced on the server side, which is the only place it can be enforced — and there are four distinct layers:</p>
+
+  <ol>
+    <li><strong>The tool surface.</strong> A client can call the tools the server exposes and nothing else. There is no "run arbitrary SQL" tool, so there is no amount of clever prompting that produces one. This is the strongest guarantee on the list, and it is structural — it comes from what you did or did not write in <code>server.py</code>.</li>
+    <li><strong>Parameter schemas.</strong> Each tool declares its parameters and types. FastMCP validates against that schema before your function body runs. Bad input becomes a <code>ToolError</code>, not undefined behaviour.</li>
+    <li><strong>Horizon's gateway.</strong> Authentication, access policy, and per-request logging all happen <em>before</em> your code runs. If auth is on, an unauthenticated caller never reaches your Python at all — as the 401 in section 02 demonstrates.</li>
+    <li><strong>Secrets never leave the runtime.</strong> <code>DATABASE_URL</code> is an encrypted Horizon environment variable injected into the process. It is not in the repo, not in the tool schemas, and not visible to any client. A connected user can read the audit log <em>through</em> <code>usage_graph</code> and <code>export_results</code> — because those tools were deliberately written — but has no path to the database itself.</li>
+  </ol>
+
+  <div class="call warn">
+    <span class="tag">Carry this forward</span>
+    <p><strong>Everything a connected user can do is something someone chose to expose.</strong> The reason a non-engineer cannot do damage here is not that they lack the skill. It is that the server offers five read-only tools over a public word list.</p>
+    <p style="margin-top:12px">Expose a tool that writes to production, and "anyone can reach it from Claude Desktop" stops being a democratization story and becomes an access-control problem. The ease of connection is a multiplier on whatever you decided to expose — in both directions. Part <code>03</code>'s authenticated-writes exercise is where that stops being hypothetical.</p>
+  </div>
+
+  <h3>One honest note on identity</h3>
+  <p><code>02</code> was blunt that <code>agent_name</code> is telemetry, not authentication — an ordinary tool parameter the model fills in, which it can get wrong or be made to get wrong. That is still true of that column.</p>
+  <p>But over HTTP there is now a second, better identity running alongside it: Horizon's gateway attaches a <strong>verified actor</strong> — a real user or service account — to every request, established before your code runs and entirely outside the model's reach. That is the <code>Depends()</code>-shaped property <code>02</code> pointed at: trustworthy because unreachable, rather than trustworthy because nothing gains from lying. Use <code>agent_name</code> to label your own telemetry. Use the gateway's actor when the answer has to hold up.</p>
+</section>
+
+<hr class="soft">
+
+<section id="trouble">
+  <h2><span class="num">08</span> Troubleshooting</h2>
+
+  <h3>The server does not appear at all</h3>
+  <ul>
+    <li><strong>Did you fully quit Claude Desktop?</strong> Config-file changes load at launch only. <code>Cmd + Q</code> on macOS; quit from the system tray on Windows. Closing the window is not enough. This is the single most common cause.</li>
+    <li><strong>Is the JSON valid?</strong> One trailing comma silently disables the whole file. Paste it into any JSON validator.</li>
+    <li><strong>Is it under <code>mcpServers</code>?</strong> The key is exact, and the file may already contain other servers — add yours alongside them rather than replacing the object.</li>
+    <li><strong>Did you edit the right file?</strong> Use <strong>Settings → Developer → Edit Config</strong> rather than guessing a path.</li>
+    <li><strong>Free plan?</strong> Free is limited to <strong>one</strong> custom connector. If you already have one, this one will not add.</li>
+    <li><strong>Was it Path B?</strong> The config-file route for remote URLs is the one whose support is genuinely unclear. Switch to Path A.</li>
+    <li><strong>Did you put something in <code>.env.local</code> and expect Claude Desktop to pick it up?</strong> It will not. Different file, different program, different side of the boundary — see the top of section 03.</li>
+  </ul>
+
+  <h3>It connected, but there are no tools in the conversation</h3>
+  <ul>
+    <li><strong>Almost always: the connector is not enabled in that chat.</strong> Click <strong>“+”</strong> → <strong>Add connectors</strong> → toggle it on. Adding a connector does not enable it everywhere.</li>
+    <li>Start a new conversation — a chat opened before the connector existed may not pick it up.</li>
+    <li>If the tool list is empty rather than absent, the handshake succeeded but the manifest is empty. That is a server-side problem: check the Horizon build logs for a failed inspection.</li>
+  </ul>
+
+  <h3>Authentication failures</h3>
+  <ul>
+    <li><strong>401 / "Bearer token required".</strong> Expected when Horizon auth is on and you have not signed in. Use the connector's Connect button and complete the browser flow — do not go hunting for a token first.</li>
+    <li><strong>Signed in but still refused.</strong> Your Horizon account is probably not a member of the organization that owns the server. Ask Ahmed for an invite to the Overclock Accelerator org. PRO includes member invites.</li>
+    <li><strong>Worked yesterday, 401 today.</strong> The session expired — Horizon's session routing TTL is 24 hours. Disconnect and reconnect the connector to redo the OAuth flow.</li>
+    <li><strong>Pasted an <code>fmcp_</code> key and it is rejected.</strong> Check for a truncated paste, and that the header is exactly <code>Authorization: Bearer fmcp_...</code> with a single space after <code>Bearer</code>.</li>
+    <li><strong>The browser opens and immediately closes with nothing happening.</strong> A pop-up blocker or a non-default browser without an active Horizon session. Sign in to <code>horizon.prefect.io</code> in your default browser first, then retry.</li>
+  </ul>
+
+  <h3>Timeouts and slowness</h3>
+  <ul>
+    <li><strong>The first call is slow, later calls are fast.</strong> Cold start. Normal. Warm it before demoing.</li>
+    <li><strong>Everything times out.</strong> Custom connectors are reached from <strong>Anthropic's cloud, not your laptop</strong> — true even though Claude Desktop is running locally. A corporate firewall or VPN restricting outbound traffic will not help, but a server on a private network or <code>localhost</code> genuinely cannot work this way. Ours is public, so this should not bite.</li>
+    <li><strong>A call fails after a long wait.</strong> Horizon's request timeout is 170 seconds. Unlikely for a dictionary lookup; possible for a very large <code>export_results</code>.</li>
+    <li><strong>A large export fails.</strong> The payload ceiling is 6 MB per response, with no streaming. Ask for a filtered export instead.</li>
+  </ul>
+
+  <h3>Checking whether it is the server or the client</h3>
+  <p>If you have a terminal, this settles it in one command. Reachable-but-refusing looks like this:</p>
+
+  <pre><code>curl -sD - -o /dev/null -X POST \
+  https://mcp-puzzlemaster.fastmcp.app/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}'</code></pre>
+
+  <p><strong>A <code>401</code> with a <code>www-authenticate: Bearer</code> header is good news</strong> — the server is up, reachable, and enforcing auth, so the problem is on the client side. A timeout or a <code>5xx</code> means the problem is the server or the network, and no amount of reconfiguring Claude Desktop will fix it.</p>
+
+  <p>Beyond that, the Horizon dashboard's <strong>Logs</strong> page shows whether the request arrived at all — and if it did, which client sent it and what the gateway did with it. That answers "is it me or is it them" definitively, which is usually the question.</p>
+</section>
+
+<hr class="soft">
+
+<section id="recap">
+  <h2><span class="num">09</span> Recap</h2>
+  <ul>
+    <li><strong>Claude Desktop does not read <code>.env.local</code>.</strong> That file is for the repo's Python agents. Claude Desktop reads <code>claude_desktop_config.json</code>. You need no API key for anything on this page.</li>
+    <li><strong>Use Settings → Connectors, not the config file.</strong> It handles the OAuth flow, which is what this server requires, and needs no restart.</li>
+    <li><strong>The config file lives at</strong> <code>~/Library/Application Support/Claude/claude_desktop_config.json</code> on macOS and <code>%APPDATA%\Claude\claude_desktop_config.json</code> on Windows — reachable from <strong>Settings → Developer → Edit Config</strong>. Editing it requires a <em>full</em> quit and relaunch.</li>
+    <li><strong>Adding a connector does not enable it in a conversation.</strong> "+" → Add connectors → toggle on.</li>
+    <li><strong>Decide the auth question before the session.</strong> Turning Horizon auth off for a read-only puzzle solver is the low-friction path.</li>
+    <li><strong>Claude Code reaches the identical endpoint</strong> with <code>claude mcp add --transport http</code>. Same server, same tools, different front door.</li>
+    <li><strong>The guardrails are server-side</strong>, and everything a user can do is something someone chose to expose. Ease of access multiplies that decision in both directions.</li>
+    <li><strong>Warm the server before you demo.</strong></li>
+  </ul>
+
+  <div class="call ok">
+    <span class="tag">The argument, closed</span>
+    <p><strong>Centralize</strong> — one implementation, in one repo. <strong>Monitor</strong> — one place that sees every call, from every client, whether it is a Python agent or a colleague typing a sentence. <strong>Democratize</strong> — a URL, and no Python required.</p>
+    <p style="margin-top:12px">The solver bodies have not changed since <code>00</code>. Only the seam moved. That was the whole point.</p>
+  </div>
+</section>
+
+<footer>
+  <p><strong>05 — MCPs for everyone.</strong> Part of the MCP training series.</p>
+  <p>Verified 2026-08-31: Claude Desktop <strong>1.40609.0</strong> and Claude Code <strong>2.1.251</strong> on macOS (Darwin 25.6.0); the <code>claude mcp add</code> flags are from the installed binary's own help output; the endpoint's auth state and OAuth capabilities are from direct requests to the live server. Claude Desktop menu labels are described from Anthropic's help centre and Horizon's documentation and were <em>not</em> verified by walking the UI on this build — trust the screen over this page.</p>
+  <p>Endpoint: <code>https://mcp-puzzlemaster.fastmcp.app/mcp</code> · Repo: <code>github.com/Overclock-Accelerator/mcp-puzzlemaster</code></p>
+  <p>No credentials appear anywhere on this page. Every token is a placeholder — replace <code>fmcp_YOUR_HORIZON_API_KEY_HERE</code> with your own, and keep it out of anything you commit or screen-share.</p>
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""Look up antonyms for a word."""
+import argparse, sys
+
+p = argparse.ArgumentParser(prog="antonym-lookup", description="Look up antonyms for a word.")
+p.add_argument("--word", type=str, required=True, help="word")
+p.add_argument("--max-results", type=int, default=10, help="max_results")
+a = p.parse_args()
+print("antonym-lookup: not implemented — this is a benchmark pad command.", file=sys.stderr)
+raise SystemExit(3)
