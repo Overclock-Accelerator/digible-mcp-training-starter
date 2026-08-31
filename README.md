@@ -68,20 +68,6 @@ need it started in its own terminal first; the folder README says which command.
 `langchain-mcp-adapters` requires `mcp<2.0.0`. An unpinned `pip install mcp`
 breaks every agent here.
 
-## The HTML pages
-
-Most of this repo is markdown, which GitHub renders in the browser. Four pages
-are HTML instead, meant to be projected:
-
-| Page | |
-|---|---|
-| `04-mcp-deployment/index.html` | Deploying an MCP server to Prefect Horizon |
-| `05-mcps-for-all/index.html` | Connecting Claude Desktop to a deployed server |
-| `07-mcp-for-all-the-tokens/index.html` | What ballooning tool counts cost |
-| `08-mcp-vs-cli/index.html` | MCP versus the command line, measured |
-
-GitHub will not render those — download and open them. Each is self-contained.
-
 ## License
 
 MIT. See [LICENSE](LICENSE).
