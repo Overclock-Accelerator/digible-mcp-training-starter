@@ -117,23 +117,24 @@ That gap is worth sitting with. The solver is not wrong; it is answering a
 different question than the editor was. Deterministic tools give you exactly what
 you asked for, which is not always the same as what you wanted.
 
-## The HTML pages
+## The four HTML pages
 
-Every README and results file also exists as a self-contained HTML page next to
-it — `00-agent-bee/README.md` and `00-agent-bee/README.html`, and so on. The HTML
-is what gets projected: same content, legible at the back of a room, dark-mode
-aware, and it opens straight from disk with no network.
+Most of this repo is markdown, which GitHub renders for you — just click a
+`README.md` and read it.
 
-**The `.md` files are the source. The `.html` files are generated output.** If you
-edit a markdown file, regenerate:
+Four pages are HTML instead, because they are written documents rather than
+code notes and they are meant to be projected:
 
-```bash
-./.venv/bin/python shared/render_report.py --all          # every page
-./.venv/bin/python shared/render_report.py --list         # which files convert
-```
+| Page | |
+|---|---|
+| `04-mcp-deployment/index.html` | Deploying an MCP server to Prefect Horizon |
+| `05-mcps-for-all/index.html` | Connecting Claude Desktop to a deployed server |
+| `07-mcp-for-all-the-tokens/index.html` | What ballooning tool counts cost |
+| `08-mcp-vs-cli/index.html` | MCP versus the command line, measured |
 
-Not converted, on purpose: `06-mcp-breakdown/WORKSHEET.md`, because you fill it
-in by hand and markdown is the right format for that.
+GitHub will not render those in the browser — download the file and open it, or
+use a raw-HTML viewer. Each one is self-contained: no network, no assets, dark
+mode aware.
 
 ## License
 
