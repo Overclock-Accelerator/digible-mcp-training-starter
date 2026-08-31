@@ -17,6 +17,7 @@ README explaining what it is and how to run it.
 git clone https://github.com/Overclock-Accelerator/digible-mcp-training-starter.git
 cd digible-mcp-training-starter
 ./setup.sh
+source .venv/bin/activate
 cp .env.local.example .env.local
 ```
 
@@ -58,8 +59,8 @@ nothing on your machine to call them.
 
 ## Troubleshooting
 
-**`ModuleNotFoundError`** — a different virtualenv is active. Run agents with
-this repo's interpreter: `./.venv/bin/python <folder>/<agent>.py`
+**`ModuleNotFoundError`** — the virtualenv is not active. Run
+`source .venv/bin/activate` from the repo root.
 
 **A tool call fails immediately** — the MCP server is not running. Most folders
 need it started in its own terminal first; the folder README says which command.
