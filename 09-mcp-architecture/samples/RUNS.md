@@ -1,16 +1,16 @@
 # Sample runs — 09
 
-Every output below was recorded from this folder as committed.
-
-No server is involved: each agent reads `digible.db` directly, in its own way.
+Recorded from this folder as committed. No server is involved: each agent reads
+`digible.db` directly, in its own way.
 
 ---
 
 ## 0. The measurement — no API key needed
 
+From the repo root, with the virtualenv active:
+
 ```bash
-cd 09-mcp-architecture
-python count_duplication.py
+python 09-mcp-architecture/count_duplication.py
 ```
 
 ```
@@ -61,8 +61,10 @@ SHARED PRIMITIVES, SOLVED SEPARATELY
 
 ## 1. Spend pacing
 
+Sections 1–5 run from `09-mcp-architecture/agents`:
+
 ```bash
-cd agents
+cd 09-mcp-architecture/agents
 python agent_spend_pacing.py "which properties are pacing over budget in May?"
 ```
 
@@ -87,7 +89,7 @@ Budget pacing — 2026-05
 ```
 
 Nothing is over on media. Everything is over once fees are on the invoice. Both
-numbers are true, and the agent is told to report both.
+numbers are true, and the agent is instructed to report both.
 
 ---
 
@@ -111,8 +113,8 @@ Five properties had meaningful (≥10%) tour drops from May to June 2026:
 5. Peachtree Row     — 92 → 80  (-13.0%)
 ```
 
-**Ask the same question in `10` and you get the same five properties and the
-same five percentages.** The refactor moved the code, not the answers.
+A correct refactor returns the same five properties and the same five
+percentages.
 
 ---
 
@@ -157,7 +159,7 @@ Bishop Arts Flats has the worst rate — 83.8% of its calls go unanswered
 
 ## 5. The conversation, which is the default
 
-Run any agent with no arguments:
+Any agent run with no arguments:
 
 ```bash
 python agent_channel_efficiency.py
@@ -174,15 +176,7 @@ Digible — Channel Efficiency
 you › cost per lead by channel in May
 ```
 
-Ask the follow-up — "same thing but just for Harborview 900" — and watch the
-trace: the agent carries the month across turns and only the property changes.
-Ask a third question the tools cannot answer and the trace prints
+On the follow-up — "same thing but just for Harborview 900" — the agent carries
+the month across turns and only the property changes. A third question the tools
+cannot answer prints
 `(none — the model answered without calling a tool)`.
-
----
-
-## 6. Next
-
-Open the six agent files side by side and find every function that turns a month
-into a pair of dates. There are ten of them, in six files, and they are all
-correct. Then design the tool set that replaces all ten with one, and open

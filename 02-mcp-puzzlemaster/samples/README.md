@@ -87,7 +87,7 @@ usage_graph              #######                                     2  avg     
 ```
 
 The totals climb between the two renders because `usage_graph` is itself a
-logged tool call. Drop `--reset` to add to the existing table instead.
+logged tool call. `--reset` clears the table first; without it, rows accumulate.
 
 ## 6. Export the audit trail — no API key
 
@@ -112,5 +112,5 @@ sorted({x['agent_name'] for x in r}))"
 27 rows; 3 failures; ['agent-bee', 'agent-crossword', 'agent-wordle', 'monitor', 'seed']
 ```
 
-Both `inputs` and `outputs` are valid JSON; very large outputs are stored as a
+Both `inputs` and `outputs` are valid JSON. Very large outputs are stored as a
 `{"truncated_chars": …, "preview": …}` object.

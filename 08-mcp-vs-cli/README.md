@@ -7,15 +7,15 @@ out to — measured against each other.
 
 All commands are from the repo root, with the virtualenv active.
 
-Generate the padding commands once, then confirm both sides share identical
-solver code:
+Generate the padding commands, then confirm both sides share identical solver
+code:
 
 ```bash
 python 08-mcp-vs-cli/cli/make_pad.py
 python 08-mcp-vs-cli/verify_solvers.py
 ```
 
-Use the CLI with no model involved:
+The CLI, with no model involved:
 
 ```bash
 python 08-mcp-vs-cli/cli/puzzle bee --letters VALIDTY --center V
@@ -23,7 +23,7 @@ python 08-mcp-vs-cli/cli/puzzle bee --letters VALIDTY --center V --json \
   | jq '[.words[] | select(.word|length >= 5)] | length'
 ```
 
-Run either agent on one task:
+Either agent on one task:
 
 ```bash
 python 08-mcp-vs-cli/agent_mcp.py --task solve --tools 3
@@ -32,7 +32,7 @@ python 08-mcp-vs-cli/agent_cli.py --task solve --capabilities 3
 python 08-mcp-vs-cli/agent_cli.py --task solve --capabilities 40
 ```
 
-Compare on the aggregate task:
+Both on the aggregate task:
 
 ```bash
 python 08-mcp-vs-cli/agent_mcp.py --task aggregate
@@ -40,7 +40,7 @@ python 08-mcp-vs-cli/agent_cli.py --task aggregate
 python 08-mcp-vs-cli/agent_cli.py --task aggregate --brief
 ```
 
-Redraw the charts, or re-run:
+Redraw the charts, or re-run the benchmark:
 
 ```bash
 python 08-mcp-vs-cli/benchmark.py --render-only
@@ -69,7 +69,8 @@ Aggregate task — "how many answers are five letters or longer?", answer 24:
 
 ## Troubleshooting
 
-**`ModuleNotFoundError`** — run `source .venv/bin/activate` from the repo root.
+**`ModuleNotFoundError`** — the virtualenv is not active. Run
+`source .venv/bin/activate` from the repo root.
 
 **`jq: command not found`** — install `jq`, or drop the pipe.
 

@@ -1,11 +1,12 @@
 # Sample runs
 
-Run from `03-mcp-bookstore/solution` with the virtualenv active, except section
-1's starter run. Sections 1 and 4 need no API key; the rest need
-`ANTHROPIC_API_KEY` in `.env.local` at the repo root and the server running:
+The runs below are from a completed implementation. Section 1 needs no API key;
+the rest need `ANTHROPIC_API_KEY` in `.env.local` at the repo root and the
+server running. All commands are from `03-mcp-bookstore/starter` with the
+virtualenv active.
 
 ```bash
-cd 03-mcp-bookstore/solution
+cd 03-mcp-bookstore/starter
 python bookstore_server.py                 # http://127.0.0.1:8003/mcp, leave it up
 ```
 
@@ -14,6 +15,24 @@ python bookstore_server.py                 # http://127.0.0.1:8003/mcp, leave it
 ```bash
 python test_exercise.py
 ```
+
+As shipped, all four fail:
+
+```
+A — one read tool behind an MCP server
+  ✗ checkpoint A requires a tool named 'search_books', and the server does not expose one.
+    Exposed right now: (nothing)
+
+  Checkpoint A requires:
+    search_books(agent_name, title, author, genre, keyword, min_price,
+                 max_price, min_rating, max_pages, min_year, max_year,
+                 on_sale_only, limit) -> dict
+      · agent_name is required; every filter is optional and independently
+        typed. No parameter takes a customer's sentence.
+      ...
+```
+
+A complete implementation reports:
 
 ```
 A — one read tool behind an MCP server
@@ -29,22 +48,6 @@ D — authenticated writes via Depends()
   ✓ passed
 
 All 4 checkpoint(s) passing.
-```
-
-In `starter/`, all four fail:
-
-```
-A — one read tool behind an MCP server
-  ✗ checkpoint A requires a tool named 'search_books', and the server does not expose one.
-    Exposed right now: (nothing)
-
-  Checkpoint A requires:
-    search_books(agent_name, title, author, genre, keyword, min_price,
-                 max_price, min_rating, max_pages, min_year, max_year,
-                 on_sale_only, limit) -> dict
-      · agent_name is required; every filter is optional and independently
-        typed. No parameter takes a customer's sentence.
-      ...
 ```
 
 ## 2. A title lookup
@@ -87,56 +90,10 @@ One `build_bundle(budget=65, genres=["Science Fiction","Mystery"])` call:
 
 > **Total: $64.98** — leaving you a modest 2 cents to spare!
 
-## 4. The refusal demo — no key needed
+## 4. The write path
 
-```bash
-python demo_refusal.py
-```
-
-```
-1. What each agent is handed
-  agent_reader.py loads: build_bundle, get_book, recommend_books, search_books
-  agent_admin.py  loads: add_book, build_bundle, delete_book, get_book,
-                         recommend_books, search_books, update_book
-
-  'add_book' in the reader's tool list: False
-  The reader is not refusing to write. It has no such verb.
-
-2. The credential the model never sees
-  add_book's parameters, as the model sees them:
-    ['agent_name', 'title', 'author', 'genre', 'price', 'pages', 'year',
-     'rating', 'description']
-  'admin' in the schema: False
-
-3. The server's own rule, with the client fully cooperating
-  Calling add_book directly, bypassing the agent entirely...
-  refused: not authorized: this call carried no admin credential, so the catalog
-  is read-only. Ask an administrator to make this change.
-
-  Now with the credential injected into the server's environment...
-  accepted: id=137 'Forged Classics'
-  (cleaned up)
-```
-
-```bash
-python demo_refusal.py --live
-```
-
-```
-──── tools invoked ───────────────────────────────────────────────
-  (none — the model answered without calling a tool)
-──────────────────────────────────────────────────────────────────
-  Thank you kindly for the suggestion, but I'm afraid I haven't the tools to
-  amend the catalog myself — adding, editing, or removing titles is a task
-  reserved for a LangBookstore administrator.
-
-  write tools invoked: []
-```
-
-## 5. The write path
-
-These change `storedata.json`. To leave the shipped one alone, restart the
-server against a scratch copy:
+These change `storedata.json`. Restart the server against a scratch copy to
+leave the shipped catalog alone:
 
 ```bash
 cp storedata.json /tmp/demo.json
@@ -178,7 +135,7 @@ env -u ANTHROPIC_API_KEY python agent_admin.py "Remove The Fifth Season from the
 
 The agent reports **134 titles remaining**.
 
-## 6. Edge cases
+## 5. Edge cases
 
 ```bash
 env -u ANTHROPIC_API_KEY python agent_reader.py "Do you have The Hitchhiker's Guide to the Galaxy?"
@@ -200,12 +157,11 @@ env -u ANTHROPIC_API_KEY python agent_reader.py "Recommend 3 post-apocalyptic bo
 
 The catalog holds exactly one Post-Apocalyptic title, so `recommend_books`
 returns one strong match and two lower-scored fill-ins from adjacent genres.
+`search_books(genre=...)` is the hard filter.
 
 > 1. **The Road** by Cormac McCarthy — $13.75 (on sale, 14% off $15.99) … 3. **Harry Potter and the Sorcerer's Stone** — I ought to be candid, this one is Fantasy rather than strictly Post-Apocalyptic.
 
-`search_books(genre=...)` is the hard filter.
-
-## 7. The conversation
+## 6. The conversation
 
 ```bash
 python agent_reader.py
@@ -248,4 +204,4 @@ you › now delete it from the catalog entirely
   2. delete_book(agent_name="agent-admin", title="The Fifth Season")
 ```
 
-Catalog back to 134 books at the end.
+The catalog holds 134 books at the end.

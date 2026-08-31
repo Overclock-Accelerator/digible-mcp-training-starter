@@ -105,7 +105,7 @@ PY
 python 01-mcp-bee/agent_with_mcp.py --letters VALIDT --center V
 ```
 
-The model reads the error and recovers. An observed run:
+An observed run, in which the model reads the error and recovers:
 
 ```
 Here's the solution for letters V, A, L, I, D, T, Y with center letter V
@@ -147,8 +147,8 @@ A rich traceback also prints to stderr.
 diff 01-mcp-bee/agent_with_tool.py 01-mcp-bee/agent_with_mcp.py
 ```
 
-Three kinds of change: the solver block deleted, a `MultiServerMCPClient` added,
-and `tools = [spelling_bee]` becoming `tools = await client.get_tools()`.
+Three changes: the solver block deleted, a `MultiServerMCPClient` added, and
+`tools = [spelling_bee]` becoming `tools = await client.get_tools()`.
 
 ```bash
 diff <(sed -n '/^def load_words/,/^    }$/p' 01-mcp-bee/agent_with_tool.py) \

@@ -7,8 +7,8 @@ README explaining what it is and how to run it.
 ## Prerequisites
 
 - **Python 3.10 or newer** — check with `python3 --version`
-- **An Anthropic API key** from [console.anthropic.com](https://console.anthropic.com/)
-  — needed for folders marked "key" below
+- **An Anthropic API key** from [console.anthropic.com](https://console.anthropic.com/),
+  for the folders marked "key" below
 - **`git`**, plus **`curl`** and **`jq`** for folder `06`
 
 ## Setup
@@ -21,41 +21,36 @@ source .venv/bin/activate
 cp .env.local.example .env.local
 ```
 
-Then open `.env.local` and paste in your Anthropic API key.
-
-`setup.sh` should end with `10 passed, 0 failed`. If it does, you are set up.
-
-Each folder's README tells you what to run there.
+Add the Anthropic API key to `.env.local`. `setup.sh` runs the solver tests,
+which report `10 passed, 0 failed`.
 
 ## The folders
 
-**Demo** — we run it together and you follow along.
-**Activity** — you build it, with a specification to check yourself against.
+**Demo** — run during the session. **Activity** — built against a specification.
 
 | | | Key? | What it is |
 |---|---|---|---|
 | `00-agent-bee` | demo | yes | A LangChain agent solving NYT Spelling Bee with a local tool. |
-| `01-mcp-bee` | demo | yes | The same solver moved behind a FastMCP server, so you can diff the two agents. |
+| `01-mcp-bee` | demo | yes | The same solver behind a FastMCP server, alongside the local-tool agent. |
 | `02-mcp-puzzlemaster` | demo | yes | Three agents sharing one server, one dictionary and one audit log. Usage graphs and CSV export. |
-| `03-mcp-bookstore` | **activity** | yes | Refactor a real LangChain agent onto MCP in four checkpoints, then add authenticated writes. |
+| `03-mcp-bookstore` | **activity** | yes | Refactor a LangChain agent onto MCP in four checkpoints, then add authenticated writes. |
 | `04-mcp-deployment` | demo | no | Deploying a local MCP server to a hosted one. An HTML page. |
-| `05-mcps-for-all` | demo | no | Reaching an MCP server from Claude Desktop, without writing Python. An HTML page. |
-| `06-mcp-breakdown` | **activity** | no | Take three production MCP servers apart — Zapier, Snowflake, Datadog — using a worksheet you keep. |
+| `05-mcps-for-all` | demo | no | Reaching an MCP server from Claude Desktop without writing Python. An HTML page. |
+| `06-mcp-breakdown` | **activity** | no | Three production MCP servers — Zapier, Snowflake, Datadog — examined against a worksheet. |
 | `07-mcp-for-all-the-tokens` | demo | yes | What tool definitions cost in context, measured across five servers. |
 | `08-mcp-vs-cli` | demo | yes | The same work through MCP tools and through a CLI, measured against each other. |
-| `09-mcp-architecture` | **activity** | yes | Six agents that each reinvented the same database primitives. Count the duplication, then collapse it behind one server. |
+| `09-mcp-architecture` | **activity** | yes | Six agents implementing the same database primitives independently. Measure the duplication, then consolidate it behind one server. |
 
 ### Deployed servers
 
-Two servers from this course are live and public, with no sign-in. You need
-nothing on your machine to call them.
+Two servers from this course are public and require no sign-in.
 
 | | Endpoint |
 |---|---|
 | PuzzleMaster | `https://mcp-puzzlemaster.fastmcp.app/mcp` |
 | Digible Data | `https://mcp-digible-queries.fastmcp.app/mcp` |
 
-`05-mcps-for-all` walks through pointing Claude Desktop at one of them.
+`05-mcps-for-all` documents connecting Claude Desktop to one of them.
 
 ## Troubleshooting
 
@@ -63,7 +58,7 @@ nothing on your machine to call them.
 `source .venv/bin/activate` from the repo root.
 
 **A tool call fails immediately** — the MCP server is not running. Most folders
-need it started in its own terminal first; the folder README says which command.
+require it started in its own terminal first; the folder README names the command.
 
 **Do not upgrade `mcp`.** `requirements.txt` pins 1.29.1 because
 `langchain-mcp-adapters` requires `mcp<2.0.0`. An unpinned `pip install mcp`

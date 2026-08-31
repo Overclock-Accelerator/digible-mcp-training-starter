@@ -1,7 +1,7 @@
 # Sample runs
 
 Commands are from the repo root, with the virtualenv active. Tool output is
-deterministic; the model's prose varies run to run.
+deterministic; the model's prose varies between runs.
 
 ## 1. Solve a puzzle
 

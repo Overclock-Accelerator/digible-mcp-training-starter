@@ -6,27 +6,22 @@ A LangChain agent with the Spelling Bee solver as a local `@tool`.
 
 All commands are from the repo root, with the virtualenv active.
 
-Solve a puzzle directly:
-
 ```bash
 python 00-agent-bee/agent.py --letters VALIDTY --center V
+python 00-agent-bee/agent.py --letters CAPITOL --center C
 ```
 
-Ask in your own words instead:
+VALIDTY returns 34 words, 171 points, pangram VALIDITY. CAPITOL returns 136
+words, 737 points.
+
+The same puzzle stated as a question:
 
 ```bash
 python 00-agent-bee/agent.py --question "For the Spelling Bee letters VALIDTY with center letter V, which answers are worth 10 or more points?"
 ```
 
-Both print a `[tool call]` / `[tool result]` pair before the answer.
-
-## Prompts
-
-| what you run | what you get back |
-|---|---|
-| `--letters VALIDTY --center V` | 34 words, 171 points, pangram VALIDITY |
-| `--letters CAPITOL --center C` | 136 words, 737 points |
-| `--question "…which answers are worth 10 or more points?"` | two words — VALIDITY at 15, ADDITIVITY at 10 |
+Two words — VALIDITY at 15 and ADDITIVITY at 10. Every invocation prints a
+`[tool call]` / `[tool result]` pair before the answer.
 
 ## Troubleshooting
 
@@ -34,7 +29,7 @@ Both print a `[tool call]` / `[tool result]` pair before the answer.
 `source .venv/bin/activate` from the repo root.
 
 **`error: ANTHROPIC_API_KEY is not set`** — put your key in `.env.local` at the
-repo root. Copy `.env.local.example` if you have not already.
+repo root. Copy `.env.local.example` if it is not there.
 
 **`error: --center 'Z' must be one of the letters 'VALIDTY'`** — the center
-letter has to be one of the seven.
+letter must be one of the seven.

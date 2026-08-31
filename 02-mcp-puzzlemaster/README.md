@@ -30,11 +30,14 @@ Each opens a chat. Every call also appears in the server terminal.
 
 ## Prompts
 
-| agent | type this | you get |
-|---|---|---|
-| `agent_bee.py` | `today's bee is VALIDTY, V in the middle` | 34 words, 171 points, pangram VALIDITY |
-| `agent_crossword.py` | `what fits C_O__W_RD?` | one match, CROSSWORD |
-| `agent_wordle.py` | `I played CRANE and got green, yellow, then three blacks` | 34 candidates remaining |
+| agent | prompt |
+|---|---|
+| `agent_bee.py` | `today's bee is VALIDTY, V in the middle` |
+| `agent_crossword.py` | `what fits C_O__W_RD?` |
+| `agent_wordle.py` | `I played CRANE and got green, yellow, then three blacks` |
+
+The bee returns 34 words, 171 points, pangram VALIDITY. The crossword returns
+one match, CROSSWORD. Wordle returns 34 candidates remaining.
 
 ## Troubleshooting
 

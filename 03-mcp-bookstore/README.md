@@ -91,7 +91,8 @@ Restore the catalog between runs with `cp ../storedata.json storedata.json`.
 
 ## Troubleshooting
 
-**`ModuleNotFoundError`** — run `source .venv/bin/activate` from the repo root.
+**`ModuleNotFoundError`** — the virtualenv is not active. Run
+`source .venv/bin/activate` from the repo root.
 
 **Connection error** — the server is not running.
 

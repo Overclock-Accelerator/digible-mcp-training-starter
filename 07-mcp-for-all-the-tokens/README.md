@@ -1,11 +1,11 @@
 # 07 — MCP for All the Tokens
 
-One agent connected to five MCP servers, measuring what tool definitions cost
-in context as you add more.
+One agent connected to five MCP servers, measuring what tool definitions cost in
+context at increasing server counts.
 
 ## Run
 
-From the repo root, virtualenv active.
+All commands are from the repo root, with the virtualenv active.
 
 Start the five servers and leave them running:
 
@@ -13,22 +13,20 @@ Start the five servers and leave them running:
 ./07-mcp-for-all-the-tokens/start_servers.sh    # ports 8010-8014
 ```
 
-Then, in a second terminal:
+In a second terminal:
 
 ```bash
 python 07-mcp-for-all-the-tokens/agent.py --servers 1     # chat with 5 tools
 python 07-mcp-for-all-the-tokens/agent.py --servers 5     # chat with 155 tools
 ```
 
-Stop them when you are done:
+Stop them:
 
 ```bash
 ./07-mcp-for-all-the-tokens/stop_servers.sh
 ```
 
 ## Prompts
-
-Ask the same thing at both sizes and compare which tools get called:
 
 ```
 find me the docs on rate limits
@@ -60,7 +58,8 @@ python 07-mcp-for-all-the-tokens/show_schema.py --servers 5 --weigh
 
 ## Troubleshooting
 
-**`ModuleNotFoundError`** — run `source .venv/bin/activate` from the repo root.
+**`ModuleNotFoundError`** — the virtualenv is not active. Run
+`source .venv/bin/activate` from the repo root.
 
 **Connection error** — the servers are not running. Run `start_servers.sh`.
 

@@ -117,7 +117,8 @@ required parameter is a value they must know to supply.
 
 ## Troubleshooting
 
-**`ModuleNotFoundError`** — run `source .venv/bin/activate` from the repo root.
+**`ModuleNotFoundError`** — the virtualenv is not active. Run
+`source .venv/bin/activate` from the repo root.
 
 **`error: ANTHROPIC_API_KEY is not set`** — put your key in `.env.local` at the
 repo root. `count_duplication.py` does not need one.

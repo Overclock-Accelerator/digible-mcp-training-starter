@@ -1,11 +1,11 @@
 # Expected output
 
-Run each command and compare. Differences noted as **expected to drift** mean
-the vendor moved, not that your setup is broken. Any other difference is usually
-a proxy, a captive portal, or no network.
+Expected output for every `inspect.sh` command. Differences marked **expected
+to drift** mean the vendor moved. Any other difference is usually a proxy, a
+captive portal, or no network.
 
-Timings are from a home connection: the whole of `./inspect.sh all` is about
-90 seconds, most of it the three `git clone`s and the 136 KB Datadog catalogue.
+Timings are from a home connection. `./inspect.sh all` takes about 90 seconds,
+most of it the three `git clone`s and the 136 KB Datadog catalogue.
 
 ---
 
@@ -17,8 +17,8 @@ Timings are from a home connection: the whole of `./inspect.sh all` is about
   No Node, no venv, no API key. Nothing here talks to a model.
 ```
 
-Fails with `missing: jq — brew install jq` if you are on a bare Linux image.
-Nothing else in the folder needs installing.
+Fails with `missing: jq — brew install jq` on a bare Linux image. Nothing else
+in the folder requires installing.
 
 ---
 
@@ -41,9 +41,8 @@ HTTP/2 401
 Snowflake: there is no shared host to probe.
 ```
 
-Both 401s are the expected result. Zapier's is the better-behaved of the two:
-it returns a JSON-RPC error object rather than a bare HTTP error, and points at
-its RFC 9728 metadata in `WWW-Authenticate`.
+Both 401s are expected. Zapier returns a JSON-RPC error object and points at its
+RFC 9728 metadata in `WWW-Authenticate`; Datadog returns a bare HTTP error.
 
 **Expected to drift:** the JSON-RPC error code, and Datadog's error body shape.
 Not the 401s.
@@ -52,7 +51,7 @@ Not the 401s.
 
 ## `./inspect.sh oauth` — ~3s
 
-Four JSON documents, all HTTP 200, all unauthenticated. The two lines to find:
+Four JSON documents, all HTTP 200, all unauthenticated:
 
 ```
   "scopes_supported": [ "openid", "profile", "email" ]        ← Zapier
@@ -67,15 +66,14 @@ Four JSON documents, all HTTP 200, all unauthenticated. The two lines to find:
 
 Both also show a `registration_endpoint`, meaning any client can self-register.
 
-**Expected to drift:** endpoints and grant-type lists. If `scopes_supported`
-gains anything more granular than `mcp_all` on the Datadog side, that is a real
-improvement and worth noting on your worksheet.
+**Expected to drift:** endpoints and grant-type lists, and any Datadog scope
+more granular than `mcp_all`.
 
 ---
 
 ## `./inspect.sh zapier` — ~15s (clones a 2.6 MB repo)
 
-You should see:
+Output:
 
 1. The **14-row meta-tool table**, pulled live from
    `docs.zapier.com/mcp/overview/how-tools-work.md`, followed by the `write_code_action`
@@ -89,9 +87,8 @@ You should see:
    exist for other Zapier products.
 
 **Expected to drift:** the meta-tool count. It was 14 on 2026-08-31, and
-`write_code_action` is described as still rolling out. If the table has 15 rows,
-`write_code_action` shipped — write that on your worksheet, because it changes
-the answer to Question 9.
+`write_code_action` is described as still rolling out. A 15-row table means
+`write_code_action` shipped, which changes the answer to Question 9.
 
 ---
 
@@ -115,9 +112,8 @@ quoted sentences including:
       MCP server with a dedicated least-privileged role.
 ```
 
-If the privilege table prints `(privilege table not found — the docs page
-changed)`, Snowflake reworked the page. Read it in a browser and update your
-worksheet; the script is not broken.
+`(privilege table not found — the docs page changed)` means Snowflake reworked
+the page, not that the script is broken.
 
 **The deprecated OSS server**, at commit `662cb48` (2026-05-15) — it is archived,
 so this commit should not move:
@@ -160,11 +156,10 @@ Then the `consumes context window space` line, the two contrasting tool entries
 ```
 
 **Expected to drift, and quickly.** 82 entries over five months is roughly a
-change every other day, so the tool count will not be 265 for long. Write your
-numbers on the worksheet.
+change every other day; the tool count will not stay at 265.
 
-The doc-drift block is a live diff of two vendor pages. If it prints nothing,
-Datadog fixed it, which would also be worth noting.
+The doc-drift block is a live diff of two vendor pages. Empty output means
+Datadog fixed the discrepancy.
 
 ---
 
@@ -182,19 +177,18 @@ Datadog fixed it, which would also be worth noting.
   Snowflake documented cap, one server            50       8,500 - 9,500
 ```
 
-The Datadog rows are computed from the catalogue you just downloaded, so they
-stay true as the surface changes.
+The Datadog rows are computed from the downloaded catalogue, so they track the
+current surface.
 
 ---
 
 ## `./inspect.sh all` — ~90s
 
-Everything above, in order. Exits 0. Roughly 450 lines of output — pipe it to a
-file if you want to read it properly:
+Everything above, in order. Exits 0. Roughly 450 lines of output:
 
 ```bash
 ./inspect.sh all > run-$(date +%F).txt 2>&1
 ```
 
-That file is a substitute for the `tools/list` baseline you cannot take. Diff
-it the next time you review these servers.
+That file stands in for the `tools/list` baseline these servers do not permit.
+Diff it against the next review.
