@@ -1,15 +1,8 @@
 # MCP Training — starter repo
 
-This repo holds the demos we run together and the starters for the activities
-you build yourself. Each numbered folder is one segment of the session and has
-its own README explaining what it is and how to run it.
-
-An MCP server is a small program that exposes tools over a protocol, so any
-client can call them — your agent, someone else's agent, or Claude Desktop.
-Folders `00` through `02` show a tool moving out of an agent and into a server.
-`03` and up are where you build one yourself.
-
-Work through the folders in order.
+This repository holds demonstrations for the Digible AI Engineering MCP
+Training. Each numbered folder is one segment of the session and has its own
+README explaining what it is and how to run it.
 
 ## Prerequisites
 
