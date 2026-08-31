@@ -1,13 +1,13 @@
-# 09-alt — Query Sprawl
+# 09 — Query Sprawl
 
 **Six agents, six questions, one database — and six private re-implementations
 of the same handful of data primitives. The tool set they all needed was
 smaller than any one of them.**
 
-That is the ONE idea. Note what the problem is *not*: every number in here is
-correct, and nothing disagrees with anything. There is no bug to find and no
-argument to settle. The only problem is that the same small problems were
-solved six times.
+That is the ONE idea. This folder is a simpler alternative to
+`09-mcp-architecture`: same database, no business-semantics adjudication. Every
+number in here is correct. Nothing disagrees with anything. The only problem is
+that the same small problems were solved six times.
 
 ---
 
@@ -64,8 +64,9 @@ echo "ANTHROPIC_API_KEY=sk-ant-..." >> .env.local
 source .venv/bin/activate
 ```
 
-`digible.db` is committed, so the activity needs no build step and no network.
-It is generated deterministically from a fixed seed. 14 properties, 5 management companies, January through June
+`digible.db` is committed — a byte-for-byte copy of the one in
+`09-mcp-architecture`, which `09-mcp-architecture/build_db.py` regenerates
+deterministically. 14 properties, 5 management companies, January through June
 2026, about 110,000 rows. All data is synthetic; the vocabulary and the fee
 structures are real.
 
@@ -76,7 +77,7 @@ structures are real.
 Each agent takes no arguments and opens a conversation:
 
 ```bash
-cd 09-alt-mcp-query-sprawl/agents
+cd 09-mcp-architecture/agents
 
 python agent_spend_pacing.py
 python agent_channel_efficiency.py
@@ -105,12 +106,15 @@ python count_duplication.py --detail   # name every implementation
 ```
 
 It reads the files with `ast`, classifies every line as data access or not, and
-counts how many times each shared primitive was solved independently. As
-committed:
+counts how many times each shared primitive was solved independently. The
+fenced `# --- plumbing ---` block every agent carries — shared/ onto the path,
+the key out of `.env.local`, argparse — is identical in all six and counted in
+neither column. As committed:
 
 ```
-  380 of 972 lines across the six agents and their one helper module (39%)
+  375 of 973 lines across the six agents and their one helper module (39%)
   are data access.
+  174 further lines are the identical per-file plumbing block, counted nowhere.
 
   open the database        5 files   6 implementations
   resolve a period         6 files  10 implementations
@@ -120,7 +124,7 @@ committed:
   format numbers           3 files   7 implementations
 ```
 
-Nearly forty per cent of this folder is plumbing, written six times.
+Forty per cent of this folder is plumbing, written six times.
 
 ---
 
@@ -159,21 +163,16 @@ Two constraints to design against:
 Aim for **five or six tools**. If you land at a dozen, you have written one tool
 per question and missed the point.
 
-Then build it: one FastMCP server exposing that set, and the six agents
-rewritten against it. Each agent must still answer its own questions and still
-open a conversation when run with no arguments — you are not merging the agents,
-you are taking away what they should never have owned.
-
-Then run `python count_duplication.py` again. The number is the exercise.
+When you have your answer, open `10-mcp-architecture-solved/`.
 
 ---
 
 ## What this folder does NOT teach
 
-There are no bugs planted here, and no two agents disagree. The harder version
-of this lesson — six teams computing genuinely *different* numbers from the same
-tables, each able to defend their answer — is a different exercise, and a more
-argumentative one.
+There are no bugs planted here, and no two agents disagree. If you want the
+exercise where six teams computed genuinely different numbers from the same
+tables and all of them defended their answer, that is `09-mcp-architecture` —
+a harder and more argumentative version of the same lesson.
 
 This one is about redundancy alone: what it costs to solve one problem six
 times, even when you solve it correctly six times.

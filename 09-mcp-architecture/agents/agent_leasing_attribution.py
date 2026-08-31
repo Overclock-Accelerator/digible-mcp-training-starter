@@ -15,11 +15,46 @@ from __future__ import annotations
 
 import re
 import sqlite3
-from pathlib import Path
 
 from langchain_core.tools import tool
 
-from _prelude import COMMON_RULES, arg_parser, create_agent, repl, require, run
+# ─── plumbing ────────────────────────────────────────────────────────────────
+# Identical in all six agents. Put the repo's shared/ on the path, load the key
+# from .env.local, and import create_agent with a readable error if the wrong
+# interpreter is active. None of it is about this agent — skim past it.
+import argparse
+import sys
+from pathlib import Path
+
+
+def _shared_dir() -> Path:
+    """Walk up until shared/envloader.py turns up — never count directory levels."""
+    for d in Path(__file__).resolve().parents:
+        if (d / "shared" / "envloader.py").is_file():
+            return d / "shared"
+    raise SystemExit("could not find shared/envloader.py — run this from "
+                     "inside the mcp-training repo.")
+
+
+sys.path.insert(0, str(_shared_dir()))
+import repl  # noqa: E402
+from envloader import load_env, require  # noqa: E402
+
+load_env()
+
+try:
+    from langchain.agents import create_agent  # noqa: E402
+except ModuleNotFoundError as exc:                     # wrong interpreter
+    _root = Path(__file__).resolve().parent.parent.parent
+    raise SystemExit(
+        f"error: {exc.name} is not installed in the Python you just used.\n"
+        f"  This usually means a different virtualenv is active.\n"
+        f"  Run it with the repo's own interpreter:\n"
+        f"    {_root}/.venv/bin/python {Path(sys.argv[0]).name}\n"
+        f"  (or from the repo root: ./setup.sh && source .venv/bin/activate)"
+    ) from None
+# ─── end plumbing ────────────────────────────────────────────────────────────
+
 
 DBFILE = Path(__file__).resolve().parent.parent / "digible.db"
 
@@ -226,13 +261,25 @@ channels are producing signed leases, not clicks.
 Renewals never count — no marketing dollar acquired one. Credit goes to the
 channel recorded on the lease's originating lead. Cost is always ALL-IN: media
 plus Digible's management and service fees.
-""" + COMMON_RULES
+
+Always use your tools; never estimate a number yourself.
+The data covers 14 properties, January through June 2026. If someone asks for a
+month outside that, say so rather than guessing.
+Be concise and lead with the number."""
 
 TOOLS = [leases_by_channel, cost_per_lease, periods_available]
 
 
 async def main() -> int:
-    args = arg_parser("Leases by channel, and what each one cost.").parse_args()
+    # ─── plumbing ───────────────────────────────────────────────────────────
+    # Free text, and nothing else. No --property, no --month, no defaults:
+    # wiring an example value into argparse would mean the *caller* did the
+    # interpreting. No arguments opens a chat; a question answers once.
+    ap = argparse.ArgumentParser(description="Leases by channel, and what each one cost.")
+    ap.add_argument("question", nargs="*",
+                    help="ask in plain English; omit entirely to open a chat")
+    args = ap.parse_args()
+    # ─── end plumbing ───────────────────────────────────────────────────────
     require("ANTHROPIC_API_KEY")
 
     # --- the agent, built here so you can actually see it ------------------
@@ -256,4 +303,4 @@ async def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(run(main()))
+    raise SystemExit(repl.run(main()))

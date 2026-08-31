@@ -13,8 +13,8 @@ This script counts how many times each of those was solved independently, and
 how many lines it took. It reads the files with `ast` and classifies each
 function by what it actually touches, so the number moves if you edit the code.
 
-The number it prints is the whole exercise. Run it again after you have
-rewritten the six agents against one MCP server, and watch it collapse.
+The number it prints is the whole exercise. `10-mcp-architecture-solved`
+prints the same number after the six agents were rewritten against one server.
 """
 
 from __future__ import annotations
@@ -66,6 +66,28 @@ LINE_RULES = re.compile(
     re.IGNORECASE)
 
 
+def plumbing_lines(lines: list[str]) -> set[int]:
+    """1-based line numbers inside a `# ─── plumbing ───` … `end plumbing` block.
+
+    Every agent carries the same bootstrap inline — shared/ onto sys.path, the
+    key out of .env.local, argparse — so each file reads top to bottom without
+    a helper module. It is neither data access nor tools, it is byte-identical
+    in all six, and counting it would move the number without anything about
+    the duplication having changed. So it is fenced off in the source and
+    skipped here.
+    """
+    inside: set[int] = set()
+    open_at: int | None = None
+    for i, line in enumerate(lines, start=1):
+        stripped = line.strip()
+        if stripped.startswith("# ─── plumbing"):
+            open_at = i
+        elif stripped.startswith("# ─── end plumbing") and open_at is not None:
+            inside.update(range(open_at, i + 1))
+            open_at = None
+    return inside
+
+
 def sql_string_lines(text: str) -> set[int]:
     """1-based line numbers inside a triple-quoted string that contains SELECT."""
     inside: set[int] = set()
@@ -97,8 +119,10 @@ def scan(path: Path) -> dict:
                 doc_lines.update(range(first.lineno, first.end_lineno + 1))
 
     sql_lines = sql_string_lines(text)
+    plumbing = plumbing_lines(lines)
     code = [i for i, l in enumerate(lines, start=1)
-            if l.strip() and not l.strip().startswith("#") and i not in doc_lines]
+            if l.strip() and not l.strip().startswith("#")
+            and i not in doc_lines and i not in plumbing]
     data = [i for i in code
             if i in sql_lines or LINE_RULES.search(lines[i - 1])]
 
@@ -106,6 +130,8 @@ def scan(path: Path) -> dict:
     for node in ast.walk(tree):
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             src = source_of(node, text)
+            if node.lineno in plumbing:
+                continue                      # bootstrap, not this file's work
             hits = [name for name, pattern in PRIMITIVES
                     if re.search(pattern, src, re.IGNORECASE)]
             functions.append({
@@ -116,6 +142,9 @@ def scan(path: Path) -> dict:
             })
 
     return {"path": path, "total": len(code), "data_lines": len(data),
+            "plumbing_lines": len([i for i in plumbing
+                                   if lines[i - 1].strip()
+                                   and not lines[i - 1].strip().startswith("#")]),
             "functions": functions,
             "tool_lines": sum(f["lines"] for f in functions if f["tool"])}
 
@@ -134,13 +163,15 @@ def main() -> int:
                     help="list every function implementing every primitive")
     args = ap.parse_args()
 
-    files = sorted(p for p in AGENTS.glob("*.py") if p.name != "_prelude.py")
+    files = sorted(AGENTS.glob("*.py"))
     if not files:
         raise SystemExit(f"no agent files found in {AGENTS}")
     reports = [scan(p) for p in files]
 
     print("\nDATA ACCESS PER FILE")
     print("  Blank lines, comments and docstrings excluded throughout.")
+    print("  So is the fenced `# --- plumbing ---` bootstrap each agent carries:")
+    print("  identical in all six, neither data access nor tools.")
     print("  " + "-" * 72)
     print(f"  {'file':<34}{'lines':>8}{'data access':>14}{'tools':>9}{'share':>8}")
     for r in reports:
@@ -177,6 +208,9 @@ def main() -> int:
                 if len({r["path"] for r in reports for f in r["functions"]
                         if n in f["primitives"]}) > 1]
     print(f"\n  {len(repeated)} primitives are implemented in more than one file.")
+    plumbing = sum(r["plumbing_lines"] for r in reports)
+    print(f"  {plumbing:,} further lines are the identical per-file plumbing "
+          f"block, counted nowhere.")
     print(f"  {totals[1]:,} of {totals[0]:,} lines across the six agents "
           f"and their one helper module ({totals[1] / totals[0] * 100:.0f}%) "
           f"are data access.")

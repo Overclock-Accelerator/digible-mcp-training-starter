@@ -31,11 +31,12 @@ CSS = Path(__file__).resolve().parent / "page_style.css"
 # which files convert
 # --------------------------------------------------------------------------
 
-# Excluded on purpose: 06-mcp-breakdown/WORKSHEET.md (attendees fill it in by
-# hand, so markdown is the right format), and anything vendored under .venv/,
-# .git/ or a cloned servers/ tree.
-SKIP_NAMES = {"WORKSHEET.md"}
-SKIP_DIRS = {".venv", ".git", "node_modules", "servers", "__pycache__"}
+# Excluded on purpose: CONTRACT.md (a spec for authors, not for display),
+# .research/ (working notes), 06-mcp-breakdown/WORKSHEET.md (attendees fill it
+# in by hand, so markdown is the right format), and anything vendored under
+# .venv/, .git/ or a cloned servers/ tree.
+SKIP_NAMES = {"CONTRACT.md", "WORKSHEET.md"}
+SKIP_DIRS = {".venv", ".git", ".research", "node_modules", "servers", "__pycache__"}
 
 
 def targets() -> list[Path]:

@@ -1,4 +1,4 @@
-# Sample runs — 09-alt
+# Sample runs — 09
 
 Every output below was recorded from this folder as committed. If yours differs,
 your environment is wrong, not the demo.
@@ -11,24 +11,26 @@ way. That is the point of the folder.
 ## 0. The measurement — no API key needed
 
 ```bash
-cd 09-alt-mcp-query-sprawl
+cd 09-mcp-architecture
 python count_duplication.py
 ```
 
 ```
 DATA ACCESS PER FILE
   Blank lines, comments and docstrings excluded throughout.
+  So is the fenced `# --- plumbing ---` bootstrap each agent carries:
+  identical in all six, neither data access nor tools.
   ------------------------------------------------------------------------
   file                                 lines   data access    tools   share
   channel efficiency (helper)             88            49        0     56%
-  call recovery                          173            70       94     40%
-  channel efficiency                      87            24       62     28%
-  leasing attribution                    175            71       84     41%
-  property funnel                        141            56       70     40%
-  spend pacing                           153            67      110     44%
-  tour trends                            155            43       85     28%
+  call recovery                          173            69       94     40%
+  channel efficiency                      88            24       62     27%
+  leasing attribution                    175            70       84     40%
+  property funnel                        141            55       70     39%
+  spend pacing                           153            66      110     43%
+  tour trends                            155            42       85     27%
   ------------------------------------------------------------------------
-  TOTAL                                  972           380      505     39%
+  TOTAL                                  973           375      505     39%
 
 SHARED PRIMITIVES, SOLVED SEPARATELY
   Independent implementations of the same small problem.
@@ -39,7 +41,20 @@ SHARED PRIMITIVES, SOLVED SEPARATELY
   look up a property              7      9   ...
   fetch spend                     4      7   ...
   fetch leads                     4      5   ...
+  fetch calls                     1      3   ...
+  fetch tours                     2      5   ...
+  fetch leases                    2      3   ...
+  fetch applications              1      1   ...
   format numbers                  3      7   ...
+  ------------------------------------------------------------------------
+
+  8 primitives are implemented in more than one file.
+  174 further lines are the identical per-file plumbing block, counted nowhere.
+  375 of 973 lines across the six agents and their one helper module (39%) are data access.
+  Every one of those lines is a place a definition can drift.
+
+  Now go read the six files and answer the question in README.md:
+  what is the SMALLEST set of tools that serves all six agents?
 ```
 
 `--detail` names every function.
@@ -98,10 +113,9 @@ Five properties had meaningful (≥10%) tour drops from May to June 2026:
 5. Peachtree Row     — 92 → 80  (-13.0%)
 ```
 
-**Write these five properties and five percentages down.** After you have
-rewritten the agents against one server, ask the same question again and check
-that every one of them still matches. That is the test of the refactor: it moved
-the code, not the answers.
+**Ask the same question in `10` and you get the same five properties and the
+same five percentages.** That is the thing to check: the refactor moved the code,
+not the answers.
 
 ---
 
@@ -175,4 +189,5 @@ a tool is worth pointing at.
 
 Open the six agent files side by side and find every function that turns a month
 into a pair of dates. There are ten of them, in six files, and they are all
-correct. Then design the tool set that replaces all ten with one, and build it.
+correct. Then design the tool set that replaces all ten with one, and open
+`10-mcp-architecture-solved/`.
