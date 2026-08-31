@@ -5,6 +5,8 @@ __pycache__/
 .env.local
 .venv/
 *.db
+*.db-shm
+*.db-wal
 *.pyc
 *.sqlite3
 exports/*.csv
