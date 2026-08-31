@@ -38,7 +38,9 @@ same thing but just for Harborview 900
 ```
 
 Tour trends returns Camelback Vista 66→46, Legacy Trails 131→107, Sundance
-Ridge 45→38, The Alder at Lowry 45→39, Peachtree Row 92→80.## Results
+Ridge 45→38, The Alder at Lowry 45→39, Peachtree Row 92→80.
+
+## Results
 
 `count_duplication.py`, as committed:
 
