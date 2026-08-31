@@ -55,7 +55,7 @@ async def main() -> int:
                         help="name this agent reports to the server's audit log")
     args = parser.parse_args()
 
-    if len(args.guess) != len(args.feedback):
+    if len(args.guess or []) != len(args.feedback or []):
         parser.error("--guess and --feedback must be given the same number of times")
 
     client = MultiServerMCPClient({
@@ -87,7 +87,7 @@ async def main() -> int:
             ),
         )
 
-        turns = ", ".join(f"{g} -> {f}" for g, f in zip(args.guess, args.feedback))
+        turns = ", ".join(f"{g} -> {f}" for g, f in zip(args.guess or [], args.feedback or []))
         # ainvoke, not invoke: MCP tools arrive as coroutine-only StructuredTools.
         if getattr(args, "question", None) or repl.one_shot(args, 'guess', 'feedback'):
             question = getattr(args, "question", None) or f"My Wordle guesses so far: {turns}. What words are still possible?"
