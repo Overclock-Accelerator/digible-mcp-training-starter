@@ -1,40 +1,24 @@
 # MCP Training — starter repo
 
-Everything you need for the session: the demos we run together, and the starters
-for the parts you build yourself. Clone it, run `./setup.sh`, and you are ready.
+This repo holds the demos we run together and the starters for the activities
+you build yourself. Each numbered folder is one segment of the session and has
+its own README explaining what it is and how to run it.
 
-Last session's lesson was that tools make agents deterministic. This session asks
-what happens when the tools stop living inside one agent.
+An MCP server is a small program that exposes tools over a protocol, so any
+client can call them — your agent, someone else's agent, or Claude Desktop.
+Folders `00` through `02` show a tool moving out of an agent and into a server.
+`03` and up are where you build one yourself.
 
-## The argument, in three moves
-
-**Centralize.** A tool defined inside an agent belongs to that agent. Every new
-consumer reimplements it, and the copies drift. Moving the tool behind an MCP
-server means one implementation, many clients.
-
-**Monitor.** Once every call goes through one place, you can count them, attribute
-them, and export them. You cannot instrument what is scattered across six
-codebases.
-
-**Democratize.** An MCP server is not a Python import, so reaching it does not
-require being able to write Python. The same server a developer wires into an
-agent, a non-engineer reaches from Claude Desktop.
-
-Each folder makes exactly one of these concrete, and the argument is cumulative —
-`01` deliberately does not justify itself until `02`.
+Work through the folders in order.
 
 ## Prerequisites
 
-- **Python 3.10 or newer.** `python3 --version` to check.
-- **An Anthropic API key**, for the folders that actually run a model. Get one at
-  [console.anthropic.com](https://console.anthropic.com/). Several folders need
-  no key at all — they are marked below.
-- **`git`, `curl`, `jq`** — only `06` needs `curl` and `jq`.
-- A terminal you are comfortable opening three windows of. Most of these demos
-  are a server in one window and an agent in another, and seeing both at once is
-  the point.
-
-No accounts, no signups, no Node, no Docker.
+- **Python 3.10 or newer** — check with `python3 --version`
+- **An Anthropic API key** from [console.anthropic.com](https://console.anthropic.com/)
+  — needed for folders marked "key" below
+- **`git`**, plus **`curl`** and **`jq`** for folder `06`
+- A terminal you can open two or three windows of — most demos run a server in
+  one window and an agent in another
 
 ## Setup
 
@@ -65,65 +49,50 @@ env -u ANTHROPIC_API_KEY ./.venv/bin/python 01-mcp-bee/agent_with_mcp.py "..."
 
 ## The folders
 
-**Demo** means we run it together and you follow along. **Activity** means you
-build it, with a specification to check yourself against.
+**Demo** — we run it together and you follow along.
+**Activity** — you build it, with a specification to check yourself against.
 
 | | | Key? | What it is |
 |---|---|---|---|
-| `00-agent-bee` | demo | yes | A LangChain agent solving NYT Spelling Bee with a local tool. The "before" — this is good code, and nothing is wrong with it yet. |
-| `01-mcp-bee` | demo | yes | The same solver moved behind a FastMCP server. Three files, diffable side by side. The solver body is byte-identical; only the seam moves. |
-| `02-mcp-puzzlemaster` | demo | yes | Three agents — bee, crossword, wordle — sharing one server, one dictionary, one audit log. Usage graphs by agent and by tool, plus CSV export. |
-| `03-mcp-bookstore` | **activity** | yes | Refactor a real LangChain agent onto MCP yourself, in four checkpoints, then add writes an agent is structurally unable to perform. The hands-on hour. |
-| `04-mcp-deployment` | demo | no | Taking a local MCP server to a hosted one, and the six things that broke. A single page — open it in a browser. |
-| `05-mcps-for-all` | demo | no | Reaching an MCP server without writing any Python, from Claude Desktop. A single page — open it in a browser. |
-| `06-mcp-breakdown` | **activity** | no | Take three real production MCP servers apart — Zapier, Snowflake, Datadog — and find out how little of one you are allowed to read. You keep the worksheet. |
-| `07-mcp-for-all-the-tokens` | demo | yes | What tool definitions cost in context, measured. Committed results, so the numbers are there whether or not you re-run the benchmark. |
-| `08-mcp-vs-cli` | demo | yes | The same work done through MCP tools and through a CLI the agent shells out to, measured against each other. |
-| `09-alt-mcp-query-sprawl` | **activity** | yes | Six agents that each independently reinvented the same six database primitives. Count the duplication, then collapse it behind one server. |
-
-Run them in order. `04` and `05` are HTML pages — open them straight from disk;
-they make no network requests.
+| `00-agent-bee` | demo | yes | A LangChain agent solving NYT Spelling Bee with a local tool. |
+| `01-mcp-bee` | demo | yes | The same solver moved behind a FastMCP server, so you can diff the two agents. |
+| `02-mcp-puzzlemaster` | demo | yes | Three agents sharing one server, one dictionary and one audit log. Usage graphs and CSV export. |
+| `03-mcp-bookstore` | **activity** | yes | Refactor a real LangChain agent onto MCP in four checkpoints, then add authenticated writes. |
+| `04-mcp-deployment` | demo | no | Deploying a local MCP server to a hosted one. An HTML page. |
+| `05-mcps-for-all` | demo | no | Reaching an MCP server from Claude Desktop, without writing Python. An HTML page. |
+| `06-mcp-breakdown` | **activity** | no | Take three production MCP servers apart — Zapier, Snowflake, Datadog — using a worksheet you keep. |
+| `07-mcp-for-all-the-tokens` | demo | yes | What tool definitions cost in context, measured across five servers. |
+| `08-mcp-vs-cli` | demo | yes | The same work through MCP tools and through a CLI, measured against each other. |
+| `09-mcp-architecture` | **activity** | yes | Six agents that each reinvented the same database primitives. Count the duplication, then collapse it behind one server. |
 
 ### Deployed servers
 
-Two servers from this course are live, public, and reachable with **no sign-in**.
-Nothing on your machine is needed to talk to them.
+Two servers from this course are live and public, with no sign-in. You need
+nothing on your machine to call them.
 
 | | Endpoint |
 |---|---|
 | PuzzleMaster | `https://mcp-puzzlemaster.fastmcp.app/mcp` |
-| Digible Metrics | `https://mcp-digible-metrics.fastmcp.app/mcp` |
+| Digible Data | `https://mcp-digible-queries.fastmcp.app/mcp` |
 
-`05-mcps-for-all` walks through pointing Claude Desktop at the first one.
+`05-mcps-for-all` walks through pointing Claude Desktop at one of them.
 
-## Two things that will bite you
+## Troubleshooting
 
-**Pin `mcp`.** PyPI's latest is 2.1.1, but `langchain-mcp-adapters` requires
-`mcp<2.0.0`. `requirements.txt` pins 1.29.1. An unpinned `pip install mcp`
+**`ModuleNotFoundError`** — a different virtualenv is active. Run agents with
+this repo's interpreter: `./.venv/bin/python <folder>/<agent>.py`
+
+**A tool call fails immediately** — the MCP server is not running. Most folders
+need it started in its own terminal first; the folder README says which command.
+
+**Do not upgrade `mcp`.** `requirements.txt` pins 1.29.1 because
+`langchain-mcp-adapters` requires `mcp<2.0.0`. An unpinned `pip install mcp`
 breaks every agent here.
 
-**Everything is async.** MCP tools arrive as coroutines with no synchronous
-counterpart. `agent.invoke()` will construct without complaint and then fail the
-instant the model actually calls a tool. Use `ainvoke`.
+## The HTML pages
 
-## A note on the word list
-
-All solvers read `shared/data/enable1.txt` — ENABLE1, 172,823 words, public
-domain, committed here so the session never depends on the network. It is not
-NYT's list, and it cannot be. Against the real 2026-08-28 puzzle it finds 34
-words for 171 points where NYT accepted 21 for 119.
-
-That gap is worth sitting with. The solver is not wrong; it is answering a
-different question than the editor was. Deterministic tools give you exactly what
-you asked for, which is not always the same as what you wanted.
-
-## The four HTML pages
-
-Most of this repo is markdown, which GitHub renders for you — just click a
-`README.md` and read it.
-
-Four pages are HTML instead, because they are written documents rather than
-code notes and they are meant to be projected:
+Most of this repo is markdown, which GitHub renders in the browser. Four pages
+are HTML instead, meant to be projected:
 
 | Page | |
 |---|---|
@@ -132,9 +101,7 @@ code notes and they are meant to be projected:
 | `07-mcp-for-all-the-tokens/index.html` | What ballooning tool counts cost |
 | `08-mcp-vs-cli/index.html` | MCP versus the command line, measured |
 
-GitHub will not render those in the browser — download the file and open it, or
-use a raw-HTML viewer. Each one is self-contained: no network, no assets, dark
-mode aware.
+GitHub will not render those — download and open them. Each is self-contained.
 
 ## License
 
