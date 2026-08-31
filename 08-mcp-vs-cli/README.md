@@ -5,19 +5,17 @@ out to — measured against each other.
 
 ## Run
 
-From the repo root, virtualenv active. Generate the padding commands once:
+All commands are from the repo root, with the virtualenv active.
+
+Generate the padding commands once, then confirm both sides share identical
+solver code:
 
 ```bash
 python 08-mcp-vs-cli/cli/make_pad.py
-```
-
-Confirm both sides share identical solver code:
-
-```bash
 python 08-mcp-vs-cli/verify_solvers.py
 ```
 
-Use the CLI directly:
+Use the CLI with no model involved:
 
 ```bash
 python 08-mcp-vs-cli/cli/puzzle bee --letters VALIDTY --center V
@@ -42,6 +40,13 @@ python 08-mcp-vs-cli/agent_cli.py --task aggregate
 python 08-mcp-vs-cli/agent_cli.py --task aggregate --brief
 ```
 
+Redraw the charts, or re-run:
+
+```bash
+python 08-mcp-vs-cli/benchmark.py --render-only
+python 08-mcp-vs-cli/benchmark.py --runs 5        # ~12 min, ~95 API calls
+```
+
 ## Results
 
 Committed in `results/`. 95 runs, all correct, `claude-sonnet-5`.
@@ -58,16 +63,9 @@ Aggregate task — "how many answers are five letters or longer?", answer 24:
 
 | Arm | Input | Output | Result chars into context |
 |---|---:|---:|---:|
-| MCP | 3,345 | 447 | 1,665 |
-| CLI | 4,240 | 180 | 2,005 |
+| MCP | 3,345 | 428 | 1,665 |
+| CLI | 3,926 | 196 | 1,609 |
 | CLI, schema known | 1,449 | 96 | 2 |
-
-Redraw the charts, or re-run:
-
-```bash
-python 08-mcp-vs-cli/benchmark.py --render-only
-python 08-mcp-vs-cli/benchmark.py --runs 5        # ~12 min, ~95 API calls
-```
 
 ## Troubleshooting
 
