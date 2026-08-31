@@ -1,9 +1,11 @@
 # Sample runs
 
-The runs below are from a completed implementation. Section 1 needs no API key;
-the rest need `ANTHROPIC_API_KEY` in `.env.local` at the repo root and the
-server running. All commands are from `03-mcp-bookstore/starter` with the
-virtualenv active.
+The runs below are from a completed implementation — `bookstore_server.py`,
+`agent_reader.py` and `agent_admin.py` are files you write, so none of these
+commands will work until you have written them. See `../README.md` for what
+each must do. Section 1 needs no API key; the rest need `ANTHROPIC_API_KEY` in
+`.env.local` at the repo root and the server running. All commands are from
+`03-mcp-bookstore/starter` with the virtualenv active.
 
 ```bash
 cd 03-mcp-bookstore/starter
@@ -16,7 +18,18 @@ python bookstore_server.py                 # http://127.0.0.1:8003/mcp, leave it
 python test_exercise.py
 ```
 
-As shipped, all four fail:
+Before you have written the server at all, the tests cannot import it and say
+so:
+
+```
+✗ could not import bookstore_server.py: No module named 'bookstore_server'
+
+Fix the import before anything else — checkpoint A starts with a server that at
+least loads.
+```
+
+Create the file with a bare `mcp = FastMCP("bookstore")` and all four
+checkpoints fail with the contract each one wants:
 
 ```
 A — one read tool behind an MCP server

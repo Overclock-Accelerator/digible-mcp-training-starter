@@ -5,6 +5,10 @@ admin agent can use.
 
 ## Run
 
+What ships is the *before* picture: `starter/rightbookai_agent.py`, a working
+LangChain agent whose tools run inside its own process. Run it first, so you
+know what you are refactoring.
+
 From the repo root, virtualenv active:
 
 ```bash
@@ -28,6 +32,84 @@ I have $65, build me a bundle of sci-fi and mystery
 recommend 3 post-apocalyptic books under $20
 add 'The Fifth Season' by N.K. Jemisin, Fantasy, $18.99
 ```
+
+## What ships, and what you write
+
+Present in `starter/`:
+
+| | |
+|---|---|
+| `rightbookai_agent.py` | the working base agent. Tools imported, in-process. Leave it alone — it is the control you are refactoring away from. |
+| `tools/*.py` | the tools as they exist today, natural-language parameters and all. What you are getting rid of. |
+| `inventory.py` | search, scoring and the knapsack solver, already written. What you are keeping. |
+| `test_exercise.py` | the specification. |
+| `storedata.json` | the catalog. |
+
+You write three files, into `starter/`, alongside those. None of them exists
+yet; nothing in the repo creates them for you.
+
+**`bookstore_server.py`** — the MCP server.
+
+- Defines a module-level `mcp = FastMCP("bookstore")`. `test_exercise.py` does
+  `import bookstore_server` and drives `bookstore_server.mcp` through FastMCP's
+  in-memory client, so that filename and that variable name are part of the
+  contract. Until the file exists the tests cannot import it and report so.
+- Exposes exactly seven tools, named and shaped as `test_exercise.py`'s `SPEC`
+  states: `search_books`, `get_book`, `recommend_books`, `build_bundle`
+  (checkpoints A and B), then `add_book`, `update_book`, `delete_book`
+  (checkpoint C). Every one takes `agent_name: str` as a required parameter.
+- Every parameter is typed and, apart from `agent_name`, individually optional.
+  The docstring is the only thing the model reads before deciding to call a
+  tool, so state what comes back and enumerate the valid genres —
+  `inventory.GENRES` holds them, and the model should never have to guess how
+  this store spells "Science Fiction".
+- Serves HTTP on `http://127.0.0.1:8003/mcp` by default. Take `--host`,
+  `--port`, and a `--stdio` flag that serves over stdio instead — the transport
+  a client would spawn rather than connect to. The server is its own process;
+  you start it, and no agent starts it for you.
+- **Never prints to stdout.** Under stdio transport stdout *is* the JSON-RPC
+  channel, and one stray `print()` kills the client. Every diagnostic goes to
+  `sys.stderr`. Log each invocation there — agent name, tool, arguments,
+  outcome, duration — as `samples/README.md` shows.
+- Computation is delegated to `inventory.py`. The server is a seam, not a
+  reimplementation.
+
+Copy the shape from `01-mcp-bee/mcp_server.py`: the `FastMCP` instance at
+module scope, `logging.basicConfig(stream=sys.stderr)`, solver logic untouched
+underneath, `mcp.run(...)` under `if __name__ == "__main__"`.
+
+**`agent_reader.py`** — the client half of checkpoint A, and the shape every
+agent in this repo follows. `01-mcp-bee/agent_with_mcp.py` is the file to copy
+from. `rightbookai_agent.py` is the *old* shape — synchronous, tools imported,
+key read directly — and deliberately not the model to follow here.
+
+- Connects to the server you started in the other terminal. It does not start
+  one. Two processes, over HTTP, via
+  `MultiServerMCPClient({"bookstore": {"transport": "streamable_http", "url": ...}})`.
+  Fail with a readable message when the server is not up.
+- Loads **only the read tools**. Not "instructed not to write" — the write
+  tools must never be in the list handed to `create_agent`, so they are never
+  in the model's schema at all. That absence is the demo; the refusal
+  transcript in `samples/README.md` is what it should produce.
+- `create_agent(model="anthropic:claude-sonnet-5", tools=tools, system_prompt=...)`,
+  the prompt instructing the model to pass `agent_name="agent-reader"` on every
+  call.
+- **Async throughout** — `async def main()` plus `asyncio.run(main())`. MCP
+  tools arrive as coroutine-only `StructuredTool`s; `agent.invoke()` constructs
+  fine and then fails at the first tool call.
+- The API key comes from `.env.local` through `shared/envloader.py`, never a
+  shell export: put `shared/` on `sys.path`, then `load_env()` and
+  `require("ANTHROPIC_API_KEY")`. Verify with
+  `env -u ANTHROPIC_API_KEY python agent_reader.py "Do you have Dune?"`.
+- Every turn prints the tools it invoked before the answer, through
+  `shared/toolvis.py`'s `show_tools` — `shared/repl.py` already does this.
+- Invoked with no arguments it opens a conversation; with arguments it answers
+  once and exits. Use `repl.one_shot(args, ...)`, `repl.once(agent, question)`
+  and `repl.chat(agent, title=..., hints=[...])`. History carrying across turns
+  is what lets one session solve several requests.
+
+**`agent_admin.py`** — checkpoint D. `agent_reader.py` with the write tools
+loaded and the admin credential presented, and nothing else different.
 
 ## Your task
 

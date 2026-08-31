@@ -46,6 +46,21 @@ GREEN, RED, DIM, RESET = "\033[32m", "\033[31m", "\033[2m", "\033[0m"
 if not sys.stdout.isatty() or os.environ.get("NO_COLOR"):
     GREEN = RED = DIM = RESET = ""
 
+# A Windows console defaults to cp1252, which cannot encode U+2713/U+2717 --
+# every failure line would die with UnicodeEncodeError before showing you the
+# checkpoint it failed. Ask for UTF-8, and fall back to ASCII marks if the
+# stream will not take it. This is a test runner: it must survive the console
+# it is run in.
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except (AttributeError, OSError):
+    pass
+try:
+    "✓✗".encode(sys.stdout.encoding or "utf-8")
+    TICK, CROSS = "✓", "✗"
+except (UnicodeEncodeError, LookupError):
+    TICK, CROSS = "PASS", "FAIL"
+
 CHECKPOINTS = {
     "A": "one read tool behind an MCP server",
     "B": "the rest of the read tools, returning structured data",
@@ -334,7 +349,7 @@ async def run(selected: list[str], verbose: bool) -> int:
         from fastmcp import Client
         import bookstore_server
     except Exception as exc:
-        print(f"{RED}✗{RESET} could not import bookstore_server.py: {exc}")
+        print(f"{RED}{CROSS}{RESET} could not import bookstore_server.py: {exc}")
         if verbose:
             traceback.print_exc()
         print(f"\n{DIM}Fix the import before anything else — checkpoint A starts with a "
@@ -349,16 +364,16 @@ async def run(selected: list[str], verbose: bool) -> int:
                 await TESTS[name](client)
         except Failure as exc:
             failures += 1
-            print(f"  {RED}✗ {exc}{RESET}")
+            print(f"  {RED}{CROSS} {exc}{RESET}")
             print(f"\n{DIM}  Checkpoint {name} requires:{RESET}\n{DIM}{SPEC[name]}{RESET}")
         except Exception as exc:
             failures += 1
-            print(f"  {RED}✗ {type(exc).__name__}: {exc}{RESET}")
+            print(f"  {RED}{CROSS} {type(exc).__name__}: {exc}{RESET}")
             if verbose:
                 traceback.print_exc()
             print(f"\n{DIM}  Checkpoint {name} requires:{RESET}\n{DIM}{SPEC[name]}{RESET}")
         else:
-            print(f"  {GREEN}✓ passed{RESET}")
+            print(f"  {GREEN}{TICK} passed{RESET}")
 
     print()
     if failures:
