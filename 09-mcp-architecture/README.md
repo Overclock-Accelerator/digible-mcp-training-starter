@@ -90,23 +90,26 @@ preference.
 
 ## Bonus
 
-**Deploy your server to Horizon.** Push it to its own GitHub repo with
-`server.py` at the root, a `requirements.txt` pinning `fastmcp==3.4.7`, and a
-`.python-version` containing `3.12`. Commit `digible.db` and open it read-only
-from a path relative to the file, not the working directory — the runtime
-filesystem is ephemeral and nothing may write to it. Then connect the repo in
-Horizon, set the entrypoint to `server.py:mcp`, and deploy. `04-mcp-deployment`
-has the full sequence.
+### 1. Deploy the server to Horizon
 
-**Connect Claude Desktop to it.** Add the deployed URL as a connector, then ask
-it questions in plain English — no code, no terminal. `05-mcps-for-all` covers
-the setup.
+Push it to its own GitHub repo with `server.py` at the root, a
+`requirements.txt` pinning `fastmcp==3.4.7`, and a `.python-version` containing
+`3.12`. Commit `digible.db` and open it read-only from a path relative to the
+file, not the working directory — the runtime filesystem is ephemeral and
+nothing may write to it.
 
-This is the part worth doing carefully. A tool set that works for your six
-agents is not automatically usable by a person: names and descriptions are the
-only interface they get, and anything you made a required parameter is
-something they now have to know to supply. Ask someone who has not seen the
-code to try it.
+Connect the repo in Horizon, set the entrypoint to `server.py:mcp`, and deploy.
+`04-mcp-deployment` has the full sequence.
+
+### 2. Connect Claude Desktop to your new MCP
+
+Add the deployed URL as a connector, then ask it questions in plain English —
+no code, no terminal. `05-mcps-for-all` covers the setup.
+
+Then hand it to someone who has not seen your code and watch what happens. A
+tool set that works for your six agents is not automatically usable by a
+person: the names and descriptions are the only interface they get, and every
+required parameter is something they now have to know to supply.
 
 ## Troubleshooting
 
