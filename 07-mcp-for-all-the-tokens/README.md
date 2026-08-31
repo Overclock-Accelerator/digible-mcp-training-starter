@@ -58,13 +58,6 @@ Schema size per server:
 python 07-mcp-for-all-the-tokens/show_schema.py --servers 5 --weigh
 ```
 
-## Re-run the benchmark
-
-```bash
-python 07-mcp-for-all-the-tokens/benchmark.py --runs 3        # 285 API calls, ~45 min
-python 07-mcp-for-all-the-tokens/benchmark.py --render-only   # redraw from committed data
-```
-
 ## Troubleshooting
 
 **`ModuleNotFoundError`** — run `source .venv/bin/activate` from the repo root.

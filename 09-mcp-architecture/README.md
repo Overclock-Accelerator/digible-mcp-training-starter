@@ -4,22 +4,7 @@ Six agents answering six questions against one database, each with its own
 private data-access code. The activity is to design the MCP tool set that
 replaces all six.
 
-## Files
-
-| | |
-|---|---|
-| `agents/agent_spend_pacing.py` | Which properties are pacing over budget this month? |
-| `agents/agent_channel_efficiency.py` | What does a lead cost us on each channel? |
-| `agents/agent_tour_trends.py` | Which properties saw tour bookings drop? |
-| `agents/agent_property_funnel.py` | What does the funnel look like at one property? |
-| `agents/agent_leasing_attribution.py` | Which channels drive the most leases? |
-| `agents/agent_call_recovery.py` | Where are we losing phone calls? |
-| `agents/_spendlib.py` | A private helper module, used by one agent |
-| `count_duplication.py` | Counts the duplication; no API key needed |
-| `digible.db` | 14 properties, 5 management companies, 12 channels, Jan–Jun 2026 |
-| `samples/RUNS.md` | Captured runs |
-
-## Run it
+## Run
 
 All commands are from the repo root, with the virtualenv active. No server is
 involved — each agent reads `digible.db` directly.
@@ -59,7 +44,7 @@ python 09-mcp-architecture/count_duplication.py --detail
   format numbers           3 files   7 implementations
 ```
 
-## Sample prompts
+## Prompts
 
 | agent | type this | you get |
 |---|---|---|
@@ -69,7 +54,7 @@ python 09-mcp-architecture/count_duplication.py --detail
 | call recovery | `which properties are missing the most calls in June?` | Vireo Uptown, 454 of 762 (59.6%); Bishop Arts Flats worst rate at 83.8% |
 | channel efficiency | `cost per lead by channel in May`, then `same thing but just for Harborview 900` | the follow-up keeps the month and changes only the property |
 
-## The task
+## Your task
 
 Design the tool set.
 

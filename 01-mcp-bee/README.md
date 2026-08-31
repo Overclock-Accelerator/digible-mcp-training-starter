@@ -3,16 +3,7 @@
 The same Spelling Bee solver, once as a local tool and once behind an MCP
 server.
 
-## Files
-
-| | |
-|---|---|
-| `agent_with_tool.py` | Agent with the solver as a local `@tool` |
-| `mcp_server.py` | The solver as an MCP server |
-| `agent_with_mcp.py` | The same agent, calling the server instead |
-| `samples/` | Captured runs |
-
-## Run it
+## Run
 
 All commands are from the repo root, with the virtualenv active.
 
@@ -38,25 +29,6 @@ which one had more words?
 ```
 
 Both answer 34 words, 171 points, pangram VALIDITY.
-
-## Compare them
-
-```bash
-diff 01-mcp-bee/agent_with_tool.py 01-mcp-bee/agent_with_mcp.py
-```
-
-```bash
-diff <(sed -n '/^def load_words/,/^    }$/p' 01-mcp-bee/agent_with_tool.py) \
-     <(sed -n '/^def load_words/,/^    }$/p' 01-mcp-bee/mcp_server.py)
-```
-
-The second prints nothing.
-
-## Inspect the server on its own
-
-```bash
-fastmcp dev inspector 01-mcp-bee/mcp_server.py
-```
 
 ## Troubleshooting
 

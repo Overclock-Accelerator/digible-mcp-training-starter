@@ -2,14 +2,7 @@
 
 A LangChain agent with the Spelling Bee solver as a local `@tool`.
 
-## Files
-
-| | |
-|---|---|
-| `agent.py` | The agent and the solver, in one file |
-| `samples/` | Captured runs |
-
-## Run it
+## Run
 
 All commands are from the repo root, with the virtualenv active.
 
@@ -27,7 +20,7 @@ python 00-agent-bee/agent.py --question "For the Spelling Bee letters VALIDTY wi
 
 Both print a `[tool call]` / `[tool result]` pair before the answer.
 
-## Sample prompts
+## Prompts
 
 | what you run | what you get back |
 |---|---|

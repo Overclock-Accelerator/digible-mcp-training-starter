@@ -3,16 +3,7 @@
 Inspect three real MCP servers — Zapier, Snowflake and Datadog — using only what
 each vendor publishes, then fill in a worksheet on each.
 
-## Files
-
-| | |
-|---|---|
-| `inspect.sh` | `deps` / `probe` / `oauth` / `zapier` / `snowflake` / `datadog` / `tokens` / `all` |
-| `WORKSHEET.md` | The ten questions. Blank. This is the artifact you keep. |
-| `samples/` | Expected output for every command |
-| `servers/` | Created by the script. Gitignored. |
-
-## Run it
+## Run
 
 All commands are from the repo root. No API key, no accounts, no Node — you need
 `curl`, `jq`, `git` and `python3`.
@@ -54,7 +45,7 @@ Save a run to diff against later:
 ./06-mcp-breakdown/inspect.sh all > run-$(date +%F).txt 2>&1
 ```
 
-## The task
+## Your task
 
 75–90 minutes. Fill in `WORKSHEET.md` — ten questions, one copy per server.
 
