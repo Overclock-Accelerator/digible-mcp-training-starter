@@ -31,65 +31,63 @@ add 'The Fifth Season' by N.K. Jemisin, Fantasy, $18.99
 
 ## Your task
 
-You are refactoring LangBookStore so its three tools live on an MCP server
-instead of inside the agent process, then adding write tools that only an admin
-agent can reach.
+Refactor LangBookStore so that its tools run on an MCP server rather than inside
+the agent process, then add write tools accessible only to an administrative
+agent.
 
-Start by reading `starter/test_exercise.py`. It is the specification: run it and
-all four checkpoints fail, each naming the tool it expected and the shape it
-wanted back. It needs no API key and runs against a throwaway copy of the
-catalog, so you can run it as often as you like.
+`starter/test_exercise.py` is the specification. Running it reports four failing
+checkpoints, each naming the tool it expects and the return shape it requires.
+It needs no API key and operates on a temporary copy of the catalog.
 
-You are not expected to hand-write most of this. Prompt an agent with the
-specification and the constraints below, then read what comes back and decide
-whether it is right.
+You are not expected to write most of this by hand. Supply the specification and
+the constraints below to an agent, then review the result.
 
-**Constraints that apply to every tool you write:**
+**Constraints applying to every tool:**
 
 - Parameters are typed and individually optional — `genre="Mystery"`,
-  `max_price=20.0`, `count=3`. No tool takes a whole sentence. If a signature
-  has `query: str` or `user_request: str` in it, the refactor has not happened.
-- Tools return structured data. The model writes the prose.
-- Not-found and invalid input raise `ToolError`, they do not return an apology
-  string.
-- The docstring is what the model reads to decide whether to call the tool, so
-  say what comes back and enumerate valid values.
-- Nothing prints to stdout. Diagnostics go to stderr.
-- Call into `starter/inventory.py` for the actual work — the search, scoring and
-  knapsack are already written and worth keeping.
+  `max_price=20.0`, `count=3`. No parameter accepts a full sentence. A signature
+  containing `query: str` or `user_request: str` indicates the refactor is
+  incomplete.
+- Tools return structured data. The model produces the prose.
+- Missing records and invalid input raise `ToolError` rather than returning an
+  explanatory string.
+- The docstring determines whether and how the model calls the tool. State what
+  is returned and enumerate valid values.
+- No output goes to stdout. Diagnostics go to stderr.
+- Computation is delegated to `starter/inventory.py`, which already implements
+  search, scoring and the knapsack solver.
 
-**The four checkpoints.** Each is a working state; stop at any of them and you
-have something that runs.
+**Checkpoints.** Each represents a working state.
 
-**A** — Implement `search_books` on the server, and build `agent_reader.py` to
-call it over HTTP at `http://127.0.0.1:8003/mcp`. The agent connects to a server
-you started; it must not spawn one. Use `create_agent` with
-`anthropic:claude-sonnet-5`, load the key through `shared/envloader.py`, and use
-`shared/repl.py` so no arguments opens a conversation. Async throughout — MCP
-tools are coroutine-only, and `invoke()` will construct fine then fail the moment
-a tool is called.
+**A.** Implement `search_books` on the server and `agent_reader.py` as its
+client, connecting over HTTP to `http://127.0.0.1:8003/mcp`. The agent connects
+to a running server and does not start one. Use `create_agent` with
+`anthropic:claude-sonnet-5`, load credentials through `shared/envloader.py`, and
+use `shared/repl.py` so that invocation without arguments opens a conversation.
+The implementation must be asynchronous throughout: MCP tools are coroutines,
+and `invoke()` will construct successfully before failing at the first tool
+call.
 
-**B** — Add `get_book`, `recommend_books` and `build_bundle`. These replace
-`starter/tools/*.py`. Read those first, but do not port their `_extract_*`
-functions — each one recovers a parameter the model will pass you directly if
-the schema asks for it.
+**B.** Implement `get_book`, `recommend_books` and `build_bundle`, replacing
+`starter/tools/*.py`. Do not port the `_extract_*` functions; each recovers a
+parameter the model supplies directly when the schema requests it.
 
-**C** — Add `add_book`, `update_book` and `delete_book`. Writes must hit disk and
-be visible to the next read in the same process.
+**C.** Implement `add_book`, `update_book` and `delete_book`. Writes must persist
+to disk and be visible to subsequent reads within the same process.
 
-**D** — Gate the three write tools behind an admin credential that appears in no
-tool's input schema, so the model cannot see it, set it or invent it. Over HTTP
-it arrives as a request header. Then create `agent_admin.py`: `agent_reader.py`
-plus the write tools and that credential.
+**D.** Restrict the write tools behind an administrative credential that appears
+in no tool's input schema, so that the model can neither read nor supply it.
+Over HTTP the credential arrives as a request header. Then implement
+`agent_admin.py`: `agent_reader.py` with the write tools and that credential.
 
-**Check each one:**
+**Verification:**
 
 ```bash
 python test_exercise.py -c A     # or B, C, D
 python test_exercise.py          # all four
 ```
 
-Reset the catalog between runs with `cp ../storedata.json storedata.json`.
+Restore the catalog between runs with `cp ../storedata.json storedata.json`.
 
 ## Troubleshooting
 

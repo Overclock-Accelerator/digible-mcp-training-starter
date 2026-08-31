@@ -59,59 +59,61 @@ Ridge 45→38, The Alder at Lowry 45→39, Peachtree Row 92→80.
 
 ## Your task
 
-Six agents answer six different questions about the same database, and every one
-of them wrote its own way to get the data. Your job is to find what they share
-and put it behind a single MCP server.
+The `agents/` directory contains six agents. Each answers a different question
+about the same database, and each implements its own data access. Consolidate
+the shared capability into a single MCP server and rewrite the agents against
+it.
 
-Start with `python count_duplication.py`. It needs no API key and reports how
-many lines of each agent are data access, plus how many times each underlying
-primitive was independently implemented.
+Begin by running `python count_duplication.py`, which requires no API key. It
+reports the proportion of each agent that is data access, and the number of
+independent implementations of each underlying primitive.
 
-- **Read the six agents** and write down what each one asks the database for —
-  the question in English, not the SQL. They are in `agents/`, one file each,
-  and each uses a deliberately different style: inline SQL, a private helper
-  module, pull-everything-and-filter, its own connection handling, its own
-  period parsing, its own formatting.
-- **List the primitives underneath.** Opening the database, resolving a period,
-  looking up a property, fetching spend, fetching leads, fetching calls. Note
-  how many of the six solve each one separately.
-- **Design a tool set that serves all six.** Aim for five or six tools. This is
-  the real work: a tool per question is not a design, it is the same sprawl on
-  a different machine. Look for the shapes that compose — a spend query, a
-  funnel query, a calls query, and whatever lookups they need — with the variety
-  living in a `group_by` parameter rather than in more tools.
-- **Build one server** exposing them, running as its own process over HTTP.
-- **Rewrite the agents against it.** They should get much thinner; the data
-  access should disappear from them entirely.
-- **Re-run `count_duplication.py`** and compare.
+1. **Survey the agents.** For each of the six, record the question it answers,
+   expressed in English rather than SQL. Note the data-access style each one
+   uses: inline SQL, a private helper module, retrieve-then-filter in Python,
+   per-call connection handling, its own period parsing, its own formatting.
 
-Tool definitions cost roughly 170–190 input tokens each per request whether or
-not they are called, so every extra tool is a permanent tax on every turn. That
-is the constraint that makes "five or six" a real target rather than a
-preference.
+2. **Identify the shared primitives.** Opening the database, resolving a period,
+   looking up a property, fetching spend, fetching leads, fetching calls. Record
+   how many of the six implement each one separately.
+
+3. **Design the tool set.** Target five or six tools. A tool per question
+   reproduces the existing duplication in a new location. Identify the query
+   shapes that compose — spend, funnel, calls, and the lookups they require —
+   and express variation through a `group_by` parameter rather than through
+   additional tools.
+
+4. **Implement the server.** One process, HTTP transport, started independently
+   of any agent.
+
+5. **Rewrite the six agents against the server.** All data access should be
+   absent from the agent files when you are finished.
+
+Tool definitions consume approximately 170–190 input tokens each per request,
+whether or not the tool is called. The five-or-six target follows from that
+cost.
 
 ## Bonus
 
 ### 1. Deploy the server to Horizon
 
-Push it to its own GitHub repo with `server.py` at the root, a
-`requirements.txt` pinning `fastmcp==3.4.7`, and a `.python-version` containing
-`3.12`. Commit `digible.db` and open it read-only from a path relative to the
-file, not the working directory — the runtime filesystem is ephemeral and
-nothing may write to it.
+Create a separate GitHub repository containing `server.py` at the root, a
+`requirements.txt` pinning `fastmcp==3.4.7`, and a `.python-version` file
+containing `3.12`. Commit `digible.db` and open it read-only from a path
+resolved relative to the source file rather than the working directory; the
+runtime filesystem is ephemeral and no process may write to it.
 
-Connect the repo in Horizon, set the entrypoint to `server.py:mcp`, and deploy.
-`04-mcp-deployment` has the full sequence.
+Connect the repository in Horizon, set the entrypoint to `server.py:mcp`, and
+deploy. `04-mcp-deployment` documents the full sequence.
 
-### 2. Connect Claude Desktop to your new MCP
+### 2. Connect Claude Desktop to your server
 
-Add the deployed URL as a connector, then ask it questions in plain English —
-no code, no terminal. `05-mcps-for-all` covers the setup.
+Add the deployed URL as a connector and query it in plain English, without code
+or a terminal. `05-mcps-for-all` documents the setup.
 
-Then hand it to someone who has not seen your code and watch what happens. A
-tool set that works for your six agents is not automatically usable by a
-person: the names and descriptions are the only interface they get, and every
-required parameter is something they now have to know to supply.
+Then ask someone unfamiliar with your implementation to use it. Tool names and
+descriptions constitute the entire interface available to that user, and any
+required parameter is a value they must know to supply.
 
 ## Troubleshooting
 
