@@ -10,8 +10,6 @@ README explaining what it is and how to run it.
 - **An Anthropic API key** from [console.anthropic.com](https://console.anthropic.com/)
   — needed for folders marked "key" below
 - **`git`**, plus **`curl`** and **`jq`** for folder `06`
-- A terminal you can open two or three windows of — most demos run a server in
-  one window and an agent in another
 
 ## Setup
 
