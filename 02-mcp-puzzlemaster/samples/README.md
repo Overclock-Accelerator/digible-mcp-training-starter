@@ -1,66 +1,57 @@
 # Sample runs
 
-Every command below is copy-pasteable from `02-mcp-puzzlemaster/`. Expected output is stated so you know immediately whether your environment is broken.
+Commands are from the repo root, with the virtualenv active. Sections 1–3 need
+`ANTHROPIC_API_KEY`; sections 4–6 need no key and no network.
 
-Sections 1–3 need `ANTHROPIC_API_KEY`. Sections 4–6 need **no key and no network** — that is deliberate, so the monitoring demo still works if the key or the network dies mid-session.
-
----
-
-## 1. Spelling Bee — normal run
+## 1. Spelling Bee
 
 ```bash
-python agent_bee.py --letters VALIDTY --center V
+python 02-mcp-puzzlemaster/agent_bee.py --letters VALIDTY --center V
 ```
 
-Expected: the agent calls `solve_spelling_bee` once and reports **34 words, 171 points, pangram VALIDITY**. Prose varies; those three numbers must not.
+One `solve_spelling_bee` call, then **34 words, 171 points, pangram VALIDITY**.
+(NYT's curated answer for this 2026-08-28 puzzle was 21 words / 119 points.)
 
-> Worth saying out loud: NYT's curated answer for this real 2026-08-28 puzzle was **21 words / 119 points**. ENABLE1 over-generates against editorial curation. That gap is the lesson — a deterministic tool and a curated ground truth are not the same thing.
-
-## 2. Crossword — normal run
+## 2. Crossword
 
 ```bash
-python agent_crossword.py --pattern C_O__W_RD
+python 02-mcp-puzzlemaster/agent_crossword.py --pattern C_O__W_RD
 ```
 
-Expected: exactly one match, **CROSSWORD**.
+Exactly one match, **CROSSWORD**.
 
-## 3. Wordle — normal run and multi-turn
+## 3. Wordle
 
 ```bash
-python agent_wordle.py --guess CRANE --feedback gybbb
+python 02-mcp-puzzlemaster/agent_wordle.py --guess CRANE --feedback gybbb
 ```
 
-Expected: **34 candidates** remaining (CHOIR, CHORD, CURIO, …).
-
-Two turns — repeat the flags in matching order:
+**34 candidates** remaining (CHOIR, CHORD, CURIO, …).
 
 ```bash
-python agent_wordle.py --guess CRANE --feedback gybbb --guess CHOIR --feedback gggby
+python 02-mcp-puzzlemaster/agent_wordle.py --guess CRANE --feedback gybbb --guess CHOIR --feedback gggby
 ```
 
-Expected: exactly one candidate left, **CHORD**. The count must strictly shrink turn over turn; if it grows, duplicate-letter handling is broken.
+Exactly one candidate left, **CHORD**.
 
-## 4. Edge case — failures are logged, not swallowed
+## 4. A failing call
 
 ```bash
-python agent_bee.py --letters ABC --center A
+python 02-mcp-puzzlemaster/agent_bee.py --letters ABC --center A
 ```
 
-Expected: the tool raises `ToolError: need exactly 7 distinct letters, got 3`, the agent reports the problem in plain language rather than inventing words, and a row lands in `usage.db` with `ok=0`. Check it:
+`ToolError: need exactly 7 distinct letters, got 3`, and a row in `usage.db`
+with `ok=0`:
 
 ```bash
-sqlite3 usage.db "SELECT agent_name, tool, ok, outputs FROM invocations WHERE ok=0 LIMIT 1;"
+sqlite3 02-mcp-puzzlemaster/usage.db "SELECT agent_name, tool, ok, outputs FROM invocations WHERE ok=0 LIMIT 1;"
 ```
 
-Without an API key, `seed_usage.py` produces the same three failure rows.
-
-## 5. Multi-agent sequence — the monitoring demo (no API key)
+## 5. Seed a history — no API key
 
 ```bash
-python seed_usage.py --reset
+python 02-mcp-puzzlemaster/seed_usage.py --reset
 ```
-
-Runs 24 invocations across all three agents — deliberately lopsided, with three intentional failures — through the same server, same middleware, same table. Expected tail:
 
 ```
 seeded 24 invocations (21 ok, 3 failed)
@@ -72,11 +63,9 @@ agent-bee        #######################                     7  avg    10ms  (1 
 agent-crossword  #################                           5  avg     4ms  (1 failed)
 ```
 
-Now the two views, by agent and by tool:
-
 ```bash
-python monitor.py --graph agent
-python monitor.py --graph tool
+python 02-mcp-puzzlemaster/monitor.py --graph agent
+python 02-mcp-puzzlemaster/monitor.py --graph tool
 ```
 
 ```
@@ -97,31 +86,31 @@ solve_crossword_pattern  #################                           5  avg     
 usage_graph              #######                                     2  avg     0ms
 ```
 
-The totals climb between the two renders, and `seed` / `monitor` appear as agents. That is correct: `usage_graph` is itself a logged tool call. The audit trail records everything crossing the seam, including the tools that read it.
+The totals climb between the two renders because `usage_graph` is itself a
+logged tool call. Drop `--reset` to add to the existing table instead.
 
-Drop the `--reset` and run the seeder again to watch every bar grow — the table is SQLite on disk, so it survives restarts.
-
-## 6. Export the audit trail / eval dataset (no API key)
+## 6. Export the audit trail — no API key
 
 ```bash
-python monitor.py --export exports/results.csv
-head -c 400 exports/results.csv
+python 02-mcp-puzzlemaster/monitor.py --export exports/results.csv
+head -c 400 02-mcp-puzzlemaster/exports/results.csv
 ```
-
-Expected: prints the absolute path it wrote, and the CSV opens with
 
 ```
 id,ts,agent_name,tool,inputs,outputs,duration_ms,ok
 ```
 
-then one row per invocation — 27 after section 5. Verify it rather than trusting the return value:
+One row per invocation — 27 after section 5.
 
 ```bash
-python -c "import csv; r=list(csv.DictReader(open('exports/results.csv'))); \
+python -c "import csv; r=list(csv.DictReader(open('02-mcp-puzzlemaster/exports/results.csv'))); \
 print(len(r), 'rows;', sum(x['ok']=='0' for x in r), 'failures;', \
 sorted({x['agent_name'] for x in r}))"
 ```
 
-Expected: `27 rows; 3 failures; ['agent-bee', 'agent-crossword', 'agent-wordle', 'monitor', 'seed']`
+```
+27 rows; 3 failures; ['agent-bee', 'agent-crossword', 'agent-wordle', 'monitor', 'seed']
+```
 
-Both `inputs` and `outputs` are valid JSON (very large outputs are stored as a `{"truncated_chars": …, "preview": …}` object, still valid JSON). Every `ok=1` row is a regression test nobody wrote; every `ok=0` row is a bug report nobody filed.
+Both `inputs` and `outputs` are valid JSON; very large outputs are stored as a
+`{"truncated_chars": …, "preview": …}` object.

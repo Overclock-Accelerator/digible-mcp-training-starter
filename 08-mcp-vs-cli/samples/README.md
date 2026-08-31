@@ -1,4 +1,4 @@
-# Samples — 08
+# Sample runs
 
 Copy-pasteable. Run from `08-mcp-vs-cli/` with the shared virtualenv active.
 
@@ -19,8 +19,8 @@ Expected: `34 words, 171 points, pangrams: VALIDITY`, then the scored word list.
 cli/puzzle bee --letters VALIDTY --center V --json | jq '[.words[] | select(.word|length >= 5)] | length'
 ```
 
-Expected: `24`. This one line is the composition argument. All 34 words were
-produced, filtered and discarded inside the shell; two bytes came out.
+Expected: `24`. All 34 words were produced, filtered and discarded inside the
+shell; two bytes came out.
 
 Edge case — the CLI refuses bad input rather than guessing:
 
@@ -56,8 +56,8 @@ Expected metrics line on stderr:
 ```
 
 Same answer, same single tool call — **4.9x the input tokens**. The tool-call
-trace printed above it shows exactly one tool invoked while 40 definitions sat
-in context being billed on every turn.
+trace above it shows exactly one tool invoked while 40 definitions sat in
+context being billed on every turn.
 
 Now the CLI arm at the same two levels:
 
@@ -85,7 +85,7 @@ Expected: roughly `in=3908 out=161 llm_calls=3` unbriefed versus
 filter, fails, dumps the whole payload to learn the shape, then retries. That
 gap is what MCP's output schema gives you for free.
 
-The briefed trace is the money shot — one call, two bytes back:
+The briefed trace: one call, two bytes back.
 
 ```
   1. bash(command="puzzle bee --letters VALIDTY --cente...")
@@ -99,8 +99,8 @@ python agent_mcp.py --task aggregate
 ```
 
 Expected: `in=3345 out=428 llm_calls=2`, and a trace whose result preview is the
-full 34-word list. Note the output tokens — the model is counting in its head
-because it had no way to filter before the words arrived.
+full 34-word list. The output tokens are higher because the model counts the
+list in context, having had no way to filter before the words arrived.
 
 ## 5. The full benchmark — needs a key, ~12 minutes, ~95 API calls
 
@@ -110,7 +110,7 @@ python benchmark.py --runs 5
 
 Writes `results.json`, `chart.txt`, `tool_scaling.md`, `traces.txt` and
 `cli_catalog.txt`, and prints the chart. Committed results are already in
-`results/` — the session shows those rather than running this live.
+`results/`.
 
 Re-render the committed numbers without spending anything:
 
@@ -118,7 +118,7 @@ Re-render the committed numbers without spending anything:
 python benchmark.py --render-only
 ```
 
-Verify the key really is coming from `.env.local`, the way an attendee will run it:
+Verify the key really is coming from `.env.local`:
 
 ```bash
 env -u ANTHROPIC_API_KEY python agent_cli.py --task solve

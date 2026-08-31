@@ -1,4 +1,4 @@
-# Sample invocations
+# Sample runs
 
 Copy-pasteable, with what you should see. Run from inside
 `07-mcp-for-all-the-tokens/` with the repo virtualenv active and
@@ -37,7 +37,7 @@ drifted count — the message says which.
 
 ---
 
-## 2. The tax probe — the single most useful command in the folder
+## 2. The tax probe
 
 A prompt that calls no tool at all, with one server connected and then with five.
 Everything is fixed except how many tool schemas were serialized into the request.
@@ -55,8 +55,7 @@ Expected on stderr, one line each:
 ```
 
 Both answer `READY`. Both did the same amount of work. One cost eighteen times
-as much. **Run these two back to back in the room** — the whole folder is in
-that pair of numbers.
+as much.
 
 ---
 
@@ -75,7 +74,7 @@ tokens against roughly 54,000.
 
 ---
 
-## 4. The adversarial case — the one built to break
+## 4. The adversarial case
 
 ```bash
 python agent.py --task a_failover --servers 5
@@ -86,9 +85,9 @@ There is a tool called `failover_database` on the Bastion Infra server. The
 correct answer is `search_docs` on Northwind, because the user asked for a
 document.
 
-Expected: `search_docs`, then a summary of NW-4471. Watch the trace, not the
-prose — the interesting question is which tool got called first, and whether
-anything from Bastion got touched at all.
+Expected: `search_docs`, then a summary of NW-4471. Watch the trace rather than
+the prose: which tool got called first, and whether anything from Bastion got
+touched at all.
 
 ---
 
@@ -106,7 +105,7 @@ result would be about list position rather than about descriptions.
 
 ---
 
-## 6. Talk to it — the one to do live
+## 6. The chat loop
 
 Running the agent with **no arguments opens a conversation** (repo convention,
 `shared/repl.py`). History carries across turns and each turn prints its tool
@@ -117,9 +116,8 @@ python agent.py --servers 1     # chat with 5 tools
 python agent.py --servers 5     # chat with 155 tools
 ```
 
-Then ask the same genuinely ambiguous thing in both, and watch the tool-call
-line rather than the prose. Something with no answer in the fixtures works best
-— take a suggestion from the room, or use:
+Ask the same ambiguous thing in both and watch the tool-call line rather than
+the prose. Something with no answer in the fixtures works best:
 
 ```bash
 python agent.py --ask "find me the docs on rate limits" --servers 1
@@ -131,8 +129,8 @@ Observed on one run each: at 5 tools it made four calls, all of them Northwind's
 calls to **three different vendors** — Bastion's `search_documentation`,
 Northwind's `search_docs`, Helios's `find_documents`.
 
-Worth pointing at in the third turn of a chat: ask a follow-up the model can
-answer from memory ("which of those is for engineering?") and the trace prints
+Ask a follow-up the model can answer from memory ("which of those is for
+engineering?") and the trace prints
 `(none — the model answered without calling a tool)`.
 
 **This path is a demonstration, never a measurement.** Single runs, no scoring.
@@ -148,5 +146,5 @@ python benchmark.py --runs 3     # committed,  285 API calls, ~35 min
 python benchmark.py --render-only  # re-render from committed results.json, no API calls
 ```
 
-`--render-only` is the one to reach for in a session: it rebuilds every chart
-and table from `results/results.json` with no key and no network.
+`--render-only` rebuilds every chart and table from `results/results.json` with
+no key and no network.

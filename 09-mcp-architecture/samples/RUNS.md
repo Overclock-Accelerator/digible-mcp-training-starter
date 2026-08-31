@@ -1,10 +1,8 @@
 # Sample runs — 09
 
-Every output below was recorded from this folder as committed. If yours differs,
-your environment is wrong, not the demo.
+Every output below was recorded from this folder as committed.
 
-No server is involved here: each agent reads `digible.db` directly, in its own
-way. That is the point of the folder.
+No server is involved: each agent reads `digible.db` directly, in its own way.
 
 ---
 
@@ -89,7 +87,7 @@ Budget pacing — 2026-05
 ```
 
 Nothing is over on media. Everything is over once fees are on the invoice. Both
-numbers are true and the agent is told to report both.
+numbers are true, and the agent is told to report both.
 
 ---
 
@@ -114,8 +112,7 @@ Five properties had meaningful (≥10%) tour drops from May to June 2026:
 ```
 
 **Ask the same question in `10` and you get the same five properties and the
-same five percentages.** That is the thing to check: the refactor moved the code,
-not the answers.
+same five percentages.** The refactor moved the code, not the answers.
 
 ---
 
@@ -180,14 +177,12 @@ you › cost per lead by channel in May
 Ask the follow-up — "same thing but just for Harborview 900" — and watch the
 trace: the agent carries the month across turns and only the property changes.
 Ask a third question the tools cannot answer and the trace prints
-`(none — the model answered without calling a tool)`. Knowing when *not* to call
-a tool is worth pointing at.
+`(none — the model answered without calling a tool)`.
 
 ---
 
-## 6. The thing to do next
+## 6. Next
 
 Open the six agent files side by side and find every function that turns a month
 into a pair of dates. There are ten of them, in six files, and they are all
 correct. Then design the tool set that replaces all ten with one, and open
-`10-mcp-architecture-solved/`.
