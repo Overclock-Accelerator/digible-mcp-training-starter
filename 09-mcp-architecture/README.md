@@ -1,35 +1,46 @@
 # 09 — MCP Architecture
 
 Six agents answering six questions against one database, each with its own
-private data-access code. The activity is to design the MCP tool set that
-replaces all six.
+private data-access code.
 
 ## Run
 
-All commands are from the repo root, with the virtualenv active. No server is
-involved — each agent reads `digible.db` directly.
+All commands are from the repo root, with the virtualenv active. There is no
+server — each agent reads `digible.db` directly.
 
 ```bash
-python 09-mcp-architecture/agents/agent_spend_pacing.py
-python 09-mcp-architecture/agents/agent_channel_efficiency.py
-python 09-mcp-architecture/agents/agent_tour_trends.py
-python 09-mcp-architecture/agents/agent_property_funnel.py
-python 09-mcp-architecture/agents/agent_leasing_attribution.py
-python 09-mcp-architecture/agents/agent_call_recovery.py
+cd 09-mcp-architecture/agents
+python agent_spend_pacing.py
+python agent_channel_efficiency.py
+python agent_tour_trends.py
+python agent_property_funnel.py
+python agent_leasing_attribution.py
+python agent_call_recovery.py
 ```
 
-No arguments opens a chat; a question answers once and exits:
-
-```bash
-python 09-mcp-architecture/agents/agent_spend_pacing.py "which properties are pacing over budget in May?"
-```
-
-Count the duplication — no API key needed:
+No arguments opens a chat; a question answers once and exits. Counting the
+duplication needs no API key:
 
 ```bash
 python 09-mcp-architecture/count_duplication.py
-python 09-mcp-architecture/count_duplication.py --detail
+python 09-mcp-architecture/count_duplication.py --detail   # names every implementation
 ```
+
+## Prompts
+
+```
+which properties are pacing over budget in May?
+which properties saw tour bookings drop in June compared with May?
+show me the funnel for Legacy Trails in May
+which properties are missing the most calls in June?
+cost per lead by channel in May
+same thing but just for Harborview 900
+```
+
+Tour trends returns Camelback Vista 66→46, Legacy Trails 131→107, Sundance
+Ridge 45→38, The Alder at Lowry 45→39, Peachtree Row 92→80.## Results
+
+`count_duplication.py`, as committed:
 
 ```
   375 of 973 lines across the six agents and their one helper module (39%)
@@ -44,37 +55,42 @@ python 09-mcp-architecture/count_duplication.py --detail
   format numbers           3 files   7 implementations
 ```
 
-## Prompts
-
-| agent | type this | you get |
-|---|---|---|
-| spend pacing | `which properties are pacing over budget in May?` | nothing over on media; everything over once fees are on the invoice |
-| tour trends | `which properties saw tour bookings drop in June compared with May?` | five properties: Camelback Vista 66→46, Legacy Trails 131→107, Sundance Ridge 45→38, The Alder at Lowry 45→39, Peachtree Row 92→80 |
-| property funnel | `show me the funnel for Legacy Trails in May` | 410 leads → 20 leases (4.9%); 83 of 131 scheduled tours completed |
-| call recovery | `which properties are missing the most calls in June?` | Vireo Uptown, 454 of 762 (59.6%); Bishop Arts Flats worst rate at 83.8% |
-| channel efficiency | `cost per lead by channel in May`, then `same thing but just for Harborview 900` | the follow-up keeps the month and changes only the property |
-
 ## Your task
 
-Design the tool set.
+Six agents answer six different questions about the same database, and every one
+of them wrote its own way to get the data. Your job is to find what they share
+and put it behind a single MCP server.
 
-1. Read the six agents. For each, write down what it asks the database for — not
-   the SQL, the question: "spend, for these properties, over this window,
-   grouped this way."
-2. Find the primitives underneath.
-3. Design a set of MCP tools that serves all six. Aim for five or six.
-4. Build one server. Rewrite the agents against it.
+Start with `python count_duplication.py`. It needs no API key and reports how
+many lines of each agent are data access, plus how many times each underlying
+primitive was independently implemented.
 
-Two constraints: tool definitions cost roughly 170–190 input tokens per tool per
-request, whether or not the model calls them (`07-mcp-for-all-the-tokens`); and
-a model choosing between 12 similar tools chooses worse than one choosing
-between 6 distinct ones.
+- **Read the six agents** and write down what each one asks the database for —
+  the question in English, not the SQL. They are in `agents/`, one file each,
+  and each uses a deliberately different style: inline SQL, a private helper
+  module, pull-everything-and-filter, its own connection handling, its own
+  period parsing, its own formatting.
+- **List the primitives underneath.** Opening the database, resolving a period,
+  looking up a property, fetching spend, fetching leads, fetching calls. Note
+  how many of the six solve each one separately.
+- **Design a tool set that serves all six.** Aim for five or six tools. This is
+  the real work: a tool per question is not a design, it is the same sprawl on
+  a different machine. Look for the shapes that compose — a spend query, a
+  funnel query, a calls query, and whatever lookups they need — with the variety
+  living in a `group_by` parameter rather than in more tools.
+- **Build one server** exposing them, running as its own process over HTTP.
+- **Rewrite the agents against it.** They should get much thinner; the data
+  access should disappear from them entirely.
+- **Re-run `count_duplication.py`** and compare.
 
+Tool definitions cost roughly 170–190 input tokens each per request whether or
+not they are called, so every extra tool is a permanent tax on every turn. That
+is the constraint that makes "five or six" a real target rather than a
+preference.
 
 ## Troubleshooting
 
-**`ModuleNotFoundError`** — the virtualenv is not active. Run
-`source .venv/bin/activate` from the repo root.
+**`ModuleNotFoundError`** — run `source .venv/bin/activate` from the repo root.
 
 **`error: ANTHROPIC_API_KEY is not set`** — put your key in `.env.local` at the
 repo root. `count_duplication.py` does not need one.
