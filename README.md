@@ -14,29 +14,17 @@ README explaining what it is and how to run it.
 ## Setup
 
 ```bash
-git clone <this repo>
-cd mcp-training
-./setup.sh                          # venv + pinned deps + solver tests
-cp .env.local.example .env.local    # then put your ANTHROPIC_API_KEY in it
+git clone https://github.com/Overclock-Accelerator/digible-mcp-training-starter.git
+cd digible-mcp-training-starter
+./setup.sh
+cp .env.local.example .env.local
 ```
 
-If `./setup.sh` ends with `10 passed, 0 failed`, your environment is good.
+Then open `.env.local` and paste in your Anthropic API key.
 
-Run anything with the repo's own interpreter — no `activate` needed, and it
-cannot pick up the wrong virtualenv:
+`setup.sh` should end with `10 passed, 0 failed`. If it does, you are set up.
 
-```bash
-./.venv/bin/python 01-mcp-bee/mcp_server.py      # terminal 1
-./.venv/bin/python 01-mcp-bee/agent_with_mcp.py  # terminal 2
-```
-
-`.env.local` is gitignored. Every agent here loads it through
-`shared/envloader.py`, so you never export anything in your shell — and you can
-prove it, which is worth doing once:
-
-```bash
-env -u ANTHROPIC_API_KEY ./.venv/bin/python 01-mcp-bee/agent_with_mcp.py "..."
-```
+Each folder's README tells you what to run there.
 
 ## The folders
 
